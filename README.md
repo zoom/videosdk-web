@@ -11,8 +11,18 @@ In your frontend project, install the Video SDK:
 `$ npm install @zoom/videosdk --save`
 
 ## Usage
+Most features have their own namespace, while events, enums, and interfaces are exposed under **Global** namespace
 
-(Write getting started guide here.)
+**ZoomVideo** namespace provides methods about checking system requirements and creating the video client instance
+
+**VideoClient** namespace gathers methods about interacting with a Zoom Video meeting. It can initialize client instance, join or leave session, manage users in a session, listen to events, and retrieve session status
+
+**ChatClient** namespace provides methods that define the chat functionality
+
+**Stream** namespace contains methods about working with streams. Video, audio, and screen sharing can be controlled though these methods
+
+Please consult the [API documentation](https://marketplace.zoom.us/docs/sdk/video/web) for additional details on how to use the SDK
+
 
 ## Sample App
 

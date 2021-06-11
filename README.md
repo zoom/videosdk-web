@@ -53,10 +53,10 @@ Config variables reference:
 | Variable                   | Description |
 | -----------------------|-------------|
 | signatureEndpoint          | Required, the endpoint url that returns a signature. [Get a signature endpoint here.](https://github.com/zoom/videosdk-sample-signature-node.js) |
-| sessionName  | The Zoom meeting / webinar number. |
-| userName | Required, A name for the user joining the Video SDK session. |
-| sessionPasscode | Session Passcode. |
-| stream | Variable declared to be defined after session is joined. |
+| sessionName  | Required, the name of your session. |
+| userName | Required, the name of the user joining your session. |
+| sessionPasscode | Required, the passcode for your session. |
+| stream | Required, the stream variable that you define after your session is joined. |
 
 
 Generate the session signature to authenticate, [instructions here](https://github.com/zoom/videosdk-sample-signature-node.js).

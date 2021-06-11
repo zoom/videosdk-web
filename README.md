@@ -23,12 +23,12 @@ Create the Zoom Video Client, and initialize the dependencies.
 ```js
 var client = ZoomVideo.createClient()
 
-client.init('en-US', `${window.location.origin}/node_modules/@zoomus/instantsdk/dist/lib`);
+client.init('en-US', `${window.location.origin}/node_modules/@zoom/videosdk/dist/lib`);
 ```
 
 NOTE: The following directory (already in node_modules) must be accessible in your url path:
 
-- `node_modules/@zoomus/instantsdk/dist/lib`
+- `node_modules/@zoom/videosdk/dist/lib`
 
 Or, you can set a custom path to the Video SDK's lib directory using:
 

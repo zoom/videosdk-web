@@ -2,7 +2,7 @@
 
 Use of this SDK is subject to our [Terms of Use](https://zoom.us/docs/en-us/zoom_api_license_and_tou.html).
 
-The [Zoom Video SDK NPM package](https://www.npmjs.com/package/@zoom/videosdk) is for implementing the [Zoom Video SDK](https://marketplace.zoom.us/docs/sdk/video/introduction) with a frontend framework like React or Angular that uses webpack / babel.
+You can use the [Zoom Video SDK NPM package](https://www.npmjs.com/package/@zoom/videosdk) to implement the [Zoom Video SDK](https://marketplace.zoom.us/docs/sdk/video/introduction) with a frontend framework like React or Angular that uses webpack / babel.
 
 ## Installation
 

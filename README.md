@@ -2,7 +2,7 @@
 
 Use of this SDK is subject to our [Terms of Use](https://zoom.us/docs/en-us/zoom_api_license_and_tou.html).
 
-You can use the [Zoom Video SDK NPM package](https://www.npmjs.com/package/@zoom/videosdk) to implement the [Zoom Video SDK](https://marketplace.zoom.us/docs/sdk/video/introduction) with a frontend framework like React or Angular that uses webpack / babel.
+Add Video, Audio, Screen Share, and Chat features to your web applications with the Zoom Video SDK.
 
 ## Installation
 
@@ -15,26 +15,22 @@ In your frontend project, install the Video SDK:
 In the component file where you want to use the Video SDK, import `ZoomVideo`.
 
 ```js
-import { ZoomVideo } from '@zoom/videosdk';
+import ZoomVideo from '@zoom/videosdk';
 ```
 
 Create the Zoom Video Client, and initialize the dependencies.
 
 ```js
-var client = ZoomVideo.createClient()
+const client = ZoomVideo.createClient()
 
-client.init('en-US', `${window.location.origin}/node_modules/@zoom/videosdk/dist/lib`);
+client.init('en-US', `http://localhost:9999/node_modules/@zoom/videosdk/dist/lib/`);
 ```
 
-NOTE: The following directory (already in node_modules) must be accessible in your url path:
+NOTE: The following directory in node_modules must be accessible in your url path:
 
 - `node_modules/@zoom/videosdk/dist/lib`
 
-Or, you can set a custom path to the Video SDK's lib directory using:
-
-```js
-client.init('en-US', `${window.location.origin}/custom/path/to/lib/`);
-```
+   For example, you could place the `lib` directory in your projects public assets directory. You can test it by navigating to one of the included files: http://localhost:9999/assets/lib/webim.min.js
 
 Set the config variables (reference below):
 
@@ -78,12 +74,12 @@ client.join(sessionName, signature, userName, sessionPasscode).then((data) => {
 Define the stream variable in the `connection-change` event listener to use the Video, Audio, Screen Share, and Chat APIs.
 
 ```js
-client.on("connection-change", async (payload) => {
+client.on("connection-change", (payload) => {
   stream = client.getMediaStream();
 })
 ```
 
-In your HTML where you want to display your Video SDK interface, create a button and a canvas element. This button will start your video, and display it in the canvas on the web page.
+Add the following HTML for the user interface. The start button will turn on your video and display it on the canvas in your web page.
 
 ```html
 <button onclick="startVideo()">Start Video</button>
@@ -92,43 +88,41 @@ In your HTML where you want to display your Video SDK interface, create a button
 <canvas id="my-video" width="1920" height="1080"></canvas>
 ```
 
-Then, in your component file, add the start and stop video functions.
+Then, in your component file, connect the buttons to the Video SDK start and stop video functions.
 
 ```js
-function startVideo() {
+async function startVideo() {
   if (!stream.isCapturingVideo()) {
-    stream.startVideo().then((data: any) => {
-      console.log(data);
+    try {
+      await stream.startVideo()
 
       const canvas = document.querySelector('#my-video')
-
       const session = client.getSessionInfo();
 
       stream.renderVideo(canvas, session.userId, 300, 100, 0, 0, 2)
-    }).catch((error: any) => {
+    } catch (error) {
       console.log(error);
-    })
+    }
   }
 }
 
-function stopVideo() {
+async function stopVideo() {
   if (stream.isCapturingVideo()) {
-    stream.stopVideo().then((data: any) => {
-      console.log(data);
+    try {
+      await stream.stopVideo();
 
       const canvas = document.querySelector('#my-video')
-
       const session = client.getSessionInfo();
 
       stream.stopRenderVideo(canvas, session.userId)
-    }).catch((error: any) => {
+    } catch (error) {
       console.log(error);
-    })
+    }
   }
 }
 ```
 
-For the full list of features including [Audio](https://marketplace.zoom.us/docs/sdk/video/web/essential/audio), [Screen Sharing](https://marketplace.zoom.us/docs/sdk/video/web/essential/screen-share), and [Chat](https://marketplace.zoom.us/docs/sdk/video/web/essential/chat), as well as additional guides, please see our [Video SDK docs](https://marketplace.zoom.us/docs/sdk/video/web).
+For the full list of features and event listeners including [Audio](https://marketplace.zoom.us/docs/sdk/video/web/essential/audio), [Screen Sharing](https://marketplace.zoom.us/docs/sdk/video/web/essential/screen-share), and [Chat](https://marketplace.zoom.us/docs/sdk/video/web/essential/chat), as well as additional guides, please see our [Video SDK docs](https://marketplace.zoom.us/docs/sdk/video/web).
 
 ## Need help?
 

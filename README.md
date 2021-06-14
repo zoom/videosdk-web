@@ -30,7 +30,7 @@ NOTE: The following directory in node_modules must be accessible in your url pat
 
 - `node_modules/@zoom/videosdk/dist/lib`
 
-   For example, you could place the `lib` directory in your projects public assets directory. You can test it by navigating to one of the included files: http://localhost:9999/assets/lib/webim.min.js
+   For example, you could place the `lib` directory in your projects public assets directory, or use webpack's copy plugin to copy it to the public directory when starting the server up. You can test it by navigating to one of the included files: http://localhost:9999/assets/lib/webim.min.js
 
 Set the config variables (reference below):
 

@@ -2,7 +2,7 @@
 
 ## Start Screen Share
 
-While in a instant meeting, you can share the desktop screen or a specific application.
+While in a video meeting, you can share the desktop screen or a specific application.
 Note:
   - The host can lock participants' ability to share their screen.
   - Call the `ZoomVideo.checkSystemRequirements()`, to ensure your browser is support screen share.

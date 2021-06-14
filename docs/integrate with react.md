@@ -15,7 +15,7 @@ export default React.createContext(null);
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ZoomContext from './ZoomClientContext';
-import ZoomVideo from '@zoomus/videosdk';
+import ZoomVideo from '@zoom/videosdk';
 const client = ZoomVideo.createClient();
 ReactDOM.render(
    <ZoomContext.Provider value={client}>

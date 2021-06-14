@@ -1,11 +1,11 @@
 # Manage the Meeting
-This article will introduce how the host manages the instant meeting.
+This article will introduce how the host manages the video meeting.
 
 ## Host and Manager
 The host can share hosting privileges with another user, allowing the manager to manage the administrative side of the meeting, such as managing participants or locking the sharing.
 
 Make other as the host. 
-> Notice there is only one host in an instant meeting.
+> Notice there is only one host in a video meeting.
 
 ```javascript
 // make another participant as the host.

@@ -35,12 +35,12 @@ NOTE: The following directory in node_modules must be accessible in your url pat
 Set the config variables (reference below):
 
 ```js
-// setup your signautre endpoint here: https://github.com/zoom/videosdk-sample-signature-node.js
-var signatureEndpoint = 'http://localhost:4000'
-var sessionName = 'VideoSDK-Test'
-var userName = 'VideoSDK'
-var sessionPasscode = '1234ABC'
-var stream;
+// setup your signature endpoint here: https://github.com/zoom/videosdk-sample-signature-node.js
+const signatureEndpoint = 'http://localhost:4000'
+const sessionName = 'VideoSDK-Test'
+const userName = 'VideoSDK'
+const sessionPasscode = '1234ABC'
+let stream;
 ```
 
 
@@ -58,7 +58,7 @@ Config variables reference:
 Generate the session signature to authenticate, [instructions here](https://github.com/zoom/videosdk-sample-signature-node.js).
 
 ```js
-var signature = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJhcHBfa2V5IjoiVklERU9fU0RLX0tFWV9IRVJFIiwiaWF0IjoxNjIzNDQyNTYzLCJleHAiOjE2MjM0NDk3NjMsInRwYyI6IlZpZGVvU0RLLVRlc3QiLCJwd2QiOiIxMjM0QUJDIn0='
+const signature = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJhcHBfa2V5IjoiVklERU9fU0RLX0tFWV9IRVJFIiwiaWF0IjoxNjIzNDQyNTYzLCJleHAiOjE2MjM0NDk3NjMsInRwYyI6IlZpZGVvU0RLLVRlc3QiLCJwd2QiOiIxMjM0QUJDIn0='
 ```
 
 Then join the session.
@@ -69,6 +69,14 @@ client.join(sessionName, signature, userName, sessionPasscode).then((data) => {
 }).catch((error) => {
   console.log(error);
 });
+
+// Using "await" syntactical sugar:
+try {
+  const data = await client.join(sessionName, signature, userName, sessionPasscode);
+  console.log(data);
+} catch (error) {
+  console.error(error);
+}
 ```
 
 Define the stream variable in the `connection-change` event listener to use the Video, Audio, Screen Share, and Chat APIs.
@@ -78,28 +86,44 @@ client.on("connection-change", (payload) => {
   stream = client.getMediaStream();
 })
 ```
+Alternatively, retrieve the mediaStream object after having successfully joined the meeting
+```js
+try {
+  const data = await client.join(sessionName, signature, userName, sessionPasscode);
+  stream = zmClient.getMediaStream();
+} catch (error) {
+  console.error(error);
+}
+```
 
-Add the following HTML for the user interface. The start button will turn on your video and display it on the canvas in your web page.
+Add the following HTML for the user interface (if using a framework like React, do the framework's equivalent). The start button will turn on your video and display it on the canvas in your web page.
 
 ```html
 <button onclick="startVideo()">Start Video</button>
 <button onclick="stopVideo()">Stop Video</button>
 
-<canvas id="my-video" width="1920" height="1080"></canvas>
+<canvas id="my-video" width="640" height="360"></canvas>
 ```
 
 Then, in your component file, connect the buttons to the Video SDK start and stop video functions.
 
 ```js
+// Try to use the same aspect ratio as your webcam, and match it with the canvas
+// If you cannot, the SDK will add black bars to maintain correct aspect ratio
+const canvas = document.querySelector('#my-video')
+const canvasWidth = 640;
+const canvasHeight = 360;
+const xOffset = 0;
+const yOffset = 0;
+const videoQuality = 2;   // equivalent to 360p; refer to the API reference for more info
+
 async function startVideo() {
   if (!stream.isCapturingVideo()) {
     try {
-      await stream.startVideo()
+      await stream.startVideo();
 
-      const canvas = document.querySelector('#my-video')
       const session = client.getSessionInfo();
-
-      stream.renderVideo(canvas, session.userId, 300, 100, 0, 0, 2)
+      stream.renderVideo(canvas, session.userId, canvasWidth, canvasHeight, xOffset, yOffset, videoQuality);
     } catch (error) {
       console.log(error);
     }
@@ -111,10 +135,8 @@ async function stopVideo() {
     try {
       await stream.stopVideo();
 
-      const canvas = document.querySelector('#my-video')
       const session = client.getSessionInfo();
-
-      stream.stopRenderVideo(canvas, session.userId)
+      stream.stopRenderVideo(canvas, session.userId);
     } catch (error) {
       console.log(error);
     }

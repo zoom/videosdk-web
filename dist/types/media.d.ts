@@ -172,19 +172,14 @@ export declare namespace Stream {
    *
    * **Example**
    * ```javascript
-   * try{
-   *   const canvas = ['capture-canvas-1', 'capture-canvas-2'];
-   *   const video = 'capture-video';
-   *   await stream.startVideo(canvas, video);
+   * try {
+   *   await stream.startVideo();
    * } catch (error) {
    *   console.log(error);
    * }
    * ```
    *
-   * @param canvas The id of `HTMLCanvasElement` to display captured content.
-   *
-   * If the provided canvas is an array, only the first canvas in the array will be used. Canvas in the array to be used can be switched by `switchCanvasForVideoCapture`.
-   * @param videoId The id of `HTMLVideoElement` to display captured content.
+   * @param {CaptureVideoOption} [option] Optional options for starting video capture
    *
    * @returns
    * - `''`: Success

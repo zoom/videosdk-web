@@ -16,10 +16,13 @@ import {
   event_active_share_change,
   event_passively_stop_share,
   event_share_content_dimension_change,
+  event_peer_share_state_change,
   event_share_content_change,
   event_device_change,
+  event_video_capturing_change,
   event_video_dimension_change,
   event_share_privilege_change,
+  event_peer_video_state_change,
 } from './event-callback';
 /**
  * Interface for the result of check system requirements.
@@ -209,7 +212,7 @@ export declare namespace VideoClient {
    * @param listener Details in {@link event_chat_received_message}.
    */
   function on(
-    event: 'chat-receive-message',
+    event: 'chat-on-message',
     listener: typeof event_chat_received_message,
   ): void;
   /**
@@ -235,6 +238,14 @@ export declare namespace VideoClient {
   function on(event: 'device-change', listener: typeof event_device_change): void;
   /**
    * @param event
+   * @param listener Details in {@link event_video_capturing_change}.
+   */
+  function on(
+    event: 'video-capturing-change',
+    listener: typeof event_video_capturing_change,
+  ): void;
+  /**
+   * @param event
    * @param listener Details in {@link event_active_share_change}.
    */
   function on(
@@ -248,6 +259,14 @@ export declare namespace VideoClient {
   function on(
     event: 'share-content-dimension-change',
     listener: typeof event_share_content_dimension_change,
+  ): void;
+  /**
+   * @param event
+   * @param listener Details in {@link event_peer_share_state_change}.
+   */
+  function on(
+    event: 'peer-share-state-change',
+    listener: typeof event_peer_share_state_change,
   ): void;
   /**
    * @param event
@@ -272,6 +291,14 @@ export declare namespace VideoClient {
   function on(
     event: 'share-content-change',
     listener: typeof event_share_content_change,
+  ): void;
+  /**
+   * @param event
+   * @param listener Details in {@link event_peer_video_state_change}.
+   */
+  function on(
+    event: 'peer-video-state-change',
+    listener: typeof event_peer_video_state_change,
   ): void;
   /**
    * Remove the event handler.

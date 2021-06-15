@@ -15,7 +15,11 @@
   "license": "ISC",
   "files": [
     "/docs",
-    "/dist"
+    "/dist",
+    "oss_attribution.txt",
+    "readme.md",
+    "LICENSE.pdf",
+    "CHANGELOG.pdf"
   ],
   "bugs": {
     "url": "https://github.com/zoom/videosdk-web/issues"

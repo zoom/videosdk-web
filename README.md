@@ -10,6 +10,7 @@ In your frontend project, install the Video SDK:
 
 `$ npm install @zoom/videosdk --save`
 
+## [VideoSDK Demo](https://github.com/zoom/sample-app-videosdk)
 ## Usage
 
 In the component file where you want to use the Video SDK, import `ZoomVideo`.

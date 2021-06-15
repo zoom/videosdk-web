@@ -275,7 +275,7 @@ export declare function event_audio_active_speaker(
  * @event
  */
 export declare function event_audio_unmute_consent(payload: {
-  reason: 'Unmute';
+  reason: 'Spotlight' | 'Unmute' | 'Allow to talk';
 }): void;
 /**
  * Occurs when current audio is changed

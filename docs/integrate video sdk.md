@@ -44,7 +44,7 @@ client.init('en-US', 'CDN');
   plugins:[
     new CopyWebpackPlugin({
       patterns:[
-        from:'node_modules/@zoom/videosdk/lib',
+        from:'node_modules/@zoom/videosdk/dist/lib',
         to:'dest/zoom-libs' // The destination folder, which you can rename as you wish
       ]
     })
@@ -83,7 +83,7 @@ const client = ZoomVideo.createClient();
   plugins:[
     new CopyWebpackPlugin({
       patterns:[
-        from:'@zoom/videosdk/lib',
+        from:'@zoom/videosdk/dist/lib',
         to:'dest/zoom-libs' // The dest folder
       ]
     })

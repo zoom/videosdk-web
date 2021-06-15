@@ -2,7 +2,7 @@
 
 Use of this SDK is subject to our [Terms of Use](https://zoom.us/docs/en-us/zoom_api_license_and_tou.html).
 
-Add Video, Audio, Screen Share, and Chat features to your web applications with the Zoom Video SDK.
+Add Video, Audio, Screen Share, and Chat features to your web applications with the [Zoom Video SDK](https://marketplace.zoom.us/docs/sdk/video/introduction).
 
 ## Installation
 
@@ -10,7 +10,6 @@ In your frontend project, install the Video SDK:
 
 `$ npm install @zoom/videosdk --save`
 
-## [VideoSDK Demo](https://github.com/zoom/sample-app-videosdk)
 ## Usage
 
 In the component file where you want to use the Video SDK, import `ZoomVideo`.
@@ -146,6 +145,10 @@ async function stopVideo() {
 ```
 
 For the full list of features and event listeners including [Audio](https://marketplace.zoom.us/docs/sdk/video/web/essential/audio), [Screen Sharing](https://marketplace.zoom.us/docs/sdk/video/web/essential/screen-share), and [Chat](https://marketplace.zoom.us/docs/sdk/video/web/essential/chat), as well as additional guides, please see our [Video SDK docs](https://marketplace.zoom.us/docs/sdk/video/web).
+
+## Sample App
+
+Checkout the Zoom [Web Video SDK Sample App](https://github.com/zoom/sample-app-videosdk), and the [Simple Signature Setup Sample App](https://github.com/zoom/videosdk-sample-signature-node.js).
 
 ## Need help?
 

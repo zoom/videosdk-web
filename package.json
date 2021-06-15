@@ -10,7 +10,12 @@
     "type": "git",
     "url": "git+https://github.com/zoom/videosdk-web.git"
   },
-  "keywords": ["zoom", "video", "sdk", "web"],
+  "keywords": [
+    "zoom",
+    "video",
+    "sdk",
+    "web"
+  ],
   "author": "Zoom Video Communications",
   "license": "ISC",
   "files": [
@@ -24,5 +29,11 @@
   "bugs": {
     "url": "https://github.com/zoom/videosdk-web/issues"
   },
-  "homepage": "https://github.com/zoom/videosdk-web#readme"
+  "homepage": "https://github.com/zoom/videosdk-web#readme",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
 }

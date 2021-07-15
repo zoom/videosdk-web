@@ -3,7 +3,7 @@ import { ChatMessage, ChatPrivilege } from './chat';
 /**
  * The State of Meeting connection.
  */
-declare enum ConnectionState {
+export declare enum ConnectionState {
   Connected = 'Connected',
   Reconnecting = 'Reconnecting',
   Closed = 'Closed',
@@ -12,14 +12,14 @@ declare enum ConnectionState {
 /**
  * The State of Video
  */
-declare enum VideoActiveState {
+export declare enum VideoActiveState {
   Active = 'Active',
   Inactive = 'Inactive',
 }
 /**
  * The State of Current User's Video Capturing
  */
-declare enum VideoCapturingState {
+export declare enum VideoCapturingState {
   Started = 'Started',
   Stopped = 'Stopped',
   Failed = 'Failed',
@@ -28,7 +28,7 @@ declare enum VideoCapturingState {
 /**
  * Reason of passively stop screen share
  */
-declare enum PassiveStopShareReason {
+export declare enum PassiveStopShareReason {
   /**
    * Privilege change or others start new sharing
    */
@@ -177,7 +177,7 @@ export declare function event_user_remove(
  * client.on('video-active-change', async(payload) => {
  *   try {
  *     if (payload.state === 'Active') {
- *       await stream.startRenderVideo(canvas, quality, payload.id, '');
+ *       await stream.renderVideo(canvas,userId,1280,720,0,0,3);
  *     } else {
  *       await astream.stopRenderVideo();
  *     }
@@ -329,6 +329,19 @@ export declare function event_auto_play_audio_failed(): void;
  * @event
  */
 export declare function event_chat_received_message(payload: ChatMessage): void;
+
+/**
+ * Occurs when message is deleted
+ * @param payload id of message
+ * ```javascript
+ * client.on('chat-delete-message',payload=>{
+ *  console.log('from %s, message:%s',payload.sender.name,payload.message);
+ * })
+ * ```
+ * @event
+ */
+export declare function event_chat_delete_message(payload: { id: string }): void;
+
 /**
  * Occurs when the host change the privilege of chat
  * @param payload the event detail

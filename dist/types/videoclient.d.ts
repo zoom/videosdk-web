@@ -1,6 +1,6 @@
 import { ExecutedResult } from './common';
-import Stream from './media';
-import ChatClient from './chat';
+import { Stream } from './media';
+import { ChatClient } from './chat';
 import {
   event_connection_change,
   event_user_add,
@@ -23,11 +23,12 @@ import {
   event_video_dimension_change,
   event_share_privilege_change,
   event_peer_video_state_change,
+  event_chat_delete_message,
 } from './event-callback';
 /**
  * Interface for the result of check system requirements.
  */
-export interface MediaCompatiblity {
+interface MediaCompatiblity {
   /**
    * If `audio` is `false`, it means the browser is not compatible with voip.
    */
@@ -42,7 +43,7 @@ export interface MediaCompatiblity {
   screen: boolean;
 }
 
-export interface SessionInfo {
+interface SessionInfo {
   /**
    * topic
    */
@@ -67,7 +68,7 @@ export interface SessionInfo {
 /**
  * Interface of a participant
  */
-export interface Participant {
+interface Participant {
   /**
    * Identify of a user.
    */
@@ -215,6 +216,10 @@ export declare namespace VideoClient {
     event: 'chat-on-message',
     listener: typeof event_chat_received_message,
   ): void;
+  function on(
+    event: 'chat-delete-message',
+    listener: typeof event_chat_delete_message,
+  ): void;
   /**
    * @param event
    * @param listener Details in {@link event_chat_privilege_change}.
@@ -316,7 +321,7 @@ export declare namespace VideoClient {
    *
    * @returns a executed promise. Following are the possible error reasons:
    * - `duplicated operation`: Duplicated invoke the `join` method.
-   * - `invalid apiKey or signature`: ApiKey or signature is not correct.
+   * - `invalid apiKey/sdkKey or signature`: ApiKey/SdkKey or signature is not correct.
    * - `invalid password`: Password is not correct.
    * - `meeting is not started`: The meeting is not started. If you are the host of the meeting, you can start the meeting.
    * - `meeting is locked`: The meeting is locked by the host, can not join the meeting.

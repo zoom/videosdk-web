@@ -1,5 +1,20 @@
 ## CHANGELOG
 
+## v1.1.3
+
+### Added:
+
+* "session_key" and "user_identity" fields to JWT, allowing developers to assign unique session and user IDs to V-SDK sessions from separate, external systems
+
+### Enhanced:
+
+* Rendering video in Chrome and Edge to remove WebGC console warning
+
+### Fixed:
+
+* Bug where sendToAll generated unintended errors
+* Issue where SDK clients were automatically muted when joining the second meeting in a session after leaving the first
+
 ## v1.1.0
 
 ### Added:

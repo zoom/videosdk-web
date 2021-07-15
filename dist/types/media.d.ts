@@ -3,7 +3,7 @@ import { ExecutedResult } from './common';
 /**
  * Interface of media device
  */
-export interface MediaDevice {
+interface MediaDevice {
   /**
    * Label of the device
    */
@@ -16,7 +16,7 @@ export interface MediaDevice {
 /**
  * Share privilege
  */
-export enum SharePrivilege {
+export declare enum SharePrivilege {
   /**
    * One participant can share at a time, only the host or manager can start sharing when someone else is sharing.
    */
@@ -27,7 +27,7 @@ export enum SharePrivilege {
   Locked = 1,
 }
 
-export interface CaptureVideoOption {
+interface CaptureVideoOption {
   /**
    * Id of the camera for capturing the video, if not specified, use system default
    */
@@ -42,13 +42,13 @@ export interface CaptureVideoOption {
   captureHeight?: number;
 }
 
-export enum VideoQuality {
+export declare enum VideoQuality {
   Video_90P = 0,
   Video_180P = 1,
   Video_360P = 2,
   Video_720P = 3,
 }
-export interface UnderlyingColor {
+interface UnderlyingColor {
   R: number;
   G: number;
   B: number;
@@ -262,7 +262,7 @@ export declare namespace Stream {
    *
    * @param x Required. Coordinate x of video.
    * @param y Required. Coordinate y of video.
-   * @param videoQuality Required. Quality of the video. 90P/180P/360P/720P. Currently supports up to 360P
+   * @param videoQuality Required. Quality of the video. 90P/180P/360P/720P. Currently supports up to 720P
    * @param additionalUserKey Optional. Used for render the same video on different coordinate of the canvas.
    *
    * @returns
@@ -504,6 +504,10 @@ export declare namespace Stream {
    */
   function isSupportMultipleVideos(): boolean;
   /**
+   * Whether video sdk supports HD video
+   */
+  function isSupportHDVideo(): boolean;
+  /**
    * Render the received screen share content.
    * - It is usually called in the `active-share-change` callback.
    *
@@ -586,5 +590,3 @@ export declare namespace Stream {
    */
   function getActiveShareUserId(): number;
 }
-
-export default Stream;

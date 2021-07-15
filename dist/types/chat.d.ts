@@ -1,6 +1,10 @@
 import { ExecutedResult } from './common';
 
-export interface ChatMessage {
+interface ChatMessage {
+  /**
+   * message id,used for delete/modify message
+   */
+  id?: string;
   message: string;
   sender: { name: string; userId: number; avatar?: string };
   receiver: {
@@ -10,7 +14,7 @@ export interface ChatMessage {
   timestamp: number;
 }
 
-export interface ChatUserItem {
+interface ChatUserItem {
   userId: number;
   displayName: string;
   isHost: boolean;
@@ -32,7 +36,7 @@ export declare enum ChatMsgType {
  *  ```js
  * const client = ZoomMeeting.createClient();
  * client.init(
- *  apiKey,
+ *  sdkKey,
  *  makeSignature(),
  *  ...,
  *  ['chat'], // to enable chat interface
@@ -79,6 +83,7 @@ export declare namespace ChatClient {
    *     - `INVALID_PARAMETERS`: invalid parameter
    */
   function send(text: string, userId: number): Promise<ChatMessage | Error>;
+
   /**
    * Send message to everyone
    * @param text message
@@ -141,35 +146,3 @@ export declare namespace ChatClient {
    */
   function getReceivers(): Array<ChatUserItem>;
 }
-/**
- * A series of events are exposed to indicate the status of Chat.
- */
-export enum ExposedChatEvent {
-  /**
-   * receive instant messages sent from other
-   * #### example
-   * ```js
-   *  client.on('chat-on-message', data => {
-   *    console.log(data);
-   *    // do something
-   *  })
-   * ```
-   * the structure of data is the same as {@link ChatMessage}
-   * @event 'chat-on-message'
-   */
-  chatReceiveMessage = 'chat-on-message',
-
-  /**
-   * receive the privilege value when it's changed
-   * #### example
-   * ```typescript
-   *  client.on('chat-privilege-change', (data: { chatPrivilege: number }) => {
-   *    console.log(data);
-   *    // do something
-   *  })
-   * ```
-   * @event 'chat-privilege-change'
-   */
-  chatPrivilegeChange = 'chat-privilege-change',
-}
-export default ChatClient;

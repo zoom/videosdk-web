@@ -1,7 +1,7 @@
 import { MediaCompatiblity, VideoClient } from './videoclient';
 import { LocalVideoTrack, LocalAudioTrack } from './preview';
 
-declare namespace ZoomVideo {
+export declare namespace ZoomVideo {
   /**
    * The version of the Zoom Video Web SDK.
    */
@@ -71,5 +71,3 @@ declare namespace ZoomVideo {
    */
   function destroyClient(): void;
 }
-
-export default ZoomVideo;

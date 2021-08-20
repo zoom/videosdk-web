@@ -64,6 +64,10 @@ interface SessionInfo {
    * Whether the user is in the meeting
    */
   isInMeeting: boolean;
+  /**
+   * session id
+   */
+  sessionId: string;
 }
 /**
  * Interface of a participant

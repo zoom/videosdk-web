@@ -415,7 +415,7 @@ export declare namespace VideoClient {
   function getChatClient(): typeof ChatClient;
 
   /**
-   * Get the user by userId.
+   * Gets the current session’s info.
    */
   function getSessionInfo(): SessionInfo;
   /**

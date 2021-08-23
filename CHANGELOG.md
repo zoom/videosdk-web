@@ -9,6 +9,7 @@
 ### Fixed:
 
 * Bug where screen sharing was not working in Chrome with WebCodecs support
+* WebCodecs send-video errors due to breaking changes to the WebCodecs API in Chrome 93
 
 ## v1.1.3
 

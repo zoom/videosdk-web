@@ -1,5 +1,16 @@
 ## CHANGELOG
 
+## v1.1.4
+
+### Added:
+
+* "sessionId" attribute to the SessionInfo interface
+
+### Fixed:
+
+* Bug where screen sharing was not working in Chrome with WebCodecs support
+* WebCodecs send-video errors due to breaking changes to the WebCodecs API in Chrome 93
+
 ## v1.1.3
 
 ### Added:
@@ -18,6 +29,7 @@
 ## v1.1.0
 
 ### Added:
+
 * Local audio and video track APIs to preview audio/video before joining a session
 * Audio quality of service (QOS) improvements resulting in smoother audio in high latency environments.
 * [npm package](https://www.npmjs.com/package/@zoom/videosdk) for integrating the Web Video SDK into the developer workflow

@@ -64,6 +64,10 @@ interface SessionInfo {
    * Whether the user is in the meeting
    */
   isInMeeting: boolean;
+  /**
+   * session id
+   */
+  sessionId: string;
 }
 /**
  * Interface of a participant
@@ -411,7 +415,7 @@ export declare namespace VideoClient {
   function getChatClient(): typeof ChatClient;
 
   /**
-   * Get the user by userId.
+   * Gets the current session’s info.
    */
   function getSessionInfo(): SessionInfo;
   /**

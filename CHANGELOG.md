@@ -1,5 +1,11 @@
 ## CHANGELOG
 
+## v1.1.5
+
+### Fixed:
+
+* WebCodecs send-video errors due to breaking changes to the WebCodecs API in Mac Chrome 93 & 94
+
 ## v1.1.4
 
 ### Added:

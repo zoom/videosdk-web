@@ -26,7 +26,12 @@ export declare enum SharePrivilege {
    */
   Locked = 1,
 }
-
+/**
+ * Interface of start audio option
+ */
+interface AudioOption {
+  speakerOnly: boolean;
+}
 interface CaptureVideoOption {
   /**
    * Id of the camera for capturing the video, if not specified, use system default
@@ -40,6 +45,10 @@ interface CaptureVideoOption {
    * Customized height of capture, 360 as
    */
   captureHeight?: number;
+  /**
+   * Is self video mirrored
+   */
+  mirrored: boolean;
 }
 
 export declare enum VideoQuality {
@@ -76,7 +85,7 @@ export declare namespace Stream {
    * @returns executed promise. Following are the possible error reasons:
    * - type=`USER_FORBIDDEN_MICROPHONE`: The user has blocked accesses to the microphone from the sdk, try to grant the privilege and rejoin the meeting.
    */
-  function startAudio(): ExecutedResult;
+  function startAudio(options?: AudioOption): ExecutedResult;
 
   /**
    * Leave the computer audio
@@ -307,7 +316,7 @@ export declare namespace Stream {
     canvas: HTMLCanvasElement,
     userId: number,
     additionalUserKey?: string,
-    underlyingColor?: UnderlyingColor,
+    underlyingColor?: UnderlyingColor | string,
     isKeepLastFrame?: boolean,
   ): ExecutedResult;
 
@@ -359,9 +368,16 @@ export declare namespace Stream {
    */
   function clearVideoCanvas(
     canvas: HTMLCanvasElement,
-    underlyingColor?: UnderlyingColor,
+    underlyingColor?: UnderlyingColor | string,
   ): ExecutedResult;
 
+  /**
+   * Mirror current video
+   * @param mirrored
+   * - `''`: Success.
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   */
+  function mirrorVideo(mirrored: boolean): ExecutedResult;
   /**
    *
    * Get the isCapturingVideo flag status.

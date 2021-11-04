@@ -1,5 +1,20 @@
 ## CHANGELOG
 
+## v1.1.6
+
+### Added:
+
+* "mirrorVideo" API call (see docs for more details)
+
+### Enhanced:
+
+* "startVideo" API call with 'mirror' option
+* "startAudio" API call with 'speakerOnly' option to join audio without needing mic permissions
+* internal failover and sharing flow
+
+### Fixed:
+* 'underlyingColor' option not working properly after calling "stopRenderVideo"
+
 ## v1.1.5
 
 ### Fixed:

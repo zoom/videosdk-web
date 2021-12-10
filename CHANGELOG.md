@@ -1,5 +1,17 @@
 ## CHANGELOG
 
+## v1.1.7
+
+### Added:
+* Support for resizing screen-share canvas via `stream.updateSharingCanvasDimension` API
+
+### Enhanced:
+* Security for dependencies in `package.json`
+
+### Fixed:
+* Broken self view in Chrome when SharedArrayBuffer is disabled and webpage is not cross-origin isolated
+* Video rendering bugs on Chrome OS 
+
 ## v1.1.6
 
 ### Added:

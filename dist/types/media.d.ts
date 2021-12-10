@@ -48,7 +48,11 @@ interface CaptureVideoOption {
   /**
    * Is self video mirrored
    */
-  mirrored: boolean;
+  mirrored?: boolean;
+  /**
+   * video element, only used in android platform
+   */
+  videoElement?: HTMLVideoElement;
 }
 
 export declare enum VideoQuality {
@@ -597,6 +601,16 @@ export declare namespace Stream {
    *
    */
   function lockShare(isLocked: boolean): ExecutedResult;
+  /**
+   * Set the dimension of canvas which rendering the received sharing content.
+   *
+   * @param width width of canvas
+   * @param height height of canvas
+   */
+  function updateSharingCanvasDimension(
+    width: number,
+    height: number,
+  ): ExecutedResult;
   /**
    * Whether the host locked the share
    */

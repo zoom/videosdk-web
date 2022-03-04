@@ -3,6 +3,8 @@ export * from './common';
 export * from './event-callback';
 export * from './media';
 export * from './chat';
+export * from './command';
 export * from './videoclient';
+export * from './recording';
 export * from './preview';
 export default ZoomVideo;

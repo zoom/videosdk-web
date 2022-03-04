@@ -1,4 +1,4 @@
-import { ExecutedResult } from './common';
+import { DialoutState, ExecutedResult } from './common';
 
 /**
  * Interface of media device
@@ -12,6 +12,19 @@ interface MediaDevice {
    * Identify of device
    */
   deviceId: string;
+}
+/**
+ * Interface of phone call country
+ */
+interface PhoneCallCountry {
+  /** country name */
+  name: string;
+  /** country code */
+  code: string;
+  /**
+   * @ignore
+   */
+  id: string;
 }
 /**
  * Share privilege
@@ -30,7 +43,27 @@ export declare enum SharePrivilege {
  * Interface of start audio option
  */
 interface AudioOption {
+  /**
+   * Join audio only with the speaker, the microphoe is not connected.
+   */
   speakerOnly: boolean;
+}
+/**
+ * Interface of dial out option
+ */
+export interface DialOutOption {
+  /**
+   * Is call me, phone audio bind to current user
+   */
+  callMe?: boolean;
+  /**
+   * Is require greeting before being connected
+   */
+  greeting?: boolean;
+  /**
+   * Is require pressing 1 before being connected
+   */
+  pressingOne?: boolean;
 }
 interface CaptureVideoOption {
   /**
@@ -50,9 +83,13 @@ interface CaptureVideoOption {
    */
   mirrored?: boolean;
   /**
-   * video element, only used in android platform
+   * video element, only used in android platform or non-SharedArrayBuffer Chromium-like browser
    */
   videoElement?: HTMLVideoElement;
+  /**
+   * Is capture 720P video
+   */
+  hd?: boolean;
 }
 
 export declare enum VideoQuality {
@@ -112,9 +149,8 @@ export declare namespace Stream {
    *
    * ```javascript
    * // unmute myself
-   * if(stream.isAllowToUnmute()){
    *  await stream.unmuteAudio();
-   * }
+   *
    * // host unmute others
    * await stream.unmuteAudio(userId);
    * // participant side
@@ -126,6 +162,59 @@ export declare namespace Stream {
    *
    */
   function unmuteAudio(userId?: number): ExecutedResult;
+  /**
+   * You can join a Zoom meeting by means of teleconferencing/audio conferencing (using a traditional phone).This is useful when:
+   * - you do not have a microphone or speaker on your PC/Mac,
+   * - you do not have a smartphone (iOS or Android) while on the road, or
+   * - you cannot connect to a network for video and VoIP (computer audio)
+   *
+   * If a number is not listed or has asterisks (***) in place of some of the numbers, it means that number is not available on the account that you're currently logged into.
+   * Check the `stream.getSupportCountryInfo()` method to get available countries.
+   *
+   * - It works only the audio flag is `true` in the media constraints.
+   * - This method will triggle `dialout-state-change` event, add listener to get the latest value.
+   * ```javascript
+   * const countryCode = '+1'
+   * const phoneNumber ='8801'
+   * if(stream.getSupportCountryInfo().findIndex(country=>country.code===countryCode)>-1){
+   *  await stream.inviteByPhone(countryCode,phoneNumber,name);
+   * }
+   * client.on('dialout-state-change',({code})=>{
+   *  console.log('dial out stats:',code);
+   * });
+   * ```
+   * @param countryCode country code
+   * @param phoneNumber phone number
+   * @param name name
+   * @param option optional option of the call out
+   *
+   * @returns executed promise.
+   */
+  function inviteByPhone(
+    countryCode: string,
+    phoneNumber: string,
+    name: string,
+    options?: DialOutOption,
+  ): ExecutedResult;
+  /**
+   * Cancel the dial out request before it is complete.
+   *
+   * @param countryCode country code
+   * @param phoneNumber phone number
+   *
+   * @returns executed promise.
+   */
+  function cancelInviteByPhone(
+    countryCode: string,
+    phoneNumber: string,
+    options?: { callMe?: boolean },
+  ): ExecutedResult;
+  /**
+   * Hang up the phone. Only used when current audio joined by the phone
+   *
+   * @return executed promise.
+   */
+  function hangup(): ExecutedResult;
 
   /**
    * Whether the user is muted.
@@ -160,8 +249,8 @@ export declare namespace Stream {
    *
    * ```javascript
    *  const microphones = stream.getMicList();
-   *  const microphone = microphones.length>0 && microphones[0];
-   *  await switchMicrophone(microphone);
+   *  const microphone = // choose another microphone
+   *  await switchMicrophone(microphone.deviceId);
    * ```
    * @param microphoneId the device id of microphone
    *
@@ -174,6 +263,18 @@ export declare namespace Stream {
    *
    */
   function switchSpeaker(speakerId: string): ExecutedResult;
+  /**
+   * Is support phone call feature
+   */
+  function isSupportPhoneFeature(): boolean;
+  /**
+   * Get supported countries
+   */
+  function getSupportCountryInfo(): Array<PhoneCallCountry>;
+  /**
+   * Get phone call status
+   */
+  function getInviteByPhoneStatus(): DialoutState;
 
   // -------------------------------------------------[video]-----------------------------------------------------------
 
@@ -206,8 +307,8 @@ export declare namespace Stream {
   function startVideo(option?: CaptureVideoOption): ExecutedResult;
 
   /**
-   * Stop current video capturing.
    *
+   * Stop current video capturing.
    *
    * **Example**
    * ```javascript
@@ -234,8 +335,9 @@ export declare namespace Stream {
    * **Example**
    * ```javascript
    * try{
-   *   const newCameraDeviceId = stream.getCameraList()[0];
-   *   await stream.switchCamera(newCameraDeviceId);
+   *   const cameras = stream.getCameraList();
+   *   const camera =  // choose your camera
+   *   await stream.switchCamera(camera.deviceId);
    * } catch (error) {
    *   console.log(error);
    * }
@@ -383,18 +485,19 @@ export declare namespace Stream {
    */
   function mirrorVideo(mirrored: boolean): ExecutedResult;
   /**
+   * Try to enable hardware acceleration
+   *
+   * @param enable boolean or specific encode or decode
+   *
+   * @returns Promise<boolean> true: success, false: fail
+   */
+  function enableHardwareAcceleration(
+    enable: boolean | { encode?: boolean; decode?: boolean },
+  ): Promise<boolean>;
+  /**
    *
    * Get the isCapturingVideo flag status.
    *
-   * **Example**
-   * ```javascript
-   * try{
-   *   const isCapturingVideo = stream.isCapturingVideo();
-   *   console.log(isCapturingVideo);
-   * } catch (error) {
-   *   console.log(error);
-   * }
-   * ```
    *
    * @returns
    * - `true`: The stream object is capturing video.
@@ -406,16 +509,6 @@ export declare namespace Stream {
    *
    * Get the isCameraTaken flag status.
    *
-   * **Example**
-   * ```javascript
-   * try{
-   *   const isCameraTaken = stream.isCameraTaken();
-   *   console.log(isCameraTaken);
-   * } catch (error) {
-   *   console.log(error);
-   * }
-   * ```
-   *
    * @returns
    * - `true`: The camera is taken by other program.
    * - `false`: The camera is taken by other program.
@@ -425,18 +518,7 @@ export declare namespace Stream {
   /**
    * Get the isCaptureForbidden flag status.
    *
-   * **Example**
-   * ```javascript
-   * try{
-   *   const isCaptureForbidden = stream.isCaptureForbidden();
-   *   console.log(isCaptureForbidden);
-   * } catch (error) {
-   *   console.log(error);
-   * }
-   * ```
    *
-   * #### Parameters
-   * None.
    *
    * @returns
    * - `true`: The capture is forbidden by user.
@@ -449,17 +531,8 @@ export declare namespace Stream {
    *
    * **Note**
    * - This camera device list is collected from browser's navigator.mediaDevices object and maintained by the stream object.
-   * - If the user does not allow permission to access the camera, this list will have a default CameraDevice object with all property set to empty string.
+   * - If the user does not allow permission to access the camera, this list will have a default CameraDevice object with all properties set to empty string.
    *
-   * **Example**
-   * ```javascript
-   * try{
-   *   const currentCameraDevicesList = stream.getCameraList();
-   *   console.log(currentCameraDevicesList);
-   * } catch (error) {
-   *   console.log(error);
-   * }
-   * ```
    *
    * @returns
    * - `[]`: The video flag is `false` in media constraints.
@@ -472,15 +545,6 @@ export declare namespace Stream {
   /**
    * Get the recently active camera devices id.
    *
-   * **Example**
-   * ```javascript
-   * try{
-   *   const activeCamera = stream.getActiveCamera();
-   *   console.log(activeCamera);
-   * } catch (error) {
-   *   console.log(error);
-   * }
-   * ```
    *
    * @returns
    * - `''`: The video flag is `false` in media constraints.
@@ -490,20 +554,10 @@ export declare namespace Stream {
   function getActiveCamera(): string;
 
   /**
-   * Get the recently active video id.
    *
-   * **Example**
-   * ```javascript
-   * try{
-   *   const activeVideoId = stream.getActiveVideoId();
-   *   console.log(activeVideoId);
-   * } catch (error) {
-   *   console.log(error);
-   * }
-   * ```
+   * Get the active video id.
    *
    * @returns
-   * - `0`: No video is active or the video flag is `false` in media constraints.
    * - `number`: Id of current active video.
    */
   function getActiveVideoId(): number;

@@ -1,6 +1,8 @@
 import { ExecutedResult } from './common';
 import { Stream } from './media';
 import { ChatClient } from './chat';
+import { CommandChannel } from './command';
+import { RecordingClient } from './recording';
 import {
   event_connection_change,
   event_user_add,
@@ -10,6 +12,7 @@ import {
   event_audio_active_speaker,
   event_audio_unmute_consent,
   event_current_audio_change,
+  event_dial_out_change,
   event_chat_received_message,
   event_chat_privilege_change,
   event_auto_play_audio_failed,
@@ -24,6 +27,9 @@ import {
   event_share_privilege_change,
   event_peer_video_state_change,
   event_chat_delete_message,
+  event_command_channel_status,
+  event_command_channel_message,
+  event_recording_change,
 } from './event-callback';
 /**
  * Interface for the result of check system requirements.
@@ -125,9 +131,9 @@ export declare namespace VideoClient {
    * @param language The language of Zoom Video Web SDK. Default is `en-US`
    * @param dependentAssets In the ZOOM Video SDK, web workers and web assembly are used to process media stream. This part of the code is separated from the SDK, so it is necessary to specify the dependent assets path.
    * When the SDK is released, the web worker and the web assembly will be also included(the `lib` folder), you can either deploy these assets to your private servers or use the cloud assets provided by ZOOM. The property has following value:
-   * - `Global`: The default value. The dependent assets path will be `https://source.zoom.us/{version}/lib`
-   * - `CDN`: The dependent assets path will be `https://dmogdx0jrul3u.cloudfront.net/{version}/lib`
-   * - `CN`: Only applicable for China. The dependent assets path will be https://jssdk.zoomus.cn/{version}/lib
+   * - `Global`: The default value. The dependent assets path will be `https://source.zoom.us/videosdk/{version}/lib/`
+   * - `CDN`: The dependent assets path will be `https://dmogdx0jrul3u.cloudfront.net/videosdk/{version}/lib/`
+   * - `CN`: Only applicable for China. The dependent assets path will be https://jssdk.zoomus.cn/videosdk/{version}/lib
    * - `{FULL_ASSETS_PATH}`: The SDK will load the dependent assets spcified by the developer.
    * @param webEndpoint optional spcify the web endpoint,default is zoom.us
    */
@@ -214,6 +220,14 @@ export declare namespace VideoClient {
   ): void;
   /**
    * @param event
+   * @param listener Details in {@link event_dial_out_change}.
+   */
+  function on(
+    event: 'dialout-state-change',
+    listener: typeof event_dial_out_change,
+  ): void;
+  /**
+   * @param event
    * @param listener Details in {@link event_chat_received_message}.
    */
   function on(
@@ -231,6 +245,18 @@ export declare namespace VideoClient {
   function on(
     event: 'chat-privilege-change',
     listener: typeof event_chat_privilege_change,
+  ): void;
+  function on(
+    event: 'command-channel-status',
+    listener: typeof event_command_channel_status,
+  ): void;
+  function on(
+    event: 'command-channel-message',
+    listener: typeof event_command_channel_message,
+  ): void;
+  function on(
+    event: 'recording-change',
+    listener: typeof event_recording_change,
   ): void;
   /**
    * @param event
@@ -322,19 +348,13 @@ export declare namespace VideoClient {
    * @param token A JWT, should be generated on server.
    * @param userName user name
    * @param password If a password is required when joining the meeting, pass the password, otherwise omit it
+   * @param sessionIdleTimeoutMins Idle timeout to end the session
    *
    * @returns a executed promise. Following are the possible error reasons:
    * - `duplicated operation`: Duplicated invoke the `join` method.
    * - `invalid apiKey/sdkKey or signature`: ApiKey/SdkKey or signature is not correct.
    * - `invalid password`: Password is not correct.
-   * - `meeting is not started`: The meeting is not started. If you are the host of the meeting, you can start the meeting.
-   * - `meeting is locked`: The meeting is locked by the host, can not join the meeting.
-   * - `meeting is at capacity`: The meeting is at capacity.
-   * - `meeting is ended`: The meeting is already ended.
-   * - `rejected by information barrier`: Can not join the meeting because og the information barrier.
-   * - `rejected by existed participant`: Can not join the meeting because another client using the account is already in the meeting.
    * - `invalid parameters`: Can not join the meeting because the invalid parameters.
-   * - `rejected by been denied`: Can not join the meeting because the host has expeled you.
    * - `internal error`: Internal error.
    */
   function join(
@@ -342,24 +362,20 @@ export declare namespace VideoClient {
     token: string,
     userName: string,
     password?: string,
+    sessionIdleTimeoutMins?: number,
   ): ExecutedResult;
   /**
-   * Leave the meeting
+   * Leave or end the meeting
    *
    * @param end optional default false, if true, the session will end. Only the host has the privilege.
    *
    */
   function leave(end?: boolean): ExecutedResult;
   /**
-   * Rename your name or other participant's name
+   * Rename your name or other user's name
    * - Only the **host** or **manager** can rename others.
-   * - The host can set whether the participants are allowed to rename themselves. refer to the `client.isAllowToRename()` get the value.
+   * - The host can set whether the user are allowed to rename themselves. refer to the `client.isAllowToRename()` get the value.
    *
-   * ``` javascript
-   * if(client.isAllowToRename()){
-   *  await client.rename([new name]);
-   * }
-   * ```
    * @param name new display name
    * @param userId rename the spcified user
    *
@@ -387,13 +403,13 @@ export declare namespace VideoClient {
    *
    * @param userId
    */
-  function makeManager(userId: number): ExecutedResult;
+  // function makeManager(userId: number): ExecutedResult;
   /**
    * Revoke the manager permission from the participant
    * - Only the **host** can revoke Manager.
    * @param userId
    */
-  function revokeManager(userId: number): ExecutedResult;
+  // function revokeManager(userId: number): ExecutedResult;
 
   /**
    * Get current user info.
@@ -413,7 +429,14 @@ export declare namespace VideoClient {
    * Get chat client.
    */
   function getChatClient(): typeof ChatClient;
-
+  /**
+   * Get Command client.
+   */
+  function getCommandClient(): typeof CommandChannel;
+  /**
+   * Get Recording client.
+   */
+  function getRecordingClient(): typeof RecordingClient;
   /**
    * Gets the current session’s info.
    */
@@ -425,5 +448,5 @@ export declare namespace VideoClient {
   /**
    * Whether current user is manager
    */
-  function isManager(): boolean;
+  // function isManager(): boolean;
 }

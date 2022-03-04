@@ -1,5 +1,7 @@
+import { RecordingStatus } from './recording';
 import { SharePrivilege } from './media';
 import { ChatMessage, ChatPrivilege } from './chat';
+import { DialoutState } from './common';
 /**
  * The State of Meeting connection.
  */
@@ -357,6 +359,36 @@ export declare function event_chat_privilege_change(payload: {
 }): void;
 
 /**
+ * Occurs when the command channel status changed
+ * @param payload
+ *```javascript
+ * client.on('command-channel-status',payload=>{
+ *  console.log('from %s, message:%s',payload);
+ * })
+ * ```
+ * @event
+ */
+export declare function event_command_channel_status(payload: any): void;
+
+/**
+ * Occurs when command channel receive msg
+ * @param payload the event detail
+ * ```javascript
+ * client.on('command-channel-message',payload=>{
+ *  console.log('from %s, message:%s',payload.senderId, payload.text, payload.timestamp);
+ * })
+ * ```
+ * @event
+ */
+export declare function event_command_channel_message(payload: any): void;
+/**
+ * Occurs when cloud recording status changes.
+ * @param payload The recording status
+ */
+export declare function event_recording_change(payload: {
+  state: RecordingStatus;
+}): void;
+/**
  * Occurs when add or remove the microphone/speaker/camera
  * @event
  */
@@ -446,3 +478,16 @@ export declare function event_share_content_change(payload: {
 export declare function event_share_privilege_change(payload: {
   privilege: SharePrivilege;
 }): void;
+
+/**
+ * Occurs when dial out state change
+ *
+ * ```javascript
+ * client.on('dialout-state-change', (payload) => {
+ *    console.log(payload.code);
+ * });
+ * ```
+ * @param payload
+ * @event
+ */
+export declare function event_dial_out_change(payload: { code: DialoutState }): void;

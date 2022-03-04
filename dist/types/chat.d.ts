@@ -30,27 +30,16 @@ export declare enum ChatMsgType {
   All = 0,
 }
 /**
- * The chat interface provides the methods define the chat behavior
- *
- * The chat object can be accessed by `getFeatureModule` method of a `ZoomMeeting` instance.
+ * The chat client provides the methods define the chat behavior
  *  ```js
- * const client = ZoomMeeting.createClient();
- * client.init(
- *  sdkKey,
- *  makeSignature(),
- *  ...,
- *  ['chat'], // to enable chat interface
- * );
- * client.join(meetingNumber, 'test', '', 'test@test.com')
+ * const client = ZoomVideo.createClient();
+ *
  * ```
  *
- * after joining meeting success, chat interface is available
+ * After joining meeting success, chat client is available
  *
  * ```js
- * const chat = client.getFeatureModule('chat');
- * if (chat) {
- *  chat.getHistory(); // chat methods can be used now
- * }
+ * const chat = client.getChatClient();
  * // start to receive chat message
  * client.on('chat-on-message', (v) => {
  *  console.log(v);
@@ -66,8 +55,7 @@ export declare namespace ChatClient {
    *  chat.sendMessage('test', userId)
    *  .then(() => {
    *      // success
-   *  })
-   *     .catch(v => {
+   *  }).catch(v => {
    *      // fail
    *      console.log(v)
    *  })
@@ -92,14 +80,14 @@ export declare namespace ChatClient {
   function sendToAll(text: string): Promise<ChatMessage | Error>;
 
   /**
-   * host or co-Host use it to change chat privilege which defines what kind of role of user that attendee can talk to, there are the different privilege as following.
+   * host or manager use it to change chat privilege which defines what kind of role of user that user can chat to, there are the different privilege as following.
    *
    
    |         | privilege value                | describe                                            |
    |---------|--------------------------------|-----------------------------------------------------|
-   | meeting | ChatPrivilege.All              | attendee can talk to everyone                      |
-   |         | ChatPrivilege.NoOne            | attendee can talk to no one                         |
-   |         | ChatPrivilege.EveryonePublicly | attendee can talk to host, manager and everyone    |
+   | meeting | ChatPrivilege.All              | user can chat to everyone                      |
+   |         | ChatPrivilege.NoOne            | user can chat to no one                        |
+   |         | ChatPrivilege.EveryonePublicly | user can chat to host, manager and everyone    |
    *
    * #### example
    *

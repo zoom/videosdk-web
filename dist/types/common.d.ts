@@ -29,6 +29,101 @@ interface ExecutedFailure {
  * - ExecutedFailure: Failure. Use `.catch(error=>{})` or `try{ *your code* }catch(error){}` to handle the errors.
  */
 export type ExecutedResult = Promise<'' | ExecutedFailure>;
+
 /**
- * Interface for the additional configuration of initialization.
+ * The state of dial out state
+ *
+ * Normal process: Calling-> Ringing->Accepted->Success
+ *
+ * Busy process: Calling->Busy
  */
+export enum DialoutState {
+  /**
+   * Calling
+   */
+  Calling = 1,
+  /**
+   * Ringing
+   */
+  Ringing = 2,
+  /**
+   * Accepted the call
+   */
+  Accepted = 3,
+  /**
+   * Busy
+   */
+  Busy = 4,
+  /**
+   * Service unavailable
+   */
+  NotAvailable = 5,
+  /**
+   * Hang up the call
+   */
+  HangUp = 6,
+  /**
+   * Fail
+   */
+  Fail = 7,
+  /**
+   * Success
+   */
+  Success = 8,
+  /**
+   * Timeout
+   */
+  Timeout = 9,
+  /**
+   * Canceling the call
+   */
+  Canceling = 10,
+  /**
+   * Canceled the call
+   */
+  Canceled = 11,
+  /**
+   * Cancel the call failed
+   */
+  CancelFailed = 12,
+}
+
+/**
+ * Payload audio muted source type for current-audio-change event
+ */
+export enum MutedSource {
+  /**
+   * User actively muted
+   */
+  Active = 'active',
+  /**
+   * The host muted you
+   */
+  PassiveByMuteOne = 'passive(mute one)',
+  /**
+   * The host muted all
+   */
+  PassiveByMuteAll = 'passive(mute all)',
+}
+
+/**
+ * Payload for action type of current audio change
+ */
+export enum AudioChangeAction {
+  /**
+   * Join the audio
+   */
+  Join = 'join',
+  /**
+   * Leave the audio
+   */
+  Leave = 'leave',
+  /**
+   * Muted
+   */
+  Muted = 'muted',
+  /**
+   * Unmuted
+   */
+  Unmuted = 'unmuted',
+}

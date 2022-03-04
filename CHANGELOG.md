@@ -1,5 +1,21 @@
 ## CHANGELOG
 
+## v1.2.0
+
+### Added:
+* Support for [Cloud Recording](https://marketplace.zoom.us/docs/sdk/video/web/essential/recording)
+* Limited support for [720p video send](https://marketplace.zoom.us/docs/sdk/overview/720p)
+* Support for call out
+* Support for command channel / real-time data
+* Improved role management
+  * *The user who created a session is considered the "original host". The original host has the following privileges: the session ends after a configurable timeout after the original host leaves a session, if a new host was not assigned. When the original host rejoins the same session later, if nobody was assigned as the new host by the original host before they left the session, the original host can claim the 'host' role, based on its user_identity setting in the JWT payload. The original host can take the host role at any time from the current host. See user_identity and role_type in [Authentication](https://marketplace.zoom.us/docs/sdk/video/auth) for details.*
+* Interface to disable session timeout
+  * *Previously, the Video SDK session would end after being idle for 48 hours. This interface enables you to choose to disable the timeout and allow the participants to be idle for an unlimited period of time. The new parameter is an unsigned int sessionIdleTimeoutMins. The default value is 40 minutes.*
+
+### Fixed:
+* chatClient.getHistory() method was not exposed
+* makeManager, revokeManager, and isManager are not available as co-hosts are not supported by the Web Video SDK. These have been removed from the documentation as well
+
 ## v1.1.7
 
 ### Added:

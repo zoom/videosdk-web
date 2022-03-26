@@ -1,5 +1,18 @@
 ## CHANGELOG
 
+## v1.2.3
+
+### Added:
+* Support for users to join session before host
+
+### Fixed:
+* Issue with Command Channel having unexpected failover behavior when ending a session
+* Audio and video not reconnecting properly on failover
+* Error code not being sent correctly when no server responds to connection requests
+
+### Known Issue:
+On Chromium, video stops playing and goes black when resolution changes to or from 720p. This is caused by a bug in Chromium, which is due to be fixed in Chrome 101, scheduled for release at the end of April. To work around this, you may reduce resolution below 720p; alternatively, if you’d like to continue using 720p, it may help to add a button or messaging to the user to toggle their video on and off
+
 ## v1.2.0
 
 ### Added:

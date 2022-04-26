@@ -124,6 +124,27 @@ interface Participant {
    */
   sharePause: boolean;
 }
+
+/**
+ * Init options of `init` method
+ */
+interface InitOptions {
+  /**
+   * optional spcify the web endpoint,default is zoom.us
+   */
+  webEndpoint?: string;
+  /**
+   * optional
+   * Enforce multiple videos(up to 3 videos of others and 1 video of self) on Chromium-like browser without SharedArrayBuffer.
+   * Note that this may result in high CPU and memory usage.
+   */
+  enforceMultipleVideos?: boolean;
+  /**
+   * optional do not load dependent assets
+   * Used to address specific edge-cases, please do not use for almost all use-cases
+   */
+  skipJsMedia?: boolean;
+}
 export declare namespace VideoClient {
   /**
    * Initilize the ZOOM Video SDK before join a meeting.
@@ -135,12 +156,12 @@ export declare namespace VideoClient {
    * - `CDN`: The dependent assets path will be `https://dmogdx0jrul3u.cloudfront.net/videosdk/{version}/lib/`
    * - `CN`: Only applicable for China. The dependent assets path will be https://jssdk.zoomus.cn/videosdk/{version}/lib
    * - `{FULL_ASSETS_PATH}`: The SDK will load the dependent assets spcified by the developer.
-   * @param webEndpoint optional spcify the web endpoint,default is zoom.us
+   * @param options optional additional options for initialization
    */
   function init(
     language: string,
     dependentAssets: string | 'CDN' | 'Global' | 'CN',
-    webEndpoint?: string,
+    options?: InitOptions,
   ): ExecutedResult;
   /**
    * Get the media stream instance for managing the media.

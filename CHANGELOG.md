@@ -1,4 +1,14 @@
 ## CHANGELOG
+## v1.2.5
+### Added:
+* Support for audio on iOS Safari
+* Support for multiple videos (3 others + 1 self) on Chromium browsers without SharedArrayBuffer. Set the value of `enforceMultipleVideos` to `true` in the `init` method to enable this feature
+
+### Fixed:
+* Audio issues on Safari browser
+* Unexpected failover when leaving or ending a session on Safari (related to the [NSURLSession WebSocket](https://bugs.webkit.org/show_bug.cgi?id=228296) experimental feature)
+* Issue of improperly clearing all sessionStorage when leaving the session
+* An edge case issue with session idle timeouts and command channel
 
 ## v1.2.3
 
@@ -12,7 +22,7 @@
 
 ### Known Issue:
 On Chromium, video stops playing and goes black when resolution changes to or from 720p. This is caused by a bug in Chromium, which is due to be fixed in Chrome 101, scheduled for release at the end of April. To work around this, you may reduce resolution below 720p; alternatively, if you’d like to continue using 720p, it may help to add a button or messaging to the user to toggle their video on and off
-
+  
 ## v1.2.0
 
 ### Added:

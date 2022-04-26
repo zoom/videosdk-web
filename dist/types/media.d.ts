@@ -46,7 +46,14 @@ interface AudioOption {
   /**
    * Join audio only with the speaker, the microphoe is not connected.
    */
-  speakerOnly: boolean;
+  speakerOnly?: boolean;
+  /**
+   * start audio automatically in Safari
+   *
+   * It's a little different in the Safari browser, when calling `startAudio` automatically or programmatically without any gesture (click or touch on the document),
+   * the value of `autoStartAudioInSafari` should be `true`, other than that, the value should always be `false` or unset.
+   */
+  autoStartAudioInSafari?: boolean;
 }
 /**
  * Interface of dial out option
@@ -114,7 +121,6 @@ export declare namespace Stream {
   // ------------------------------------------------[audio]------------------------------------------------------------
   /**
    * Join audio by the microphone and speaker.
-   * - It works only the audio flag is `true` in the media constraints.
    * - If the participant has joined audio by the phone, he/she cannot join the computer audio.
    *
    * ```javascript
@@ -123,6 +129,42 @@ export declare namespace Stream {
    * const stream = client.getMediaStream();
    * await stream.startAudio();
    * ```
+   *
+   * It's a little different in Safari browser.
+   * ```javascript
+   * let audioDecode, audioEncode;
+   * // wait until the encoding and decoding process is ready for the audio
+   * client.on("media-sdk-change", (payload) => {
+   *    const { action, type, result } = payload;
+   *    if (type === "audio" && result === "success") {
+   *      if (action === "encode") {
+   *        audioEncode = true;
+   *      } else if (action === "decode") {
+   *        audioDecode = true;
+   *      }
+   *      if (audioDecode && audioEncode) {
+   *        try {
+   *          // start audio automatically in Safari
+   *          stream.startAudio({ autoStartAudioInSafari: true });
+   *        } catch (err) {
+   *          console.warn(err);
+   *        }
+   *      }
+   *    }
+   *  });
+   *
+   *  // Start audio in 'click' callback in Safari
+   *  joinAudioButton.addEventListener("click", () => {
+   *    if (audioDecode && audioDecode) {
+   *      try {
+   *        stream.startAudio();
+   *      } catch (err) {
+   *         console.warn(err);
+   *      }
+   *    }
+   *  });
+   *
+   * ```
    * @returns executed promise. Following are the possible error reasons:
    * - type=`USER_FORBIDDEN_MICROPHONE`: The user has blocked accesses to the microphone from the sdk, try to grant the privilege and rejoin the meeting.
    */
@@ -130,7 +172,6 @@ export declare namespace Stream {
 
   /**
    * Leave the computer audio
-   * - It works only the audio flag is `true` in the media constraints.
    */
   function stopAudio(): ExecutedResult;
 
@@ -171,7 +212,6 @@ export declare namespace Stream {
    * If a number is not listed or has asterisks (***) in place of some of the numbers, it means that number is not available on the account that you're currently logged into.
    * Check the `stream.getSupportCountryInfo()` method to get available countries.
    *
-   * - It works only the audio flag is `true` in the media constraints.
    * - This method will triggle `dialout-state-change` event, add listener to get the latest value.
    * ```javascript
    * const countryCode = '+1'
@@ -353,8 +393,6 @@ export declare namespace Stream {
    *
    * Start render video
    *
-   * **Note**
-   * - It works only when the video flag is `true` in media constraints.
    *
    * **Example**
    * ```javascript
@@ -398,8 +436,6 @@ export declare namespace Stream {
   /**
    * Stop render the video.
    *
-   * **Note**
-   * - It works only when the video flag is `true` in media constraints.
    *
    * **Example**
    * ```javascript

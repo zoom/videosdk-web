@@ -1,4 +1,8 @@
 ## CHANGELOG
+## v1.2.7
+### Fixed:
+* Issue where two-or-more videos could not be properly, simultaneously shown on Firefox and Safari
+
 ## v1.2.5
 ### Added:
 * Support for audio on iOS Safari

@@ -1,7 +1,53 @@
 import { RecordingStatus } from './recording';
 import { SharePrivilege } from './media';
 import { ChatMessage, ChatPrivilege } from './chat';
-import { DialoutState } from './common';
+import {
+  DialoutState,
+  ReconnectReason,
+  AudioChangeAction,
+  MutedSource,
+} from './common';
+/**
+ * Interface of a ParticipantPropertiesPayload
+ */
+export interface ParticipantPropertiesPayload {
+  /**
+   * Identify of the user
+   */
+  userId: number;
+  /**
+   * Avatar of the user
+   */
+  avatar?: string;
+  /**
+   * Display name
+   */
+  displayName?: string;
+  /**
+   * Whether the user is host
+   */
+  isHost?: boolean;
+  /**
+   * Whether the user is manager
+   */
+  isManager: boolean;
+  /**
+   * Whether the audio is muted
+   */
+  muted?: boolean;
+  /**
+   * Whether the user is starting the video
+   */
+  bVideoOn?: boolean;
+  /**
+   * Whether the user is starting share
+   */
+  sharerOn?: boolean;
+  /**
+   * Whether the sharing is paused
+   */
+  sharerPause?: boolean;
+}
 /**
  * The State of Meeting connection.
  */
@@ -41,13 +87,6 @@ export declare enum PassiveStopShareReason {
   StopScreenCapture = 'StopScreenCapture',
 }
 /**
- * Reason of the meeting reconnecting
- * - `on hold`: From on hold to into meeting.
- * - `failover`: Remote server disconnect unexpectedly.
- * - `promote`|`depromote`: From attendee to panelist and vice versa.
- */
-type ReconnectingReason = 'failover';
-/**
  * Reason of the meeting closed
  * - `kicked by host`: Been kicked by the host.
  * - `ended by host`: The meeting is ended by the hose.
@@ -65,48 +104,7 @@ interface ConnectionChangePayload {
   /**
    * Reason of the change.
    */
-  reason?: ReconnectingReason | ClosedReason;
-}
-/**
- * Interface of Participant Properties
- */
-interface ParticipantPropertiesPayload {
-  /**
-   * Identify of the user
-   */
-  userId: number;
-  /**
-   * Avatar of the user
-   */
-  avatar?: string;
-  /**
-   * Display name
-   */
-  displayName?: string;
-  /**
-   * Whether the user is host
-   */
-  isHost?: boolean;
-  /**
-   * Whether the user is manager
-   */
-  isManager: boolean;
-  /**
-   * Whether the audio is muted
-   */
-  muted?: boolean;
-  /**
-   * Whether the user is starting the video
-   */
-  bVideoOn?: boolean;
-  /**
-   * Whether the user is starting share
-   */
-  sharerOn?: boolean;
-  /**
-   * Whether the sharing is paused
-   */
-  sharerPause?: boolean;
+  reason?: ReconnectReason | ClosedReason;
 }
 
 /**
@@ -135,6 +133,7 @@ interface MediaSDKEncDecPayload {
  *
  * @param payload The event detail.
  * @event
+ * @category Session
  */
 export declare function event_connection_change(
   payload: ConnectionChangePayload,
@@ -151,6 +150,7 @@ export declare function event_connection_change(
  * ```
  * @param payload The event detail
  * @event
+ * @category Session
  */
 export declare function event_user_add(
   payload: Array<ParticipantPropertiesPayload>,
@@ -159,6 +159,7 @@ export declare function event_user_add(
  * Occurs when the properties of the participants updated.
  * @param payload The event detail
  * @event
+ * @category Session
  */
 export declare function event_user_update(
   payload: Array<ParticipantPropertiesPayload>,
@@ -167,6 +168,7 @@ export declare function event_user_update(
  * Occurs when the participants leave the meeting
  * @param payload The event detail
  * @event
+ * @category Session
  */
 export declare function event_user_remove(
   payload: Array<ParticipantPropertiesPayload>,
@@ -190,6 +192,7 @@ export declare function event_user_remove(
  * ```
  * @param payload The event detail
  * @event
+ * @category Video
  */
 export declare function event_video_active_change(payload: {
   state: VideoActiveState;
@@ -215,6 +218,7 @@ export declare function event_video_active_change(payload: {
  * ```
  * @param payload The event detail
  * @event
+ * @category Video
  */
 export declare function event_video_capturing_change(payload: {
   state: VideoCapturingState;
@@ -229,6 +233,7 @@ export declare function event_video_capturing_change(payload: {
  * ```
  * @param payload
  * @event
+ * @category Video
  */
 export declare function event_video_dimension_change(payload: {
   width: number;
@@ -241,6 +246,7 @@ export declare function event_video_dimension_change(payload: {
  *
  * @param payload
  * @event
+ * @category Video
  */
 export declare function event_peer_video_state_change(payload: {
   action: 'Start' | 'Stop';
@@ -257,6 +263,7 @@ export declare function event_peer_video_state_change(payload: {
  * @param payload active user
  * - Distinguish activity level by the volume, the bigest is the first element.
  * @event
+ * @category Audio
  */
 export declare function event_audio_active_speaker(
   payload: Array<ActiveSpeaker>,
@@ -275,6 +282,7 @@ export declare function event_audio_active_speaker(
  * });
  * ```
  * @event
+ * @category Audio
  */
 export declare function event_audio_unmute_consent(payload: {
   reason: 'Spotlight' | 'Unmute' | 'Allow to talk';
@@ -304,11 +312,12 @@ export declare function event_audio_unmute_consent(payload: {
  * });
  * ```
  * @event
+ * @category Audio
  */
 export declare function event_current_audio_change(payload: {
-  action: 'join' | 'leave' | 'muted' | 'unmuted';
+  action: AudioChangeAction;
   type?: 'phone' | 'computer';
-  source?: 'active' | 'passive(mute all)' | 'passive(mute one)' | 'passive';
+  source?: MutedSource;
 }): void;
 /**
  * Occurs when the SDK try to auto play audio failed. It may occur invoke stream.joinComputerAudio() immediately after join the meeting.
@@ -318,6 +327,8 @@ export declare function event_current_audio_change(payload: {
  *  console.log('auto play audio failed, waiting user's interaction');
  * })
  * ```
+ * @event
+ * @category Audio
  */
 export declare function event_auto_play_audio_failed(): void;
 /**
@@ -329,6 +340,7 @@ export declare function event_auto_play_audio_failed(): void;
  * })
  * ```
  * @event
+ * @category Chat
  */
 export declare function event_chat_received_message(payload: ChatMessage): void;
 
@@ -341,6 +353,7 @@ export declare function event_chat_received_message(payload: ChatMessage): void;
  * })
  * ```
  * @event
+ * @category Chat
  */
 export declare function event_chat_delete_message(payload: { id: string }): void;
 
@@ -353,6 +366,7 @@ export declare function event_chat_delete_message(payload: { id: string }): void
  * })
  * ```
  * @event
+ * @category Chat
  */
 export declare function event_chat_privilege_change(payload: {
   chatPrivilege: ChatPrivilege;
@@ -367,6 +381,7 @@ export declare function event_chat_privilege_change(payload: {
  * })
  * ```
  * @event
+ * @category Command channel
  */
 export declare function event_command_channel_status(payload: any): void;
 
@@ -379,11 +394,14 @@ export declare function event_command_channel_status(payload: any): void;
  * })
  * ```
  * @event
+ * @category Command channel
  */
 export declare function event_command_channel_message(payload: any): void;
 /**
  * Occurs when cloud recording status changes.
  * @param payload The recording status
+ * @event
+ * @category Recording
  */
 export declare function event_recording_change(payload: {
   state: RecordingStatus;
@@ -391,12 +409,14 @@ export declare function event_recording_change(payload: {
 /**
  * Occurs when add or remove the microphone/speaker/camera
  * @event
+ * @category Media
  */
 export declare function event_device_change(): void;
 /**
  * Occurs when the encode or decode state of media sdk changes
  * @param payload
  * @event
+ * @category Media
  */
 export declare function event_media_sdk_change(payload: MediaSDKEncDecPayload): void;
 /**
@@ -413,6 +433,7 @@ export declare function event_media_sdk_change(payload: MediaSDKEncDecPayload): 
  * ```
  * @param payload
  * @event
+ * @category Screen share
  */
 export declare function event_active_share_change(payload: {
   state: 'Active' | 'Inactive';
@@ -428,6 +449,7 @@ export declare function event_active_share_change(payload: {
  * ```
  * @param payload
  * @event
+ * @category Screen share
  */
 export declare function event_share_content_dimension_change(payload: {
   type: 'sended' | 'received'; // sended: current share; received: others' share
@@ -438,6 +460,7 @@ export declare function event_share_content_dimension_change(payload: {
  * Occurs when current sharing is passively stopped.
  * @param payload
  * @event
+ * @category Screen share
  */
 export declare function event_passively_stop_share(
   payload: PassiveStopShareReason,
@@ -456,6 +479,7 @@ export declare function event_passively_stop_share(
  * ```
  * @param payload
  * @event
+ * @category Screen share
  */
 export declare function event_peer_share_state_change(payload: {
   userId: number;
@@ -466,6 +490,7 @@ export declare function event_peer_share_state_change(payload: {
  * - Maybe host start new sharing, received shared content will be automatically changed
  * @param payload
  * @event
+ * @category Screen share
  */
 export declare function event_share_content_change(payload: {
   userId: number;
@@ -474,6 +499,7 @@ export declare function event_share_content_change(payload: {
  * Occurs when the host change the share privilege
  * @param payload
  * @event
+ * @category Screen share
  */
 export declare function event_share_privilege_change(payload: {
   privilege: SharePrivilege;
@@ -489,5 +515,94 @@ export declare function event_share_privilege_change(payload: {
  * ```
  * @param payload
  * @event
+ * @category Phone
  */
 export declare function event_dial_out_change(payload: { code: DialoutState }): void;
+/**
+ * Occurs when share audio state changes. It is usually used to cooperatively change the state of computer audio
+ * @param payload
+ * @event
+ * @category Audio
+ */
+export declare function event_share_audio_change(payload: {
+  state: 'on' | 'off';
+}): void;
+
+/**
+ * Occur when virtual background is enabled,and vb model is loaded
+ * @param payload
+ * @event
+ * @category Video
+ */
+export declare function event_video_vb_preload_change(payload: {
+  isReady: boolean;
+}): void;
+/**
+ * Occurs when decode (recevied) the audio statistics data is changed
+ * @param payload the event detail
+ * - `data`
+ *  - `encoding`: if encoding is true, means that the data is encoding audio data statisitics.
+ *  - `avg_loss`: average package loss for audio
+ *  - `jitter`: jitter for audio
+ *  - `max_loss`: max package loss for audio
+ *  - `rtt`: round trip time for audio .
+ *  - `sample_rate`: sample rate audio
+ * - `type` : string AUDIO_QOS_DATA
+ * ```javascript
+ * client.on('audio-statistic-data-change', (payload) => {
+ *   console.log('emit', payload);
+ *  });
+ * ```
+ * @event
+ * @category Audio
+ */
+
+export declare function event_audio_statistic_data_change(payload: {
+  data: {
+    avg_loss: number;
+    encoding: boolean;
+    jitter: number;
+    max_loss: number;
+    rtt: number;
+    sample_rate: number;
+  };
+  type: 'AUDIO_QOS_DATA';
+}): void;
+/**
+ * Occurs when decode (recevied) the video statistics data is changed
+ * @param payload the event detail
+ * - `data`
+ *  - `encoding`: if encoding is true, means that the data is encoding video data statisitics.
+ *  - `avg_loss`: average package loss for video
+ *  - `jitter`: jitter for video
+ *  - `max_loss`: max package loss for video
+ *  - `rtt`: round trip time for video .
+ *  - `sample_rate`: sample rate video
+ *  - `width`: width for video
+ *  - `height`: height for video
+ *  - `fps`: fps for video
+ * - `type` : string VIDEO_QOS_DATA
+ *
+ * ```javascript
+ * client.on('video-statistic-data-change', (payload) => {
+ *   console.log('emit', payload);
+ *  });
+ * ```
+ * @event
+ * @category Video
+ */
+
+export declare function event_video_statistic_data_change(payload: {
+  data: {
+    avg_loss: number;
+    encoding: boolean;
+    jitter: number;
+    max_loss: number;
+    rtt: number;
+    sample_rate: number;
+    width: number;
+    height: number;
+    fps: number;
+  };
+  type: 'VIDEO_QOS_DATA';
+}): void;

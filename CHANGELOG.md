@@ -1,9 +1,38 @@
 ## CHANGELOG
+## v1.3.0
+
+* The `role_type` attribute in the JWT token is required. See [SDK Authorization](https://marketplace.zoom.us/docs/sdk/video/auth) for details.
+
+### Added
+* Virtual background support, and APIs
+  * APIs include: `isSupportVirtualBackground`,  `previewVirtualBackground`, `updateVirtualBackgroundImage`, `stopPreviewVirtualBackground`, and `virtualBackground` option in `startVideo` method
+  * See API reference for more details
+* Audio and video statistic information. 
+  * Subscribe to audio and video data via `subscribeAudioStatisticData` and `subscribeVideoStatisticData`
+  * Data will be sent every second via the `audio-statistic-data-change` and `video-statistic-data-change` events
+* Support for sharing audio only while screen sharing a Chrome tab
+* Support for sharing “Content from 2nd Camera” (e.g. a document camera, or the integrated camera on your laptop)
+  * New `ScreenShareOption` option for the `startShareScreen` method
+  * New secondaryCamera-related method: `switchSharingSecondaryCamera`
+  * See [here](https://support.zoom.us/hc/en-us/articles/201362153-Sharing-your-screen-or-desktop-on-Zoom) for more details on functionality, and the API reference for usage
+
+### Enhanced
+* Datacenter selection algorithm for reduced latency and improved in-meeting performance
+  * Improvements include geo-fencing and greater prioritization of geographically-close servers
+* QoS for in-meeting video streams (e.g. participant videos)
+
+### Fixed
+* Occasional conflicts when starting 720p videos with virtual background
+* Issue where the start audio with `speakerOnly` option on iOS mobile browser could lead to users not hearing audio
+* Video rendering issue on Android mobile browsers
+
 ## v1.2.7
+
 ### Fixed:
 * Issue where two-or-more videos could not be properly, simultaneously shown on Firefox and Safari
 
 ## v1.2.5
+
 ### Added:
 * Support for audio on iOS Safari
 * Support for multiple videos (3 others + 1 self) on Chromium browsers without SharedArrayBuffer. Set the value of `enforceMultipleVideos` to `true` in the `init` method to enable this feature

@@ -79,27 +79,6 @@ interface Participant {
    */
   sharePause: boolean;
 }
-/**
- * Status of subsession
- */
-export enum SubsessionStatus {
-  /**
-   * Subsession is not open
-   */
-  NotStarted = 1,
-  /**
-   * Subsession is open
-   */
-  InProgress = 2,
-  /**
-   * Subsession is closing, there may be a closing countdown
-   */
-  Closing = 3,
-  /**
-   * Subsession is closed
-   */
-  Closed = 4,
-}
 
 /**
  * The state of dial out state
@@ -207,16 +186,4 @@ export enum ReconnectReason {
    * meeting failover
    */
   Failover = 'failover',
-  /**
-   * join the breakout subsession
-   */
-  JoinSubsession = 'join breakout room',
-  /**
-   * move among the breakout subsessions
-   */
-  MoveToSubsession = 'move to breakout room',
-  /**
-   * back to the main session
-   */
-  BackToMainSession = 'back to main session',
 }

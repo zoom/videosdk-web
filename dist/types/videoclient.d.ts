@@ -3,7 +3,6 @@ import { Stream } from './media';
 import { ChatClient } from './chat';
 import { CommandChannel } from './command';
 import { RecordingClient } from './recording';
-import { SubsessionClient } from './subsession';
 
 import {
   event_connection_change,
@@ -34,15 +33,6 @@ import {
   event_recording_change,
   event_share_audio_change,
   event_video_vb_preload_change,
-  event_bo_invite_to_join,
-  event_bo_room_countdown,
-  event_bo_room_time_up,
-  event_bo_closing_room_countdown,
-  event_bo_broadcast_message,
-  event_bo_ask_for_help,
-  event_bo_ask_for_help_response,
-  event_bo_room_state_change,
-  event_bo_main_session_change,
   event_audio_statistic_data_change,
   event_video_statistic_data_change,
   event_media_sdk_change,
@@ -371,86 +361,6 @@ export declare namespace VideoClient {
     listener: typeof event_share_audio_change,
   ): void;
   /**
-   * @param event
-   * @param listener Details in {@link event_bo_invite_to_join}.
-   */
-  function on(
-    event: 'subsession-invite-to-join',
-    listener: typeof event_bo_invite_to_join,
-  ): void;
-  /**
-   *
-   * @param event
-   * @param listener Details in {@link event_bo_room_countdown}.
-   */
-  function on(
-    event: 'subsession-countdown',
-    listener: typeof event_bo_room_countdown,
-  ): void;
-  /**
-   *
-   * @param event
-   * @param listener Details in {@link event_bo_room_time_up}.
-   */
-  function on(
-    event: 'subsession-time-up',
-    listener: typeof event_bo_room_time_up,
-  ): void;
-  /**
-   *
-   * @param event
-   * @param listener Details in {@link event_bo_closing_room_countdown}.
-   */
-  function on(
-    event: 'closing-subsession-countdown',
-    listener: typeof event_bo_closing_room_countdown,
-  ): void;
-  /**
-   *
-   * @param event
-   * @param listener Details in {@link event_bo_broadcast_message}.
-   */
-  function on(
-    event: 'subsession-broadcast-message',
-    listener: typeof event_bo_broadcast_message,
-  ): void;
-  /**
-   *
-   * @param event
-   * @param listener  Details in {@link event_bo_ask_for_help}.
-   */
-  function on(
-    event: 'subsession-ask-for-help',
-    listener: typeof event_bo_ask_for_help,
-  ): void;
-  /**
-   *
-   * @param event
-   * @param listener Details in {@link event_bo_ask_for_help_response}.
-   */
-  function on(
-    event: 'subsession-ask-for-help-response',
-    listener: typeof event_bo_ask_for_help_response,
-  ): void;
-  /**
-   *
-   * @param event
-   * @param listener Details in {@link event_bo_room_state_change}.
-   */
-  function on(
-    event: 'subsession-state-change',
-    listener: typeof event_bo_room_state_change,
-  ): void;
-  /**
-   *
-   * @param event
-   * @param listener Details in {@link event_bo_main_session_change}.
-   */
-  function on(
-    event: 'main-session-user-updated',
-    listener: typeof event_bo_main_session_change,
-  ): void;
-  /**
    *
    * @param event
    * @param listener Details in {@link event_video_vb_preload_change}
@@ -570,10 +480,6 @@ export declare namespace VideoClient {
    * Get Recording client.
    */
   function getRecordingClient(): typeof RecordingClient;
-  /**
-   * Get Breakout Room client.
-   */
-  function getSubsessionClient(): typeof SubsessionClient;
   /**
    * Gets the current session’s info.
    */

@@ -2,7 +2,6 @@ import { RecordingStatus } from './recording';
 import { SharePrivilege } from './media';
 import { ChatMessage, ChatPrivilege } from './chat';
 import {
-  SubsessionStatus,
   DialoutState,
   ReconnectReason,
   AudioChangeAction,
@@ -106,10 +105,6 @@ interface ConnectionChangePayload {
    * Reason of the change.
    */
   reason?: ReconnectReason | ClosedReason;
-  /**
-   * If the reason is JoinSubsession or MoveToSubsession, this is the subsession name
-   */
-  subsessionName?: string;
 }
 
 /**
@@ -611,113 +606,3 @@ export declare function event_video_statistic_data_change(payload: {
   };
   type: 'VIDEO_QOS_DATA';
 }): void;
-
-/** breakout room start */
-
-/**
- *
- * Occurs when the host assigned you in to a subsession, you can decide whether to join the subsession
- * Use `SubsessionClient.joinSubsession(subsessionId)` to join the subsession
- *
- * @param payload
- *
- * @event
- * @category Subsession
- */
-export declare function event_bo_invite_to_join(payload: {
-  subsessionId: string;
-  subsessionName: string;
-}): void;
-
-/**
- *
- * Occurs when the subsession has a countdown, this event will be triggered every second until time up
- *
- * @param payload
- *  -countdown: seconds remaining
- *
- * @event
- * @category Subsession
- */
-export declare function event_bo_room_countdown(payload: {
-  countdown: number;
-}): void;
-
-/**
- * Occurs when the countdown is over.
- *
- * @event
- * @category Subsession
- */
-export declare function event_bo_room_time_up(): void;
-
-/**
- * Occurs when there is a buffer countdown when the subsession is about to be closed, this event will be triggered every second until countdown is over
- * @param payload
- *  -countdown: seconds remaining
- *
- * @event
- * @category Subsession
- */
-export declare function event_bo_closing_room_countdown(payload: {
-  countdown: number;
-}): void;
-/**
- * Occurs when the host broadcasts content to all
- * @param payload
- *
- * @event
- * @category Subsession
- */
-export declare function event_bo_broadcast_message(payload: {
-  message: string;
-}): void;
-
-/**
- * Occurs when the host received the request for help
- * @param payload
- *
- * @event
- * @category Subsession
- */
-export declare function event_bo_ask_for_help(payload: {
-  userId: number;
-  displayName: string;
-  subsessionName: string;
-  subsessionId: string;
-}): void;
-export declare enum AskHostHelpResponse {
-  Received = 0,
-  Busy = 1,
-  Ignore = 2,
-  AlreadyInRoom = 3,
-}
-/**
- * Occurs when the attendee received the repose the request for help
- * @param payload
- *
- * @event
- * @category Subsession
- */
-export declare function event_bo_ask_for_help_response(payload: {
-  result: AskHostHelpResponse;
-}): void;
-/**
- * Occurs when the status of subsession changed
- * @param payload
- *
- * @event
- * @category Subsession
- */
-export declare function event_bo_room_state_change(payload: {
-  status: SubsessionStatus;
-}): void;
-/**
- * Occurs when the host is in subsession,  main session user changed
- * @param payload
- *
- * @event
- * @category Subsession
- */
-export declare function event_bo_main_session_change(payload: any): void;
-/** breakout room end */

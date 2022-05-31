@@ -97,21 +97,224 @@ interface CaptureVideoOption {
    * Is capture 720P video
    */
   hd?: boolean;
+  /**
+   * virtual background option
+   */
+  virtualBackground?: {
+    /**
+     * image url for virtual background
+     * - If set a specific image, the url can be  a regular http|https url, base64 format or ObjectURL
+     * - 'blur' : blur your background
+     * - undefined : no virtual backround
+     */
+    imageUrl: string | 'blur' | undefined;
+    /**
+     * cropping the background image to an appropriate aspect ratio(16/9), default is false
+     */
+    cropped?: boolean;
+  };
+}
+/**
+ * Interface of audio qos data
+ */
+export interface AudioQosData {
+  /**
+   * audio sample rate
+   */
+  sample_rate: number;
+  /**
+   * audio round trip time
+   */
+  rtt: number;
+  /**
+   * audio jitter
+   */
+  jitter: number;
+  /**
+   * audio average loss
+   */
+  avg_loss: number;
+  /**
+   * audio max loss
+   */
+  max_loss: number;
+}
+/**
+ * Interface of audio statistic option
+ */
+interface AudioStatisticOption {
+  /**
+   * Subscribe/unsubscribe encoding data(sending audio)
+   */
+  encode?: boolean;
+  /**
+   * Subscribe/ubsubscribe decoding data(receiving audio)
+   */
+  decode?: boolean;
+}
+/**
+ * Interface of share screen option
+ */
+export interface ScreenShareOption {
+  /**
+   * the cameraId
+   * Share a secondary camera connected to your computer; for example, a document camera or the integrated camera on your laptop.
+   */
+  secondaryCameraId?: string;
+  /**
+   * The capture with of share video, only enabled when the value of secondaryCameraId is not undefined
+   */
+  captureWidth?: number;
+  /**
+   * The capture height of share video, only enabled when the value of secondaryCameraId is not undefined
+   */
+  captureHeight?: number;
+}
+/**
+ * Interface of share audio status
+ */
+interface ShareAudioStatus {
+  /**
+   * Is share audio enabled for the current sharing
+   */
+  isShareAudioEnabled: boolean;
+  /**
+   * Is share audio muted for the current sharing
+   */
+  isShareAudioMuted: boolean;
+  /**
+   * Is share audio on for the current sharing
+   */
+  isSharingAudio: boolean;
 }
 
-export declare enum VideoQuality {
+/**
+ * Enumeration of video quality
+ * @enum
+ */
+export enum VideoQuality {
+  /**
+   * 90P
+   */
   Video_90P = 0,
+  /**
+   * 180P
+   */
   Video_180P = 1,
+  /**
+   * 360P
+   */
   Video_360P = 2,
+  /**
+   * 720P
+   */
   Video_720P = 3,
 }
+/**
+ * Interface of underlying color
+ */
 interface UnderlyingColor {
+  /**
+   * decimal, red/255
+   */
   R: number;
+  /**
+   * decimal, green/255
+   */
   G: number;
+  /**
+   * decimal, black/255
+   */
   B: number;
-  A: number;
+  /**
+   * decimal, 1 - opaque, 0 - transparent
+   */
+  A?: number;
 }
-
+/**
+ * Interface of video qos data
+ */
+export interface VideoQosData {
+  /**
+   * video sample rate
+   */
+  sample_rate: number;
+  /**
+   * video round trip time
+   */
+  rtt: number;
+  /**
+   * video jitter
+   */
+  jitter: number;
+  /**
+   * video average loss
+   */
+  avg_loss: number;
+  /**
+   * video max loss
+   */
+  max_loss: number;
+  /**
+   * video width
+   */
+  width: number;
+  /**
+   * video height
+   */
+  height: number;
+  /**
+   * video FPS
+   */
+  fps: number;
+}
+/**
+ * Interface of video statistic option
+ */
+interface VideoStatisticOption {
+  /**
+   * Subscribe/unsubscribe encoding data(sending video)
+   */
+  encode?: boolean;
+  /**
+   * Subscribe/ubsubscribe decoding data(receiving video)
+   */
+  decode?: boolean;
+}
+/**
+ * Status of virtual background
+ */
+interface VirtualBackgroundStatus {
+  /**
+   * is the virtual background model ready
+   */
+  isVBPreloadReady?: boolean | undefined;
+  /**
+   * is virtual background configured
+   */
+  isVBConfigured?: boolean | undefined;
+  /**
+   * current virtual background image
+   */
+  imageSrc?: string | undefined;
+}
+/**
+ * Share status
+ */
+export enum ShareStatus {
+  /**
+   * Sharing
+   */
+  Sharing = 'sharing',
+  /**
+   * Sharing paused
+   */
+  Paused = 'paused',
+  /**
+   * Sharing ended
+   */
+  End = 'ended',
+}
 /**
  * The Stream interface provides methods that define the behaviors of a Stream object, such as the mute audio, capture video.
  *
@@ -167,11 +370,14 @@ export declare namespace Stream {
    * ```
    * @returns executed promise. Following are the possible error reasons:
    * - type=`USER_FORBIDDEN_MICROPHONE`: The user has blocked accesses to the microphone from the sdk, try to grant the privilege and rejoin the meeting.
+   * @category Audio
    */
   function startAudio(options?: AudioOption): ExecutedResult;
 
   /**
    * Leave the computer audio
+   * @returns executed promise.
+   * @category Audio
    */
   function stopAudio(): ExecutedResult;
 
@@ -181,6 +387,8 @@ export declare namespace Stream {
    * - Only the **host** or **manager** can mute others.
    * - If an attendee is allowed to talk, the host can also mute him/her.
    * @param userId Default `undefined`
+   * @returns executed promise.
+   * @category Audio
    */
   function muteAudio(userId?: number): ExecutedResult;
   /**
@@ -200,6 +408,8 @@ export declare namespace Stream {
    * })
    * ```
    * @param userId Default `undefined`
+   * @returns executed promise.
+   * @category Audio
    *
    */
   function unmuteAudio(userId?: number): ExecutedResult;
@@ -229,6 +439,7 @@ export declare namespace Stream {
    * @param option optional option of the call out
    *
    * @returns executed promise.
+   * @category Phone
    */
   function inviteByPhone(
     countryCode: string,
@@ -243,6 +454,7 @@ export declare namespace Stream {
    * @param phoneNumber phone number
    *
    * @returns executed promise.
+   * @category Phone
    */
   function cancelInviteByPhone(
     countryCode: string,
@@ -253,37 +465,31 @@ export declare namespace Stream {
    * Hang up the phone. Only used when current audio joined by the phone
    *
    * @return executed promise.
+   * @category Phone
    */
   function hangup(): ExecutedResult;
-
   /**
-   * Whether the user is muted.
-   * - If not specified the user id, get the muted of current user.
-   * @param userId Default `undefined`
-   * @return boolean
+   * Mute self share audio or other's share audio locally
+   * If `userId` leaves empty, will mute share audio, other participants cannot hear the share audio.
+   * If set the `userId`, will mute share views audio locally, other participants are not affected.
+   *
+   * @param userId Optional empty value will mute self share audio
+   *
+   * @return executed promise.
+   * @category Audio
    */
-  function isAudioMuted(userId?: number): boolean;
-
+  function muteShareAudio(userId?: number): ExecutedResult;
   /**
-   * Get the available microphones.
+   * Unmute self share audio or other's share audio locally
+   * If `userId` leaves empty, will unmute share audio, other participants can hear the share audio.
+   * If set the `userId`, will unmute share views audio locally, other participants are not affected.
+   *
+   * @param userId Optional empty value will unmute self share audio
+   *
+   * @return executed promise.
+   * @category Audio
    */
-  function getMicList(): Array<MediaDevice>;
-  /**
-   * Get the available speakers.
-   */
-  function getSpeakerList(): Array<MediaDevice>;
-
-  /**
-   * Get the active device id of microphone.
-   * @returns device id
-   */
-  function getActiveMicrophone(): string;
-  /**
-   * Get the active device of speaker.
-   * @returns device id
-   */
-  function getActiveSpeaker(): string;
-
+  function unmuteShareAudio(userId?: number): ExecutedResult;
   /**
    * Switch the microphone
    *
@@ -293,6 +499,8 @@ export declare namespace Stream {
    *  await switchMicrophone(microphone.deviceId);
    * ```
    * @param microphoneId the device id of microphone
+   * @returns executed promise.
+   * @category Audio
    *
    */
   function switchMicrophone(microphoneId: string): ExecutedResult;
@@ -300,21 +508,141 @@ export declare namespace Stream {
    * Switch the speaker
    *
    * @param speakerId the device id of speaker
+   * @returns executed promise.
+   * @category Audio
    *
    */
   function switchSpeaker(speakerId: string): ExecutedResult;
   /**
+   * Subscribe audio statistic data base on the type parameter.
+   * Client will receive audio quality data every second.
+   *
+   * **Note**
+   *   If type are not specified, this will subscribe both encode and decode audio statistics.
+   *    - client only handles the encode (send) audio statistic data when:
+   *      1. Current user connected audio.
+   *      2. Current user is not muted
+   *      3. There is other participant who is listening to current user's audio.
+   *    - client only handles the decode (receive) audio statistic data when:
+   *      1. Current user has connected audio
+   *      2. There is other participant who is sending audio.
+   *
+   * **Example**
+   * ```javascript
+   * try{
+   *   await stream.subscribeAudioStatisticData();
+   * } catch (error)  {
+   *   console.log(error);
+   * }
+   * ```
+   *
+   * @param type optional. Object { encode: Boolean, decode: Boolean }, Can specify which type of audio should be subscribe.
+   *
+   * @returns
+   * - `''`: Success.
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   *
+   * @category Audio
+   */
+  function subscribeAudioStatisticData(type?: AudioStatisticOption): ExecutedResult;
+  /**
+   * unsubscribe audio statistic data base on the type parameter.
+   *
+   * **Note**
+   *    If type are not specified, this will unsubscribe both encode and decode audio statistics.
+   * **Example**
+   * ```javascript
+   * try{
+   *   await stream.unsubscribeAudioStatisticData();
+   * } catch (error)  {
+   *   console.log(error);
+   * }
+   * ```
+   *
+   * @param type optional. Object { encode: Boolean, decode: Boolean }, Can specify which type of audio should be unsubscribe.
+   *
+   * @returns   * - `''`: Success.
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   *
+   * @category Audio
+   */
+  function unsubscribeAudioStatisticData(
+    type?: AudioStatisticOption,
+  ): ExecutedResult;
+
+  /**
+   * Whether the user is muted.
+   * - If not specified the user id, get the muted of current user.
+   * @param userId Default `undefined`
+   * @return boolean
+   * @category Audio
+   */
+  function isAudioMuted(userId?: number): boolean;
+
+  /**
+   * Get the available microphones.
+   * @returns camera list
+   * @category Audio
+   */
+  function getMicList(): Array<MediaDevice>;
+  /**
+   * Get the available speakers.
+   * @return speaker list
+   * @category Audio
+   */
+  function getSpeakerList(): Array<MediaDevice>;
+
+  /**
+   * Get the active device id of microphone.
+   * @returns device id
+   * @category Audio
+   */
+  function getActiveMicrophone(): string;
+  /**
+   * Get the active device of speaker.
+   * @returns device id
+   * @category Audio
+   */
+  function getActiveSpeaker(): string;
+
+  /**
    * Is support phone call feature
+   * @returns
+   * @category Phone
    */
   function isSupportPhoneFeature(): boolean;
   /**
    * Get supported countries
+   * @returns supported phone call countries
+   * @category Phone
    */
   function getSupportCountryInfo(): Array<PhoneCallCountry>;
   /**
    * Get phone call status
+   * @returns phone call status
+   * @category Phone
    */
   function getInviteByPhoneStatus(): DialoutState;
+  /**
+   * Get the status of share audio
+   * @returns status of share audio
+   * @category Audio
+   */
+  function getShareAudioStatus(): ShareAudioStatus;
+  /**
+   * Is share audio muted in local. The share audio here refers to the audio shared by other participants.
+   * @param userId userId
+   * @returns boolean
+   * @category Audio
+   *
+   */
+  function isOthersShareAudioMutedLocally(userId: number): boolean;
+  /**
+   * Get the audio statistic data
+   * @returns {@link AudioQosData}
+   * @category Audio
+   */
+  function getAudioStatisticData(): { encode: AudioQosData; decode: AudioQosData };
 
   // -------------------------------------------------[video]-----------------------------------------------------------
 
@@ -343,6 +671,7 @@ export declare namespace Stream {
    *   - `VIDEO_USER_FORBIDDEN_CAPTURE`: The user has forbidden use camera, he/she can allow camera and rejoin the meeting.
    *   - `VIDEO_ESTABLISH_STREAM_ERROR`: Video websocket is broken.
    *   - `VIDEO_CAMERA_IS_TAKEN`: User's camera is taken by other programs.
+   * @category Video
    */
   function startVideo(option?: CaptureVideoOption): ExecutedResult;
 
@@ -362,6 +691,7 @@ export declare namespace Stream {
    * @returns
    * - `''`: Success
    * - `Error`: Failure. Details in {@link ErrorTypes}.
+   * @category Video
    */
   function stopVideo(): ExecutedResult;
 
@@ -385,6 +715,8 @@ export declare namespace Stream {
    *
    * @param cameraDeviceId The id of camera device.
    *   - {@link Stream.getCameraList} can be used to get current accessible camera device.
+   *
+   * @category Video
    *
    */
   function switchCamera(cameraDeviceId: string): ExecutedResult;
@@ -421,6 +753,7 @@ export declare namespace Stream {
    * @returns
    * - `''`: Success
    * - `Error`: Failure. Deatils in {@link ErrorTypes}.
+   * @category Video
    */
   function renderVideo(
     canvas: HTMLCanvasElement,
@@ -453,6 +786,7 @@ export declare namespace Stream {
    * @returns
    * - `''`: Success.
    * - `Error`: Failure. Details in {@link ErrorTypes}.
+   * @category Video
    */
   function stopRenderVideo(
     canvas: HTMLCanvasElement,
@@ -473,6 +807,7 @@ export declare namespace Stream {
    * * @returns
    * - `''`: Success.
    * - `Error`: Failure. Details in {@link ErrorTypes}.
+   * @category Video
    */
   function updateVideoCanvasDimension(
     canvas: HTMLCanvasElement,
@@ -490,9 +825,10 @@ export declare namespace Stream {
    * @param y Required. Coordinate y of video.
    * @param additionalUserKey Optional. Must be paired with `renderVideo`.
    *
-   *  * @returns
+   * @returns
    * - `''`: Success.
    * - `Error`: Failure. Details in {@link ErrorTypes}.
+   * @category Video
    */
   function adjustRenderedVideoPosition(
     canvas: HTMLCanvasElement,
@@ -507,6 +843,11 @@ export declare namespace Stream {
    * Clear all the canvas
    * @param canvas Required. The canvas to render the video.
    * @param underlyingColor Optional. Underlying color when video is stopped,default is transparent.
+   *
+   * * @returns
+   * - `''`: Success.
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   * @category Video
    */
   function clearVideoCanvas(
     canvas: HTMLCanvasElement,
@@ -516,8 +857,12 @@ export declare namespace Stream {
   /**
    * Mirror current video
    * @param mirrored
+   *
+   * @returns
    * - `''`: Success.
    * - `Error`: Failure. Details in {@link ErrorTypes}.
+   *
+   * @category Video
    */
   function mirrorVideo(mirrored: boolean): ExecutedResult;
   /**
@@ -526,18 +871,118 @@ export declare namespace Stream {
    * @param enable boolean or specific encode or decode
    *
    * @returns Promise<boolean> true: success, false: fail
+   *
+   * @category Video
    */
   function enableHardwareAcceleration(
     enable: boolean | { encode?: boolean; decode?: boolean },
   ): Promise<boolean>;
   /**
+   * Preview the virtual background, if the video is on, preview virtual background will apply to current video.
+   * @param canvas
+   * @param imageUrl virtual background image
+   * @param cropped  cropped to 16/9 aspect ratio, default is false
+   *
+   * @returns
+   * - `''`: Success.
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   *
+   * @category Video
+   */
+  function previewVirtualBackground(
+    canvas: HTMLCanvasElement,
+    imageUrl: string | 'blur' | undefined,
+    cropped?: boolean,
+  ): ExecutedResult;
+  /**
+   * Update the image of virtual background
+   * @param imageUrl virtual background image
+   * @param cropped cropped to 16/9 aspect ratio, default is false
+   * @returns
+   * - `''`: Success.
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   *
+   *  @category Video
+   */
+  function updateVirtualBackgroundImage(
+    imageUrl: string | 'blur' | undefined,
+    cropped?: boolean,
+  ): ExecutedResult;
+  /**
+   * Stop previewing the virtual background
+   *
+   * @returns
+   * - `''`: Success.
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   *
+   * @category Video
+   */
+  function stopPreviewVirtualBackground(): ExecutedResult;
+  /**
+   * Subscribe video statistic data base on the type parameter.
+   * Client will receive video quality data every second.
+   *
+   * **Note**
+   *   If type are not specified, this will subscribe both encode and decode video statistics.
+   *   - client only handles the encode (send) video statistic data when
+   *      - 1.Current user turns on video.
+   *      - 2.There is other participant who is watching current user's video.
+   *   - client only handles the decode (receive) video statistic data when
+   *      - 1.there is other participant who is sending video.
+   *
+   * **Example**
+   * ```javascript
+   * try{
+   *   await stream.subscribeVideoStatisticData();
+   * } catch (error)  {
+   *   console.log(error);
+   * }
+   * ```
+   *
+   * @param type optional. Object { encode: Boolean, decode: Boolean }, Can specify which type of audio should be subscribe.
+   *
+   * @returns
+   * - `''`: Success.
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   *
+   * @category Video
+   */
+  function subscribeVideoStatisticData(type?: VideoStatisticOption): ExecutedResult;
+
+  /**
+   * unsubscribe video statistic data base on the type parameter.
+   *
+   * **Note**
+   *   If type are not specified, this will unsubscribe both encode and decode audio statistics.
+   * **Example**
+   * ```javascript
+   * try{
+   *   await stream.unsubscribeVideoStatisticData();
+   * } catch (error)  {
+   *   console.log(error);
+   * }
+   * ```
+   *
+   * @param type optional. Object { encode: Boolean, decode: Boolean }, Can specify which type of audio should be subscribe.
+   *
+   * @returns
+   * - `''`: Success.
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   *
+   * @category Video
+   */
+  function unsubscribeVideoStatisticData(
+    type?: VideoStatisticOption,
+  ): ExecutedResult;
+  /**
    *
    * Get the isCapturingVideo flag status.
    *
-   *
    * @returns
    * - `true`: The stream object is capturing video.
-   * - `false`: The stream object is not capturing video.
+   * - `false`: The stream object is not capturing video or the video flag is `false` in media constraints.
+   *
+   * @category Video
    */
   function isCapturingVideo(): boolean;
 
@@ -547,18 +992,20 @@ export declare namespace Stream {
    *
    * @returns
    * - `true`: The camera is taken by other program.
-   * - `false`: The camera is taken by other program.
+   * - `false`: The camera is taken by other program or the video flag is `false` in media constraints.
+   *
+   * @category Video
    */
   function isCameraTaken(): boolean;
 
   /**
    * Get the isCaptureForbidden flag status.
    *
-   *
-   *
    * @returns
    * - `true`: The capture is forbidden by user.
    * - `false`: The capture is not forbidden by user or the video flag is `false` in media constraints.
+   *
+   * @category Video
    */
   function isCaptureForbidden(): boolean;
 
@@ -567,7 +1014,7 @@ export declare namespace Stream {
    *
    * **Note**
    * - This camera device list is collected from browser's navigator.mediaDevices object and maintained by the stream object.
-   * - If the user does not allow permission to access the camera, this list will have a default CameraDevice object with all properties set to empty string.
+   * - If the user does not allow permission to access the camera, this list will have a default CameraDevice object with all property set to empty string.
    *
    *
    * @returns
@@ -575,6 +1022,8 @@ export declare namespace Stream {
    * - `Array<CameraDevice>`: A CameraDevice interface has following property:
    *   - `label: string`: The label of camera device.
    *   - `deviceId: string`: The string of camera device.
+   *
+   * @category Video
    */
   function getCameraList(): Array<MediaDevice>;
 
@@ -584,39 +1033,71 @@ export declare namespace Stream {
    *
    * @returns
    * - `''`: The video flag is `false` in media constraints.
-   * - `'default'`: No camera device id is passed to `startVideo` and it will use system default camera.
+   * - `'default'`: No camera device id is passed to `startCaptureVideo` and it will use system default camera.
    * - `string`: Recently active camera devices id.
+   *
+   * @category Video
    */
   function getActiveCamera(): string;
 
   /**
-   *
-   * Get the active video id.
+   * Get the recently active video id.
    *
    * @returns
+   * - `0`: No video is active or the video flag is `false` in media constraints.
    * - `number`: Id of current active video.
+   *
+   * @category Video
    */
   function getActiveVideoId(): number;
   /**
    *
    * Get the max quality of video.
+   * @returns highest video quality. See the definition {@link VideoQuality}
+   * @category Video
    *
    */
   function getVideoMaxQuality(): number;
 
   /**
    * Get the dimension of received video.
+   * @return received video dimension
+   * @category Video
    */
   function getReceivedVideoDimension(): { height: number; width: number };
 
   /**
-   * Whether the browser is support render multiple videos simultaneously
+   * Whether the browser is support multiple video
+   * @returns is current platform supporting multiple videos
+   * @category Video
    */
   function isSupportMultipleVideos(): boolean;
   /**
    * Whether video sdk supports HD video
+   * @returns is current account supporting sending 720P video
+   * @category Video
    */
   function isSupportHDVideo(): boolean;
+  /**
+   * Whether current platform support virtual background
+   * @returns is current platform supporting virtual background
+   * @category Video
+   */
+  function isSupportVirtualBackground(): boolean;
+  /**
+   * Get status of virtual background
+   *
+   * @returns status of virtual background. {@link VirtualBackgroundStatus}
+   *
+   * @category Video
+   */
+  function getVirtualbackgroundStatus(): VirtualBackgroundStatus;
+  /**
+   * Get the video statistic data
+   * @returns data of video statistic.{@link VideoQosData}
+   * @category Video
+   */
+  function getVideoStatisticData(): { encode: VideoQosData; decode: VideoQosData };
   /**
    * Render the received screen share content.
    * - It is usually called in the `active-share-change` callback.
@@ -635,6 +1116,7 @@ export declare namespace Stream {
    * @param activeUserId Required. active share user id
    *
    * @returns executed promise.
+   * @category Screen Share
    */
   function startShareView(
     canvas: HTMLCanvasElement,
@@ -643,33 +1125,44 @@ export declare namespace Stream {
   /**
    * Stop render received screen share content.
    * @returns executed promise.
+   * @category Screen Share
    */
   function stopShareView(): ExecutedResult;
   /**
    * Start screen share.
+   *
    * - Check the share privilege before start screen share.
    * - If you start screen share, you will stop reveived others shared content.
    * - Legacy Chrome browser need to install chrome extension before start screen share, check the promise return value.
    * @param canvas Required. The canvas which renders the screen share content.
+   * @param options Optional. options for screen share
    *
    * @returns executed promise.
    * - {type:'INVALID_OPERATION', reason:'required extension', extensionUrl:'url'} : Installed the extension before start share
+   *
+   * @category Screen Share
    */
-  function startShareScreen(canvas: HTMLCanvasElement): ExecutedResult;
+  function startShareScreen(
+    canvas: HTMLCanvasElement,
+    options?: ScreenShareOption,
+  ): ExecutedResult;
   /**
    * Pause screen share
-   *
+   * @returns executed promise.
+   * @category Screen Share
    */
   function pauseShareScreen(): ExecutedResult;
 
   /**
    * Resume screen share
-   *
+   * @returns executed promise.
+   * @category Screen Share
    */
   function resumeShareScreen(): ExecutedResult;
   /**
    * Stop screen share
-   *
+   * @returns executed promise.
+   * @category Screen Share
    */
   function stopShareScreen(): ExecutedResult;
   /**
@@ -688,7 +1181,8 @@ export declare namespace Stream {
    * })
    * ```
    * @param isLocked set true to lock share, or false to unlock.
-   *
+   * @returns executed promise.
+   * @category Screen Share
    */
   function lockShare(isLocked: boolean): ExecutedResult;
   /**
@@ -696,17 +1190,36 @@ export declare namespace Stream {
    *
    * @param width width of canvas
    * @param height height of canvas
+   * @returns executed promise.
+   * @category Screen Share
    */
   function updateSharingCanvasDimension(
     width: number,
     height: number,
   ): ExecutedResult;
   /**
+   * Switch camera for sharing
+   * @param cameraId camera id
+   * @returns executed promise.
+   * @category Screen Share
+   */
+  function switchSharingSecondaryCamera(cameraId: string): ExecutedResult;
+  /**
    * Whether the host locked the share
+   * @returns is screen share locked
+   * @category Screen Share
    */
   function isShareLocked(): boolean;
   /**
    * Get the user id of received shared content
+   * @returns active shared user id
+   * @category Screen Share
    */
   function getActiveShareUserId(): number;
+  /**
+   * Get the status of share
+   * @returns share status
+   * @category Screen Share
+   */
+  function getShareStatus(): ShareStatus;
 }

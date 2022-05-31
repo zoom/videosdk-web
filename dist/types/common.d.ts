@@ -31,6 +31,77 @@ interface ExecutedFailure {
 export type ExecutedResult = Promise<'' | ExecutedFailure>;
 
 /**
+ * Interface of a participant
+ */
+interface Participant {
+  /**
+   * Identify of a user.
+   */
+  userId: number;
+  /**
+   * Display name of a user.
+   */
+  displayName: string;
+  /**
+   * Audio state of a user.
+   * - `''`: No audio.
+   * - `computer`: Joined by computer audio.
+   * - `phone`: Joined by phone
+   */
+  audio: '' | 'computer' | 'phone';
+  /**
+   * Whether audio is muted.
+   */
+  muted: boolean;
+  /**
+   * Whether the user is host.
+   */
+  isHost: boolean;
+  /**
+   * Whether the user is manager.
+   */
+  isManager: boolean;
+  /**
+   * The avatar of a user.
+   * You can set the avatar in the [web profile](https://zoom.us/profile).
+   */
+  avatar?: string;
+  /**
+   * Whether the user is started video.
+   */
+  bVideoOn: boolean;
+  /**
+   * Whether the user is started share.
+   */
+  sharerOn: boolean;
+  /**
+   * Whether the share is paused
+   */
+  sharePause: boolean;
+}
+/**
+ * Status of subsession
+ */
+export enum SubsessionStatus {
+  /**
+   * Subsession is not open
+   */
+  NotStarted = 1,
+  /**
+   * Subsession is open
+   */
+  InProgress = 2,
+  /**
+   * Subsession is closing, there may be a closing countdown
+   */
+  Closing = 3,
+  /**
+   * Subsession is closed
+   */
+  Closed = 4,
+}
+
+/**
  * The state of dial out state
  *
  * Normal process: Calling-> Ringing->Accepted->Success
@@ -126,4 +197,26 @@ export enum AudioChangeAction {
    * Unmuted
    */
   Unmuted = 'unmuted',
+}
+
+/**
+ * Payload of connection-change, the reconnecting reason
+ */
+export enum ReconnectReason {
+  /**
+   * meeting failover
+   */
+  Failover = 'failover',
+  /**
+   * join the breakout subsession
+   */
+  JoinSubsession = 'join breakout room',
+  /**
+   * move among the breakout subsessions
+   */
+  MoveToSubsession = 'move to breakout room',
+  /**
+   * back to the main session
+   */
+  BackToMainSession = 'back to main session',
 }

@@ -1,8 +1,10 @@
-import { ExecutedResult } from './common';
+import { ExecutedResult, Participant } from './common';
 import { Stream } from './media';
 import { ChatClient } from './chat';
 import { CommandChannel } from './command';
 import { RecordingClient } from './recording';
+import { SubsessionClient } from './subsession';
+
 import {
   event_connection_change,
   event_user_add,
@@ -30,6 +32,20 @@ import {
   event_command_channel_status,
   event_command_channel_message,
   event_recording_change,
+  event_share_audio_change,
+  event_video_vb_preload_change,
+  event_bo_invite_to_join,
+  event_bo_room_countdown,
+  event_bo_room_time_up,
+  event_bo_closing_room_countdown,
+  event_bo_broadcast_message,
+  event_bo_ask_for_help,
+  event_bo_ask_for_help_response,
+  event_bo_room_state_change,
+  event_bo_main_session_change,
+  event_audio_statistic_data_change,
+  event_video_statistic_data_change,
+  event_media_sdk_change,
 } from './event-callback';
 /**
  * Interface for the result of check system requirements.
@@ -74,55 +90,6 @@ interface SessionInfo {
    * session id
    */
   sessionId: string;
-}
-/**
- * Interface of a participant
- */
-interface Participant {
-  /**
-   * Identify of a user.
-   */
-  userId: number;
-  /**
-   * Display name of a user.
-   */
-  displayName: string;
-  /**
-   * Audio state of a user.
-   * - `''`: No audio.
-   * - `computer`: Joined by computer audio.
-   * - `phone`: Joined by phone
-   */
-  audio: '' | 'computer' | 'phone';
-  /**
-   * Whether audio is muted.
-   */
-  muted: boolean;
-  /**
-   * Whether the user is host.
-   */
-  isHost: boolean;
-  /**
-   * Whether the user is manager.
-   */
-  isManager: boolean;
-  /**
-   * The avatar of a user.
-   * You can set the avatar in the [web profile](https://zoom.us/profile).
-   */
-  avatar: string;
-  /**
-   * Whether the user is started video.
-   */
-  bVideoOn: boolean;
-  /**
-   * Whether the user is started share.
-   */
-  sharerOn: boolean;
-  /**
-   * Whether the share is paused
-   */
-  sharePause: boolean;
 }
 
 /**
@@ -248,6 +215,24 @@ export declare namespace VideoClient {
     listener: typeof event_dial_out_change,
   ): void;
   /**
+   *
+   * @param event
+   * @param listener Detail in {@link event_audio_statistic_data_change}.
+   */
+  function on(
+    event: 'audio-statistic-data-change',
+    listener: typeof event_audio_statistic_data_change,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Detail in {@link event_video_statistic_data_change}.
+   */
+  function on(
+    event: 'video-statistic-data-change',
+    listener: typeof event_video_statistic_data_change,
+  ): void;
+  /**
    * @param event
    * @param listener Details in {@link event_chat_received_message}.
    */
@@ -255,6 +240,11 @@ export declare namespace VideoClient {
     event: 'chat-on-message',
     listener: typeof event_chat_received_message,
   ): void;
+  /**
+   *
+   * @param event
+   * @param listener
+   */
   function on(
     event: 'chat-delete-message',
     listener: typeof event_chat_delete_message,
@@ -267,14 +257,29 @@ export declare namespace VideoClient {
     event: 'chat-privilege-change',
     listener: typeof event_chat_privilege_change,
   ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_command_channel_status}.
+   */
   function on(
     event: 'command-channel-status',
     listener: typeof event_command_channel_status,
   ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_command_channel_message}.
+   */
   function on(
     event: 'command-channel-message',
     listener: typeof event_command_channel_message,
   ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_recording_change}.
+   */
   function on(
     event: 'recording-change',
     listener: typeof event_recording_change,
@@ -355,6 +360,113 @@ export declare namespace VideoClient {
   function on(
     event: 'peer-video-state-change',
     listener: typeof event_peer_video_state_change,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in{@link event_share_audio_change}
+   */
+  function on(
+    event: 'share-audio-change',
+    listener: typeof event_share_audio_change,
+  ): void;
+  /**
+   * @param event
+   * @param listener Details in {@link event_bo_invite_to_join}.
+   */
+  function on(
+    event: 'subsession-invite-to-join',
+    listener: typeof event_bo_invite_to_join,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_bo_room_countdown}.
+   */
+  function on(
+    event: 'subsession-countdown',
+    listener: typeof event_bo_room_countdown,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_bo_room_time_up}.
+   */
+  function on(
+    event: 'subsession-time-up',
+    listener: typeof event_bo_room_time_up,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_bo_closing_room_countdown}.
+   */
+  function on(
+    event: 'closing-subsession-countdown',
+    listener: typeof event_bo_closing_room_countdown,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_bo_broadcast_message}.
+   */
+  function on(
+    event: 'subsession-broadcast-message',
+    listener: typeof event_bo_broadcast_message,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener  Details in {@link event_bo_ask_for_help}.
+   */
+  function on(
+    event: 'subsession-ask-for-help',
+    listener: typeof event_bo_ask_for_help,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_bo_ask_for_help_response}.
+   */
+  function on(
+    event: 'subsession-ask-for-help-response',
+    listener: typeof event_bo_ask_for_help_response,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_bo_room_state_change}.
+   */
+  function on(
+    event: 'subsession-state-change',
+    listener: typeof event_bo_room_state_change,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_bo_main_session_change}.
+   */
+  function on(
+    event: 'main-session-user-updated',
+    listener: typeof event_bo_main_session_change,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_video_vb_preload_change}
+   */
+  function on(
+    event: 'video-virtual-background-preload-change',
+    listener: typeof event_video_vb_preload_change,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_media_sdk_change}
+   */
+  function on(
+    event: 'media-sdk-change',
+    listener: typeof event_media_sdk_change,
   ): void;
   /**
    * Remove the event handler.
@@ -459,6 +571,10 @@ export declare namespace VideoClient {
    */
   function getRecordingClient(): typeof RecordingClient;
   /**
+   * Get Breakout Room client.
+   */
+  function getSubsessionClient(): typeof SubsessionClient;
+  /**
    * Gets the current session’s info.
    */
   function getSessionInfo(): SessionInfo;
@@ -466,6 +582,10 @@ export declare namespace VideoClient {
    * Whether current user is host
    */
   function isHost(): boolean;
+  /**
+   * Get the host of the session
+   */
+  function getSessionHost(): Participant | undefined;
   /**
    * Whether current user is manager
    */

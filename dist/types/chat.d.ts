@@ -86,7 +86,7 @@ export declare namespace ChatClient {
    |         | privilege value                | describe                                            |
    |---------|--------------------------------|-----------------------------------------------------|
    | meeting | ChatPrivilege.All              | user can chat to everyone                      |
-   |         | ChatPrivilege.NoOne            | user can chat to no one                        |
+   |         | ChatPrivilege.NoOne            | user can chat to no one                         |
    |         | ChatPrivilege.EveryonePublicly | user can chat to host, manager and everyone    |
    *
    * #### example

@@ -71,10 +71,9 @@ For the full list of features and event listeners, as well as additional guides,
 
 ## Sample Apps
 
-Checkout the Video SDK sample apps:
-
-- [Web](https://github.com/zoom/sample-app-videosdk)
-- [Signature Generator](https://github.com/zoom/videosdk-sample-signature-node.js)
+- [Video SDK Web Sample](https://github.com/zoom/videosdk-web-sample)
+- [Video SDK Auth Sample (Node.js)](https://github.com/zoom/videosdk-sample-signature-node.js)
+- [Webhook Sample (Node.js)](https://github.com/zoom/webhook-sample-node.js)
 
 ## Need help?
 

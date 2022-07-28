@@ -36,6 +36,7 @@ import {
   event_audio_statistic_data_change,
   event_video_statistic_data_change,
   event_media_sdk_change,
+  event_video_cell_detailed_change,
 } from './event-callback';
 /**
  * Interface for the result of check system requirements.
@@ -101,7 +102,14 @@ interface InitOptions {
    * Used to address specific edge-cases, please do not use for almost all use-cases
    */
   skipJsMedia?: boolean;
+  /**
+   * Prevent devices from dimming or locking the screen when in a session.
+   */
+  stayAwake?: boolean;
 }
+/**
+ * The video client is the core of the Video SDK.
+ */
 export declare namespace VideoClient {
   /**
    * Initilize the ZOOM Video SDK before join a meeting.
@@ -185,7 +193,7 @@ export declare namespace VideoClient {
    * @param listener Details in {@link event_audio_unmute_consent}.
    */
   function on(
-    event: 'unmute-audio-consent',
+    event: 'host-ask-unmute-audio',
     listener: typeof event_audio_unmute_consent,
   ): void;
   /**
@@ -379,6 +387,15 @@ export declare namespace VideoClient {
     listener: typeof event_media_sdk_change,
   ): void;
   /**
+   *
+   * @param event
+   * @param listener Details in {@link event_video_cell_detailed_change}
+   */
+  function on(
+    event: 'video-detailed-data-change',
+    listener: typeof event_video_cell_detailed_change,
+  ): void;
+  /**
    * Remove the event handler.
    * @param event event name
    * @param callback the event handler
@@ -446,13 +463,13 @@ export declare namespace VideoClient {
    *
    * @param userId
    */
-  // function makeManager(userId: number): ExecutedResult;
+  function makeManager(userId: number): ExecutedResult;
   /**
    * Revoke the manager permission from the participant
    * - Only the **host** can revoke Manager.
    * @param userId
    */
-  // function revokeManager(userId: number): ExecutedResult;
+  function revokeManager(userId: number): ExecutedResult;
 
   /**
    * Get current user info.
@@ -495,5 +512,5 @@ export declare namespace VideoClient {
   /**
    * Whether current user is manager
    */
-  // function isManager(): boolean;
+  function isManager(): boolean;
 }

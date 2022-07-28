@@ -1,4 +1,9 @@
-import { DialoutState, ExecutedResult } from './common';
+import {
+  DialoutState,
+  ExecutedResult,
+  MobileVideoFacingMode,
+  VideoQuality,
+} from './common';
 
 /**
  * Interface of media device
@@ -76,7 +81,7 @@ interface CaptureVideoOption {
   /**
    * Id of the camera for capturing the video, if not specified, use system default
    */
-  cameraId?: string;
+  cameraId?: string | MobileVideoFacingMode;
   /**
    * Customized width of capture, 640 as default
    */
@@ -189,28 +194,6 @@ interface ShareAudioStatus {
 }
 
 /**
- * Enumeration of video quality
- * @enum
- */
-export enum VideoQuality {
-  /**
-   * 90P
-   */
-  Video_90P = 0,
-  /**
-   * 180P
-   */
-  Video_180P = 1,
-  /**
-   * 360P
-   */
-  Video_360P = 2,
-  /**
-   * 720P
-   */
-  Video_720P = 3,
-}
-/**
  * Interface of underlying color
  */
 interface UnderlyingColor {
@@ -280,6 +263,10 @@ interface VideoStatisticOption {
    * Subscribe/ubsubscribe decoding data(receiving video)
    */
   decode?: boolean;
+  /**
+   * Get the detailed data of each received video, such as fps,resolution
+   */
+  detailed?: boolean;
 }
 /**
  * Status of virtual background
@@ -403,7 +390,7 @@ export declare namespace Stream {
    * // host unmute others
    * await stream.unmuteAudio(userId);
    * // participant side
-   * client.on('unmute-audio-consent',(payload)=>{
+   * client.on('host-ask-unmute-audio',(payload)=>{
    *  console.log('Host ask me to unmute');
    * })
    * ```
@@ -571,6 +558,26 @@ export declare namespace Stream {
   ): ExecutedResult;
 
   /**
+   * Mute someone's audio locally, this operation doesn't affect other participants' audio
+   * @param userId userId
+   *
+   * @returns   * - `''`: Success.
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   *
+   * @category Audio
+   */
+  function muteUserAudioLocally(userId: number): ExecutedResult;
+  /**
+   * Unmute someone's audio locally, this operation doesn't affect other participants' audio
+   * @param userId userId
+   *
+   * @returns   * - `''`: Success.
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   *
+   * @category Audio
+   */
+  function unmuteUserAudioLocally(userId: number): ExecutedResult;
+  /**
    * Whether the user is muted.
    * - If not specified the user id, get the muted of current user.
    * @param userId Default `undefined`
@@ -643,6 +650,13 @@ export declare namespace Stream {
    * @category Audio
    */
   function getAudioStatisticData(): { encode: AudioQosData; decode: AudioQosData };
+  /**
+   * Is someone's audio muted locally
+   * @param userId userId
+   * @returns boolean
+   * @category Audio
+   */
+  function isUserAudioMutedLocally(userId: number): boolean;
 
   // -------------------------------------------------[video]-----------------------------------------------------------
 
@@ -719,7 +733,9 @@ export declare namespace Stream {
    * @category Video
    *
    */
-  function switchCamera(cameraDeviceId: string): ExecutedResult;
+  function switchCamera(
+    cameraDeviceId: string | MobileVideoFacingMode,
+  ): ExecutedResult;
 
   /**
    *

@@ -6,6 +6,7 @@ import {
   ReconnectReason,
   AudioChangeAction,
   MutedSource,
+  VideoQuality,
 } from './common';
 /**
  * Interface of a ParticipantPropertiesPayload
@@ -195,7 +196,13 @@ export declare function event_user_remove(
  * @category Video
  */
 export declare function event_video_active_change(payload: {
+  /**
+   * Active state of video
+   */
   state: VideoActiveState;
+  /**
+   * user id
+   */
   userId: number;
 }): void;
 /**
@@ -221,6 +228,9 @@ export declare function event_video_active_change(payload: {
  * @category Video
  */
 export declare function event_video_capturing_change(payload: {
+  /**
+   * Capture state of video
+   */
   state: VideoCapturingState;
 }): void;
 /**
@@ -236,8 +246,17 @@ export declare function event_video_capturing_change(payload: {
  * @category Video
  */
 export declare function event_video_dimension_change(payload: {
+  /**
+   * width
+   */
   width: number;
+  /**
+   * height
+   */
   height: number;
+  /**
+   * type: received video
+   */
   type: 'received';
 }): void;
 /**
@@ -249,7 +268,13 @@ export declare function event_video_dimension_change(payload: {
  * @category Video
  */
 export declare function event_peer_video_state_change(payload: {
+  /**
+   * action of the peer video, Start or Stop
+   */
   action: 'Start' | 'Stop';
+  /**
+   * userId
+   */
   userId: number;
 }): void;
 /**
@@ -277,7 +302,7 @@ export declare function event_audio_active_speaker(
  *  - `Allow to talk`: You are an attendee of a webinar, the host allowed you to talk.
  *
  * ```javascript
- * client.on('unmute-audio-consent', (payload) => {
+ * client.on('host-ask-unmute-audio', (payload) => {
  *    console.log(payload.reason);
  * });
  * ```
@@ -285,6 +310,9 @@ export declare function event_audio_active_speaker(
  * @category Audio
  */
 export declare function event_audio_unmute_consent(payload: {
+  /**
+   * The reason of unmute consent
+   */
   reason: 'Spotlight' | 'Unmute' | 'Allow to talk';
 }): void;
 /**
@@ -315,8 +343,17 @@ export declare function event_audio_unmute_consent(payload: {
  * @category Audio
  */
 export declare function event_current_audio_change(payload: {
+  /**
+   * The action of current audio change
+   */
   action: AudioChangeAction;
+  /**
+   * The type of audio
+   */
   type?: 'phone' | 'computer';
+  /**
+   * If the action is muted, the extra field to show the source of muted
+   */
   source?: MutedSource;
 }): void;
 /**
@@ -355,7 +392,12 @@ export declare function event_chat_received_message(payload: ChatMessage): void;
  * @event
  * @category Chat
  */
-export declare function event_chat_delete_message(payload: { id: string }): void;
+export declare function event_chat_delete_message(payload: {
+  /**
+   * message id
+   */
+  id: string;
+}): void;
 
 /**
  * Occurs when the host change the privilege of chat
@@ -369,6 +411,9 @@ export declare function event_chat_delete_message(payload: { id: string }): void
  * @category Chat
  */
 export declare function event_chat_privilege_change(payload: {
+  /**
+   * chat privilege
+   */
   chatPrivilege: ChatPrivilege;
 }): void;
 
@@ -383,7 +428,7 @@ export declare function event_chat_privilege_change(payload: {
  * @event
  * @category Command channel
  */
-export declare function event_command_channel_status(payload: any): void;
+export declare function event_command_channel_status(payload: ConnectionState): void;
 
 /**
  * Occurs when command channel receive msg
@@ -396,7 +441,28 @@ export declare function event_command_channel_status(payload: any): void;
  * @event
  * @category Command channel
  */
-export declare function event_command_channel_message(payload: any): void;
+export declare function event_command_channel_message(payload: {
+  /**
+   * sender user id
+   */
+  senderId: string;
+  /**
+   * sender display name
+   */
+  senderName: string;
+  /**
+   * message content
+   */
+  text: string;
+  /**
+   * timestamp
+   */
+  timestamp: number;
+  /**
+   * message id
+   */
+  msgid: string;
+}): void;
 /**
  * Occurs when cloud recording status changes.
  * @param payload The recording status
@@ -404,6 +470,9 @@ export declare function event_command_channel_message(payload: any): void;
  * @category Recording
  */
 export declare function event_recording_change(payload: {
+  /**
+   * recording status
+   */
   state: RecordingStatus;
 }): void;
 /**
@@ -436,7 +505,13 @@ export declare function event_media_sdk_change(payload: MediaSDKEncDecPayload): 
  * @category Screen share
  */
 export declare function event_active_share_change(payload: {
+  /**
+   * state of share
+   */
   state: 'Active' | 'Inactive';
+  /**
+   * user id of active share
+   */
   userId: number;
 }): void;
 /**
@@ -452,8 +527,17 @@ export declare function event_active_share_change(payload: {
  * @category Screen share
  */
 export declare function event_share_content_dimension_change(payload: {
-  type: 'sended' | 'received'; // sended: current share; received: others' share
+  /**
+   *  sended: current share; received: others' share
+   */
+  type: 'sended' | 'received';
+  /**
+   * width
+   */
   width: number;
+  /**
+   * height
+   */
   height: number;
 }): void;
 /**
@@ -482,7 +566,13 @@ export declare function event_passively_stop_share(
  * @category Screen share
  */
 export declare function event_peer_share_state_change(payload: {
+  /**
+   * userId
+   */
   userId: number;
+  /**
+   * action of peer share
+   */
   action: 'Start' | 'Stop';
 }): void;
 /**
@@ -493,6 +583,9 @@ export declare function event_peer_share_state_change(payload: {
  * @category Screen share
  */
 export declare function event_share_content_change(payload: {
+  /**
+   * the current receiving sharing user id
+   */
   userId: number;
 }): void;
 /**
@@ -502,6 +595,9 @@ export declare function event_share_content_change(payload: {
  * @category Screen share
  */
 export declare function event_share_privilege_change(payload: {
+  /**
+   * share privilege
+   */
   privilege: SharePrivilege;
 }): void;
 
@@ -517,7 +613,12 @@ export declare function event_share_privilege_change(payload: {
  * @event
  * @category Phone
  */
-export declare function event_dial_out_change(payload: { code: DialoutState }): void;
+export declare function event_dial_out_change(payload: {
+  /**
+   * the state code of phone call
+   */
+  code: DialoutState;
+}): void;
 /**
  * Occurs when share audio state changes. It is usually used to cooperatively change the state of computer audio
  * @param payload
@@ -525,6 +626,9 @@ export declare function event_dial_out_change(payload: { code: DialoutState }): 
  * @category Audio
  */
 export declare function event_share_audio_change(payload: {
+  /**
+   * the state of share chrome tab audio
+   */
   state: 'on' | 'off';
 }): void;
 
@@ -535,6 +639,9 @@ export declare function event_share_audio_change(payload: {
  * @category Video
  */
 export declare function event_video_vb_preload_change(payload: {
+  /**
+   * is ready for apply the virtual background
+   */
   isReady: boolean;
 }): void;
 /**
@@ -558,14 +665,38 @@ export declare function event_video_vb_preload_change(payload: {
  */
 
 export declare function event_audio_statistic_data_change(payload: {
+  /**
+   * data
+   */
   data: {
+    /**
+     * average package loss for audio
+     */
     avg_loss: number;
+    /**
+     * if encoding is true, means that the data is encoding audio data statisitics.
+     */
     encoding: boolean;
+    /**
+     * jitter for audio
+     */
     jitter: number;
+    /**
+     * max package loss for audio
+     */
     max_loss: number;
+    /**
+     * round trip time for audio .
+     */
     rtt: number;
+    /**
+     * sample rate audio
+     */
     sample_rate: number;
   };
+  /**
+   * type
+   */
   type: 'AUDIO_QOS_DATA';
 }): void;
 /**
@@ -593,16 +724,63 @@ export declare function event_audio_statistic_data_change(payload: {
  */
 
 export declare function event_video_statistic_data_change(payload: {
+  /**
+   * data
+   */
   data: {
+    /**
+     * average package loss for video
+     */
     avg_loss: number;
+    /**
+     * if encoding is true, means that the data is encoding video data statisitics.
+     */
     encoding: boolean;
+    /**
+     * jitter for video
+     */
     jitter: number;
+    /**
+     * max package loss for video
+     */
     max_loss: number;
+    /**
+     * round trip time for video .
+     */
     rtt: number;
+    /**
+     * sample rate video
+     */
     sample_rate: number;
+    /**
+     * resolution width for video
+     */
     width: number;
+    /**
+     * resolution height for video
+     */
     height: number;
+    /**
+     * fps
+     */
     fps: number;
   };
+  /**
+   * type
+   */
   type: 'VIDEO_QOS_DATA';
+}): void;
+
+/**
+ * Occurs on video cell statistic data changes
+ * @param payload
+ *
+ *  @event
+ */
+export declare function event_video_cell_detailed_change(payload: {
+  userId: number;
+  width?: number;
+  height?: number;
+  quality?: VideoQuality;
+  fps?: number;
 }): void;

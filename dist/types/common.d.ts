@@ -187,3 +187,46 @@ export enum ReconnectReason {
    */
   Failover = 'failover',
 }
+/**
+ * Enumeration of video quality
+ * @enum
+ */
+export enum VideoQuality {
+  /**
+   * 90P
+   */
+  Video_90P = 0,
+  /**
+   * 180P
+   */
+  Video_180P = 1,
+  /**
+   * 360P
+   */
+  Video_360P = 2,
+  /**
+   * 720P
+   */
+  Video_720P = 3,
+}
+/**
+ *  `facingMode` for mobile browser, see https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/facingMode
+ */
+export enum MobileVideoFacingMode {
+  /**
+   * The video source is facing toward the user; this includes, for example, the front-facing camera on a smartphone.
+   */
+  User = 'user',
+  /**
+   * The video source is facing away from the user, thereby viewing their environment. This is the back camera on a smartphone.
+   */
+  Environment = 'environment',
+  /**
+   * The video source is facing toward the user but to their left, such as a camera aimed toward the user but over their left shoulder.
+   */
+  Left = 'left',
+  /**
+   * The video source is facing toward the user but to their right, such as a camera aimed toward the user but over their right shoulder.
+   */
+  Right = 'right',
+}

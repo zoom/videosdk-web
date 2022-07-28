@@ -13,7 +13,7 @@
 
 ### Enhanced
 * Video playback in Safari and Firefox by removing black bars from 4:3 aspect ratio
-* Maximum number of participants per canvas from to 25 (previously 9)
+* Maximum number of participants per canvas to 25 (previously 9)
 * Video statistics/data to include fps and resolution of each rendered video
   * Enabled via `subscribeVideoStatisticData` method, with data acquired via `video-detailed-data-change` event
 * Starting video in mobile browsers with facing mode support

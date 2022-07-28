@@ -25,7 +25,9 @@ export interface CommandChannelMsg {
    */
   msgid?: string;
 }
-
+/**
+ * The CommandChannelClient can be accessed by `getCommandClient` method of the `VideoClient`
+ */
 export declare namespace CommandChannel {
   /**
    * send string text through command channel

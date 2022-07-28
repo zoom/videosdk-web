@@ -1,4 +1,29 @@
 ## CHANGELOG
+## 1.4.0
+
+### Added
+* `muteUserAudioLocally` method to locally mute or unmute another user's audio
+* Mic and speaker preview support
+  * The microphone can be tested by recording voice and playing it
+  * Speakers can be tested by playing a sound and visualizing its audio wave
+  * See the [LocalAudioTrack docs](https://marketplacefront.zoom.us/sdk/custom/web/interfaces/localaudiotrack.html) to learn more
+* `stayAwake` option to the `init` method to prevent device dimming/locking during a session
+* `preloadDependentAssets` method to preload asset dependencies; optimizes performance in poor network environments
+* Manager (co-host) support via `makeManager` and `removeManager` methods
+
+### Enhanced
+* Video playback in Safari and Firefox by removing black bars from 4:3 aspect ratio
+* Maximum number of participants per canvas from to 25 (previously 9)
+* Video statistics/data to include fps and resolution of each rendered video
+  * Enabled via `subscribeVideoStatisticData` method, with data acquired via `video-detailed-data-change` event
+* Starting video in mobile browsers with facing mode support
+* Video quality support (up to 720p) for Intel Macs
+* Command channel by reducing delay from 50ms to 0ms between messages
+
+### Fixed
+* An issue where if the host unmutes someone via `unmuteAudio`, the user will receive the `host-ask-unmute-audio` event instead of the audio being unmuted directly
+* Edge cases on firefox where calling `startAudio` would always return an unresolved promise
+
 ## v1.3.0
 
 * The `role_type` attribute in the JWT token is required. See [SDK Authorization](https://marketplace.zoom.us/docs/sdk/video/auth) for details.

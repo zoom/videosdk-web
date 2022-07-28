@@ -1,6 +1,9 @@
 import { MediaCompatiblity, VideoClient } from './videoclient';
 import { LocalVideoTrack, LocalAudioTrack } from './preview';
 
+/**
+ * Zoom Video SDK for Web platform
+ */
 export declare namespace ZoomVideo {
   /**
    * The version of the Zoom Video Web SDK.
@@ -59,15 +62,21 @@ export declare namespace ZoomVideo {
   /**
    * Creates a new {@link LocalAudioTrack} to manage local audio capture
    * @param [deviceId] Optional device ID to use for local capture
+   * @category preview
    */
   function createLocalAudioTrack(deviceId?: string): LocalAudioTrack;
   /**
    * Creates a new {@link LocalVideoTrack} to start/stop local video capture and playback
    * @param [deviceId] Optional device ID to use for local capture
+   * @category preview
    */
   function createLocalVideoTrack(deviceId?: string): LocalVideoTrack;
   /**
    * Destroy the client
    */
   function destroyClient(): void;
+  /**
+   * Preload dependent assets to optimize performance
+   */
+  function preloadDependentAssets(path?: string): void;
 }

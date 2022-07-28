@@ -31,14 +31,15 @@ export declare enum ChatMsgType {
 }
 /**
  * The chat client provides the methods define the chat behavior
- *  ```js
- * const client = ZoomVideo.createClient();
+ *
+ *  ```javascript
+ *  const client = ZoomVideo.createClient();
  *
  * ```
  *
  * After joining meeting success, chat client is available
  *
- * ```js
+ * ```javascript
  * const chat = client.getChatClient();
  * // start to receive chat message
  * client.on('chat-on-message', (v) => {

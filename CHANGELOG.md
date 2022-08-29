@@ -1,4 +1,20 @@
 ## CHANGELOG
+## version 1.4.1
+
+### Added
+* Subsession support
+
+### Enhanced
+* Monitor logs for helping troubleshoot audio-start issues in iOS browser.
+* `preloadDependentAssets` method by adding a customized assets path option/argument
+
+### Fixed
+* Mobile browsers not receiving 'active-share-change' event
+* Issues where the `startAudio` method is called with the `speakerOnly` option unintentionally
+* Issues with chrome tab audio sharing in certain cases
+* Issues when rendering 3+1 videos with SharedArrayBuffer disabled
+* Timing issues with the `device-change` event
+
 ## 1.4.0
 
 ### Added

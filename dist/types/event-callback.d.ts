@@ -2,6 +2,7 @@ import { RecordingStatus } from './recording';
 import { SharePrivilege } from './media';
 import { ChatMessage, ChatPrivilege } from './chat';
 import {
+  SubsessionStatus,
   DialoutState,
   ReconnectReason,
   AudioChangeAction,
@@ -53,24 +54,52 @@ export interface ParticipantPropertiesPayload {
  * The State of Meeting connection.
  */
 export declare enum ConnectionState {
+  /**
+   * Connected
+   */
   Connected = 'Connected',
+  /**
+   * Reconnection, usually occurs in failover
+   */
   Reconnecting = 'Reconnecting',
+  /**
+   * Closed
+   */
   Closed = 'Closed',
+  /**
+   * Fail
+   */
+  Fail = 'Fail',
 }
 
 /**
  * The State of Video
  */
 export declare enum VideoActiveState {
+  /**
+   * Active
+   */
   Active = 'Active',
+  /**
+   * Inactive
+   */
   Inactive = 'Inactive',
 }
 /**
  * The State of Current User's Video Capturing
  */
 export declare enum VideoCapturingState {
+  /**
+   * Started
+   */
   Started = 'Started',
+  /**
+   * Stopped
+   */
   Stopped = 'Stopped',
+  /**
+   * Failed
+   */
   Failed = 'Failed',
 }
 
@@ -106,6 +135,10 @@ interface ConnectionChangePayload {
    * Reason of the change.
    */
   reason?: ReconnectReason | ClosedReason;
+  /**
+   * If the reason is JoinSubsession or MoveToSubsession, this is the subsession name
+   */
+  subsessionName?: string;
 }
 
 /**
@@ -122,9 +155,21 @@ interface ActiveSpeaker {
   displayName?: string;
 }
 
+/**
+ * Media workers status
+ */
 interface MediaSDKEncDecPayload {
+  /**
+   * encode or decode
+   */
   action: 'encode' | 'decode';
+  /**
+   * type of the worker
+   */
   type: 'audio' | 'video' | 'share';
+  /**
+   * result of the initialization
+   */
   result: 'success' | 'fail';
 }
 
@@ -141,7 +186,7 @@ export declare function event_connection_change(
 ): void;
 
 /**
- * Occurs when new participant join the meeting
+ * Occurs when new participant join the session
  *
  * ```javascript
  * client.on('user-added',(payload)=>{
@@ -166,7 +211,7 @@ export declare function event_user_update(
   payload: Array<ParticipantPropertiesPayload>,
 ): void;
 /**
- * Occurs when the participants leave the meeting
+ * Occurs when the participants leave the session
  * @param payload The event detail
  * @event
  * @category Session
@@ -184,7 +229,7 @@ export declare function event_user_remove(
  *     if (payload.state === 'Active') {
  *       await stream.renderVideo(canvas,userId,1280,720,0,0,3);
  *     } else {
- *       await astream.stopRenderVideo();
+ *       await stream.stopRenderVideo(canvas,userId);
  *     }
  *   } catch (error) {
  *     console.log(error);
@@ -263,6 +308,15 @@ export declare function event_video_dimension_change(payload: {
  *
  * Occurs when other participants start/stop video
  *
+ * ```javascript
+ * client.on('peer-video-state-change', (payload) => {
+ * if (payload.action === 'Start') {
+ *  stream.renderVideo(document.querySelector('#participants-canvas'), payload.userId, 960, 540, X_CORD, Y_CORD, 3)
+ * } else if (payload.action === 'Stop') {
+ *  stream.stopRenderVideo(document.querySelector('#participants-canvas'), payload.userId)
+ * }
+ * })
+ * ```
  * @param payload
  * @event
  * @category Video
@@ -278,7 +332,7 @@ export declare function event_peer_video_state_change(payload: {
   userId: number;
 }): void;
 /**
- * Occurs when some participants in meeting are talking
+ * Occurs when some participants in the session are talking
  *
  * ```javascript
  * client.on('active-speaker', (payload) => {
@@ -309,11 +363,11 @@ export declare function event_audio_active_speaker(
  * @event
  * @category Audio
  */
-export declare function event_audio_unmute_consent(payload: {
+export declare function event_host_ask_unmute_audio(payload: {
   /**
    * The reason of unmute consent
    */
-  reason: 'Spotlight' | 'Unmute' | 'Allow to talk';
+  reason: 'Unmute';
 }): void;
 /**
  * Occurs when current audio is changed
@@ -357,7 +411,7 @@ export declare function event_current_audio_change(payload: {
   source?: MutedSource;
 }): void;
 /**
- * Occurs when the SDK try to auto play audio failed. It may occur invoke stream.joinComputerAudio() immediately after join the meeting.
+ * Occurs when the SDK try to auto play audio failed. It may occur invoke stream.startAudio() immediately after join the session.
  *
  * ```javascript
  * client.on('auto-play-audio-failed',()=>{
@@ -392,12 +446,12 @@ export declare function event_chat_received_message(payload: ChatMessage): void;
  * @event
  * @category Chat
  */
-export declare function event_chat_delete_message(payload: {
-  /**
-   * message id
-   */
-  id: string;
-}): void;
+// export declare function event_chat_delete_message(payload: {
+//   /**
+//    * message id
+//    */
+//   id: string;
+// }): void;
 
 /**
  * Occurs when the host change the privilege of chat
@@ -494,9 +548,9 @@ export declare function event_media_sdk_change(payload: MediaSDKEncDecPayload): 
  * ```javascript
  * client.on('active-share-change',payload=>{
  *  if(payload.state==='Active'){
- *   stream.startRenderScreenShare(payload.userId,canvas);
+ *   stream.startShareView(canvas,payload.userId);
  *  }else if(payload.state==='Inactive'){
- *   stream.stopRenderScreenShare();
+ *   stream.stopShareView();
  *  }
  * })
  * ```
@@ -778,9 +832,182 @@ export declare function event_video_statistic_data_change(payload: {
  *  @event
  */
 export declare function event_video_cell_detailed_change(payload: {
+  /**
+   * userId
+   */
   userId: number;
+  /**
+   * resolution width of the video
+   */
   width?: number;
+  /**
+   * resolution height of the video
+   */
   height?: number;
+  /**
+   * video quality
+   */
   quality?: VideoQuality;
+  /**
+   * fps
+   */
   fps?: number;
 }): void;
+
+/** breakout room start */
+
+/**
+ *
+ * Occurs when the host assigned you in to a subsession, you can decide whether to join the subsession
+ * Use `SubsessionClient.joinSubsession(subsessionId)` to join the subsession
+ *
+ * @param payload
+ *
+ * @event
+ * @category Subsession
+ */
+export declare function event_bo_invite_to_join(payload: {
+  /**
+   * subsession id
+   */
+  subsessionId: string;
+  /**
+   * subsession name
+   */
+  subsessionName: string;
+}): void;
+
+/**
+ *
+ * Occurs when the subsession has a countdown, this event will be triggered every second until time up
+ *
+ * @param payload
+ *  -countdown: seconds remaining
+ *
+ * @event
+ * @category Subsession
+ */
+export declare function event_bo_room_countdown(payload: {
+  /**
+   * countdown for subsession
+   */
+  countdown: number;
+}): void;
+
+/**
+ * Occurs when the countdown is over.
+ *
+ * @event
+ * @category Subsession
+ */
+export declare function event_bo_room_time_up(): void;
+
+/**
+ * Occurs when there is a buffer countdown when the subsession is about to be closed, this event will be triggered every second until countdown is over
+ * @param payload
+ *  -countdown: seconds remaining
+ *
+ * @event
+ * @category Subsession
+ */
+export declare function event_bo_closing_room_countdown(payload: {
+  /**
+   * countdown for closing subsession
+   */
+  countdown: number;
+}): void;
+/**
+ * Occurs when the host broadcasts content to all
+ * @param payload
+ *
+ * @event
+ * @category Subsession
+ */
+export declare function event_bo_broadcast_message(payload: {
+  /**
+   * message
+   */
+  message: string;
+}): void;
+
+/**
+ * Occurs when the host received the request for help
+ * @param payload
+ *
+ * @event
+ * @category Subsession
+ */
+export declare function event_bo_ask_for_help(payload: {
+  /**
+   * userId of the user who request the help
+   */
+  userId: number;
+  /**
+   * display name
+   */
+  displayName: string;
+  /**
+   * subsession name of the user current in
+   */
+  subsessionName: string;
+  /**
+   * subsession id
+   */
+  subsessionId: string;
+}): void;
+/**
+ * Response of ask host help
+ */
+export declare enum AskHostHelpResponse {
+  /**
+   * received
+   */
+  Received = 0,
+  /**
+   * busy, host is helping other users
+   */
+  Busy = 1,
+  /**
+   * host postphone the request
+   */
+  Ignore = 2,
+  /**
+   * host already in the room
+   */
+  AlreadyInRoom = 3,
+}
+/**
+ * Occurs when the attendee received the repose the request for help
+ * @param payload
+ *
+ * @event
+ * @category Subsession
+ */
+export declare function event_bo_ask_for_help_response(payload: {
+  /**
+   * the response of ask for help
+   */
+  result: AskHostHelpResponse;
+}): void;
+/**
+ * Occurs when the status of subsession changed
+ * @param payload
+ *
+ * @event
+ * @category Subsession
+ */
+export declare function event_bo_room_state_change(payload: {
+  /**
+   * the status of subsession
+   */
+  status: SubsessionStatus;
+}): void;
+/**
+ * Occurs when the host is in subsession,  main session user changed
+ * @param payload
+ *
+ * @event
+ * @category Subsession
+ */
+export declare function event_bo_main_session_change(payload: any): void;
+/** breakout room end */

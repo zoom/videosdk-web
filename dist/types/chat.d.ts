@@ -1,28 +1,89 @@
 import { ExecutedResult } from './common';
 
+/**
+ * Message record
+ */
 interface ChatMessage {
   /**
    * message id,used for delete/modify message
    */
   id?: string;
+  /**
+   * message content
+   */
   message: string;
-  sender: { name: string; userId: number; avatar?: string };
-  receiver: {
+  /**
+   * sender
+   */
+  sender: {
+    /**
+     * name
+     */
     name: string;
+    /**
+     * userId
+     */
+    userId: number;
+    /**
+     * @ignore
+     */
+    avatar?: string;
+  };
+  /**
+   * receiver
+   */
+  receiver: {
+    /**
+     * name
+     */
+    name: string;
+    /**
+     * userId
+     */
     userId: number;
   };
+  /**
+   * timestamp
+   */
   timestamp: number;
 }
 
+/**
+ * Receiver
+ */
 interface ChatUserItem {
+  /**
+   * userId
+   */
   userId: number;
+  /**
+   * display name
+   */
   displayName: string;
+  /**
+   * is host
+   */
   isHost: boolean;
+  /**
+   * is manager
+   */
   isManager: boolean;
 }
+/**
+ * Privilege of the chat
+ */
 export declare enum ChatPrivilege {
+  /**
+   * Everyone
+   */
   All = 1,
+  /**
+   * No one, cannot send message
+   */
   NoOne = 4,
+  /**
+   * Everyone but cannot send private message
+   */
   EveryonePublicly = 5,
 }
 
@@ -30,36 +91,18 @@ export declare enum ChatMsgType {
   All = 0,
 }
 /**
- * The chat client provides the methods define the chat behavior
- *
- *  ```javascript
- *  const client = ZoomVideo.createClient();
- *
- * ```
- *
- * After joining meeting success, chat client is available
+ * After joining a session, call client.getChatClient() to get the chat client.
  *
  * ```javascript
- * const chat = client.getChatClient();
- * // start to receive chat message
- * client.on('chat-on-message', (v) => {
- *  console.log(v);
- *  // do something
- * })
+ * const chat = client.getChatClient()
  * ```
  */
 export declare namespace ChatClient {
   /**
-   * send chat message to other
+   * To send a chat to a specific participant, call the chat.send() function.
    * #### example
    * ```js
-   *  chat.sendMessage('test', userId)
-   *  .then(() => {
-   *      // success
-   *  }).catch(v => {
-   *      // fail
-   *      console.log(v)
-   *  })
+   *  chat.send('test', userId)
    * ```
    * @param text
    * @param userId
@@ -74,58 +117,48 @@ export declare namespace ChatClient {
   function send(text: string, userId: number): Promise<ChatMessage | Error>;
 
   /**
-   * Send message to everyone
+   * To send a chat to all participants, call the chat.sendToAll() function.
    * @param text message
    * @returns ExecutedPromise
    */
   function sendToAll(text: string): Promise<ChatMessage | Error>;
 
   /**
-   * host or manager use it to change chat privilege which defines what kind of role of user that user can chat to, there are the different privilege as following.
+   * The host or manager can control the chat privilege in the session. Following are the definition of the privilege:
    *
    
-   |         | privilege value                | describe                                            |
-   |---------|--------------------------------|-----------------------------------------------------|
-   | meeting | ChatPrivilege.All              | user can chat to everyone                      |
-   |         | ChatPrivilege.NoOne            | user can chat to no one                        |
-   |         | ChatPrivilege.EveryonePublicly | user can chat to host, manager and everyone    |
+   | value                          | description                                            |
+   |--------------------------------|-----------------------------------------------------|
+   | ChatPrivilege.All              | user can chat to everyone                      |
+   | ChatPrivilege.NoOne            | user can chat to no one                         |
+   | ChatPrivilege.EveryonePublicly | user can chat to host, manager and everyone    |
    *
    * #### example
    *
    * ```js
    * chat.setPrivilege(ChatPrivilege.All)
-   * .then((v) => {
-   *      const { chatPrivilege } = v;
-   *      // success
-   *  })
-   * .catch(v => {
-   *      // fail
-   *      console.log(v)
-   *  })
    * ```
    *
    * @param privilege
    *
    * @return executedPromise
    */
-  function setPrivilege(privilege: number): ExecutedResult;
+  function setPrivilege(privilege: ChatPrivilege): ExecutedResult;
 
   /**
-   * return the current privilege value
+   * Get the current chat privilege
    * #### example
    * ```js
    * const privilege = chat.getPrivilege();
-   * console.log(privilege);
    * ```
    * @return
    */
-  function getPrivilege(): number;
+  function getPrivilege(): ChatPrivilege;
   /**
    * get the history chat list
    * #### example
    * ```js
    * const historyChatList = chat.getHistory();
-   * console.log(historyChatList);
    * ```
    * @return
    */

@@ -77,6 +77,9 @@ export interface DialOutOption {
    */
   pressingOne?: boolean;
 }
+/**
+ * Interface of capture video option
+ */
 interface CaptureVideoOption {
   /**
    * Id of the camera for capturing the video, if not specified, use system default
@@ -87,7 +90,7 @@ interface CaptureVideoOption {
    */
   captureWidth?: number;
   /**
-   * Customized height of capture, 360 as
+   * Customized height of capture, 360 as default
    */
   captureHeight?: number;
   /**
@@ -1121,7 +1124,7 @@ export declare namespace Stream {
    * ```javascript
    * client.on('active-share-change',payload=>{
    *  if(payload.state==='Active'){
-   *   stream.startShareView(payload.activeUserId,canvas);
+   *   stream.startShareView(canvas,payload.activeUserId);
    *  }else if(payload.state==='Inactive'){
    *   stream.stopShareView();
    *  }

@@ -1,4 +1,7 @@
 import { ExecutedFailure } from './common';
+/**
+ * Command channel message
+ */
 export interface CommandChannelMsg {
   /**
    * sender id
@@ -35,13 +38,6 @@ export declare namespace CommandChannel {
    * ```js
    *  const cmdChannel = client.getCommandClient()
    *  cmdChannel.send('test', userId)
-   *  .then(() => {
-   *      // success
-   *  })
-   *     .catch(v => {
-   *      // fail
-   *      console.log(v)
-   *  })
    * ```
    *
    * @param text

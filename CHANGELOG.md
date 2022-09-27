@@ -1,4 +1,16 @@
 ## CHANGELOG
+## version 1.5.0
+### Added
+* Support for sending 720p videos on M1 and M2 macOS devices.
+
+### Enhanced
+* Audio on Android
+
+### Fixed
+* Issue where speaker tests would not stop in some edge cases.
+* `switchCamera()` function not working properly on mobile iOS and Android devices.
+
+
 ## version 1.4.1
 
 ### Added

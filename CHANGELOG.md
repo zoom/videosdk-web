@@ -1,4 +1,8 @@
 ## CHANGELOG
+## version 1.5.1
+### Fixed
+* Audio did not work on Safari for iPadOS.
+
 ## version 1.5.0
 ### Added
 * Support for sending 720p videos on M1 and M2 macOS devices.

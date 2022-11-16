@@ -8,4 +8,5 @@ export * from './videoclient';
 export * from './subsession';
 export * from './recording';
 export * from './preview';
+export * from './live-transcription';
 export default ZoomVideo;

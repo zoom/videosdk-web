@@ -2,6 +2,7 @@ import {
   DialoutState,
   ExecutedResult,
   MobileVideoFacingMode,
+  Participant,
   VideoQuality,
 } from './common';
 
@@ -43,6 +44,10 @@ export declare enum SharePrivilege {
    * Only the host or manager can share
    */
   Locked = 1,
+  /**
+   * Multiple participants can share simultaneously
+   */
+  MultipleShare = 3,
 }
 /**
  * Interface of start audio option
@@ -80,11 +85,11 @@ export interface DialOutOption {
 /**
  * Interface of capture video option
  */
-interface CaptureVideoOption {
+export interface CaptureVideoOption {
   /**
    * Id of the camera for capturing the video, if not specified, use system default
    */
-  cameraId?: string | MobileVideoFacingMode;
+  cameraId?: typeof MobileVideoFacingMode | string;
   /**
    * Customized width of capture, 640 as default
    */
@@ -121,6 +126,10 @@ interface CaptureVideoOption {
      */
     cropped?: boolean;
   };
+  /**
+   * Whether to capture the video in the original ratio, the default is to crop the ratio to 16:9
+   */
+  originalRatio?: boolean;
 }
 /**
  * Interface of audio qos data
@@ -164,6 +173,14 @@ interface AudioStatisticOption {
  * Interface of share screen option
  */
 export interface ScreenShareOption {
+  /**
+   * Whether the sharing is broadcast to subsessions. Only host or co-host have the privilege
+   */
+  broadcastToSubsession?: boolean;
+  /**
+   * Whether the screen sharing user can receive 'share-can-see-screen' event
+   */
+  requestReadReceipt?: boolean;
   /**
    * the cameraId
    * Share a secondary camera connected to your computer; for example, a document camera or the integrated camera on your laptop.
@@ -581,6 +598,17 @@ export declare namespace Stream {
    */
   function unmuteUserAudioLocally(userId: number): ExecutedResult;
   /**
+   * Adjust someone's audio locally, this operation doesn't affect other participants' audio
+   * @param userId userId
+   * @param volume number
+   *
+   * @category Audio
+   */
+  function adjustUserAudioVolumeLocally(
+    userId: number,
+    volume: number,
+  ): ExecutedResult;
+  /**
    * Whether the user is muted.
    * - If not specified the user id, get the muted of current user.
    * @param userId Default `undefined`
@@ -660,6 +688,13 @@ export declare namespace Stream {
    * @category Audio
    */
   function isUserAudioMutedLocally(userId: number): boolean;
+  /**
+   * Get the volume of a user
+   * @param userId userId
+   * @returns number
+   * @category Audio
+   */
+  function getUserVolumeLocally(userId: number): number;
 
   // -------------------------------------------------[video]-----------------------------------------------------------
 
@@ -718,6 +753,7 @@ export declare namespace Stream {
    *
    * **Note**
    * - The camera device id is accessible only after the user allows the browser to access camera devices.
+   * - If the using on the mobile devices, using the {@link MobileVideoFacingMode} as the camera ID
    *
    * **Example**
    * ```javascript
@@ -737,7 +773,7 @@ export declare namespace Stream {
    *
    */
   function switchCamera(
-    cameraDeviceId: string | MobileVideoFacingMode,
+    cameraDeviceId: string | typeof MobileVideoFacingMode,
   ): ExecutedResult;
 
   /**
@@ -1148,6 +1184,28 @@ export declare namespace Stream {
    */
   function stopShareView(): ExecutedResult;
   /**
+   * Switch to another share content.
+   *
+   * When there are multiple users sharing the screen in the session,you can have a chance to switch to  another one's  screen.
+   *
+   * ```javascript
+   * const sharingUserList = stream.getShareUserList();
+   * // click handler of sharing user list menu
+   * switchButton.addEventListener('click',(event)=>{
+   *  if(event.dataId!==stream.getActiveShareUserId()){
+   *   stream.switchShareView(event.dataId);
+   *  }
+   * })
+   *
+   * ```
+   *
+   * @param activeNodeId Required. active share user id
+   *
+   * @returns executed promise.
+   * @category Screen Share
+   */
+  function switchShareView(activeNodeId: number): ExecutedResult;
+  /**
    * Start screen share.
    *
    * - Check the share privilege before start screen share.
@@ -1162,7 +1220,7 @@ export declare namespace Stream {
    * @category Screen Share
    */
   function startShareScreen(
-    canvas: HTMLCanvasElement,
+    canvas: HTMLCanvasElement | HTMLVideoElement,
     options?: ScreenShareOption,
   ): ExecutedResult;
   /**
@@ -1224,11 +1282,40 @@ export declare namespace Stream {
    */
   function switchSharingSecondaryCamera(cameraId: string): ExecutedResult;
   /**
+   * Set the privilege of screen share
+   *
+   * @param privilege the privilege
+   * @returns executed promise.
+   *
+   * @category Screen Share
+   */
+  function setSharePrivilege(privilege: SharePrivilege): ExecutedResult;
+  /**
+   * When screen sharing is started, host or manager can determine whether the shared content is broadcast to subsessions.
+   *
+   * @returns executed promise.
+   * @category Screen Share
+   */
+  function shareToSubsession(): ExecutedResult;
+  /**
+   * Stop broadcasting the shared content to subsessions.
+   *
+   * @returns executed promise.
+   * @category Screen Share
+   */
+  function stopShareToSubsession(): ExecutedResult;
+  /**
    * Whether the host locked the share
    * @returns is screen share locked
    * @category Screen Share
    */
   function isShareLocked(): boolean;
+  /**
+   * Get the share privilege
+   * @returns share privilege
+   * @category Screen Share
+   */
+  function getSharePrivilege(): SharePrivilege;
   /**
    * Get the user id of received shared content
    * @returns active shared user id
@@ -1241,4 +1328,10 @@ export declare namespace Stream {
    * @category Screen Share
    */
   function getShareStatus(): ShareStatus;
+  /**
+   * Get the list of user who are sharing screen.
+   * @returns shared user list
+   * @category Screen Share
+   */
+  function getShareUserList(): Array<Participant>;
 }

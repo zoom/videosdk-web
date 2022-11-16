@@ -1,9 +1,31 @@
 ## CHANGELOG
-## version 1.5.1
+## v1.5.5
+### Added
+* Support for multi-sharing at the same time. Enable with `stream.setSharePrivilege(SharePrivilege.MultipleShare)`. Use `stream.switchShareView` to switch the share view. 
+* Ability to adjust individual user's audio volume locally using `stream.adjustUserAudioVolumeLocally`.
+* Support for Firefox gallery view when `SharedArrayBuffer` is enabled.
+* Support for live transcription and translation (if enabled for the Account).
+
+## Enhanced
+* `stream.startShareScreen` API with `requestReadReceipt` option; when enabled, there will be a `share-can-see-screen` event when other users’ receive the shared content.
+* Speed when joining a session.
+* Number of 720p videos that can be subscribed to (now up to 4) on Chrome and Chromium-like browsers (note that this is CPU- and network-intensive).
+* `startCaptureVideo` API with `originalRatio` option as an alternative to the new default behavior of cropping captured video to 16:9 ratio.
+
+## Fixed
+* Issue with sending a command channel message right after a `user-added` event.
+* Audio not working correctly on desktop Safari with `SharedArrayBuffer` enabled.
+* Audio distortion issues on iOS and iPadOS.
+* Certain monitor logs being unintentionally missing.
+* Host privileges being rescinded when entering subsessions in certain edge cases.
+* Video unintentionally playing back with controls when opened in an iOS webview in certain cases.
+
+
+## v1.5.1
 ### Fixed
 * Audio did not work on Safari for iPadOS.
 
-## version 1.5.0
+## v1.5.0
 ### Added
 * Support for sending 720p videos on M1 and M2 macOS devices.
 
@@ -15,7 +37,7 @@
 * `switchCamera()` function not working properly on mobile iOS and Android devices.
 
 
-## version 1.4.1
+## v1.4.1
 
 ### Added
 * Subsession support
@@ -31,7 +53,7 @@
 * Issues when rendering 3+1 videos with SharedArrayBuffer disabled
 * Timing issues with the `device-change` event
 
-## 1.4.0
+## v1.4.0
 
 ### Added
 * `muteUserAudioLocally` method to locally mute or unmute another user's audio

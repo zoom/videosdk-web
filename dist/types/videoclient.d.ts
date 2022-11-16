@@ -4,7 +4,7 @@ import { ChatClient } from './chat';
 import { CommandChannel } from './command';
 import { RecordingClient } from './recording';
 import { SubsessionClient } from './subsession';
-
+import { LiveTranscriptionClient } from './live-transcription';
 import {
   event_connection_change,
   event_user_add,
@@ -47,7 +47,12 @@ import {
   event_video_statistic_data_change,
   event_media_sdk_change,
   event_video_cell_detailed_change,
+  event_caption_status,
+  event_caption_message,
+  event_caption_enable,
+  event_share_can_see_screen,
 } from './event-callback';
+
 /**
  * Interface for the result of check system requirements.
  */
@@ -486,6 +491,37 @@ export declare namespace VideoClient {
     listener: typeof event_video_cell_detailed_change,
   ): void;
   /**
+   *
+   * @param event
+   * @param listener Details in {@link event_caption_status}
+   */
+  function on(event: 'caption-status', listener: typeof event_caption_status): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_caption_message}
+   */
+  function on(
+    event: 'caption-message',
+    listener: typeof event_caption_message,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_caption_enable}
+   */
+  function on(event: 'caption-enable', listener: typeof event_caption_enable): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_share_can_see_screen}
+   */
+  function on(
+    event: 'share-can-see-screen',
+    listener: typeof event_share_can_see_screen,
+  ): void;
+
+  /**
    * Remove the event handler.
    * @param event event name
    * @param callback the event handler
@@ -591,6 +627,10 @@ export declare namespace VideoClient {
    * Get Breakout Room client.
    */
   function getSubsessionClient(): typeof SubsessionClient;
+  /**
+   * Get LiveTranscription client
+   */
+  function getLiveTranscriptionClient(): typeof LiveTranscriptionClient;
   /**
    * Gets the current session’s info.
    */

@@ -9,6 +9,7 @@ import {
   MutedSource,
   VideoQuality,
 } from './common';
+import { LiveTranscriptionMessage } from './live-transcription';
 /**
  * Interface of a ParticipantPropertiesPayload
  */
@@ -1011,3 +1012,47 @@ export declare function event_bo_room_state_change(payload: {
  */
 export declare function event_bo_main_session_change(payload: any): void;
 /** breakout room end */
+/**
+ * Occurs when  the  live transcription status changes
+ * @param payload the event detail
+ * ```javascript
+ * client.on('caption-status',payload=>{
+ *  console.log(payload);
+ * })
+ * ```
+ * @event
+ */
+export declare function event_caption_status(payload: {
+  /**
+   * is auto caption enabled
+   */
+  autoCaption: boolean;
+  /**
+   * language code
+   */
+  lang?: number;
+}): void;
+/**
+ * Occurs when the live transcription or live translation or manual captions message received.
+ * @param payload the event detail
+ * ```javascript
+ * client.on('caption-message',payload=>{
+ *  console.log(payload);
+ * })
+ * ```
+ * @event
+ */
+export declare function event_caption_message(
+  payload: LiveTranscriptionMessage,
+): void;
+/**
+ * Occurs if the automatical live transcription enable status change
+ * @param payload
+ */
+export declare function event_caption_enable(payload: boolean): void;
+
+/**
+ * Occurs on when the `requestReadReceipt` option is true in the `startShareScreen` method, the sharer can receive the event if someone can see the shared screen
+ *  @event
+ */
+export declare function event_share_can_see_screen(): void;

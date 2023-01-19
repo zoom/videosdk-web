@@ -1,27 +1,27 @@
 import { ExecutedResult } from './common';
 
 /**
- * Message record
+ * Message record.
  */
 interface ChatMessage {
   /**
-   * message id,used for delete/modify message
+   * Message ID, used to delete or modify the message.
    */
   id?: string;
   /**
-   * message content
+   * Message content.
    */
   message: string;
   /**
-   * sender
+   * Sender information.
    */
   sender: {
     /**
-     * name
+     * Sender name.
      */
     name: string;
     /**
-     * userId
+     * Sender user ID.
      */
     userId: number;
     /**
@@ -30,20 +30,20 @@ interface ChatMessage {
     avatar?: string;
   };
   /**
-   * receiver
+   * Receiver information.
    */
   receiver: {
     /**
-     * name
+     * Receiver name.
      */
     name: string;
     /**
-     * userId
+     * Receiver user ID.
      */
     userId: number;
   };
   /**
-   * timestamp
+   * Message timestamp.
    */
   timestamp: number;
 }
@@ -53,36 +53,36 @@ interface ChatMessage {
  */
 interface ChatUserItem {
   /**
-   * userId
+   * User ID.
    */
   userId: number;
   /**
-   * display name
+   * Display name.
    */
   displayName: string;
   /**
-   * is host
+   * Whether the user is the host.
    */
   isHost: boolean;
   /**
-   * is manager
+   * Whether the user is a manager.
    */
   isManager: boolean;
 }
 /**
- * Privilege of the chat
+ * Chat privileges for users.
  */
 export declare enum ChatPrivilege {
   /**
-   * Everyone
+   * Everyone can send messages.
    */
   All = 1,
   /**
-   * No one, cannot send message
+   * No one can send messages.
    */
   NoOne = 4,
   /**
-   * Everyone but cannot send private message
+   * Everyone can send public messages, but not private messages.
    */
   EveryonePublicly = 5,
 }
@@ -91,7 +91,7 @@ export declare enum ChatMsgType {
   All = 0,
 }
 /**
- * After joining a session, call client.getChatClient() to get the chat client.
+ * After joining a session, call `client.getChatClient()` to get the chat client.
  *
  * ```javascript
  * const chat = client.getChatClient()
@@ -99,8 +99,8 @@ export declare enum ChatMsgType {
  */
 export declare namespace ChatClient {
   /**
-   * To send a chat to a specific participant, call the chat.send() function.
-   * #### example
+   * Sends a chat message to a specific participant.
+   * #### Example
    * ```js
    *  chat.send('test', userId)
    * ```
@@ -109,31 +109,31 @@ export declare namespace ChatClient {
    *
    * @return
    * - `ChatMessage`: success
-   * - `Error`: Failure. Following the details of Error:
-   *     - `IMPROPER_MEETING_STATE`: It works only when user is in meeting
-   *     - `INSUFFICIENT_PRIVILEGES`: chat privilege limited
-   *     - `INVALID_PARAMETERS`: invalid parameter
+   * - `Error`: Failure. Here are the error states and details:
+   *     - `IMPROPER_MEETING_STATE`: Chat works only when the user is in meeting.
+   *     - `INSUFFICIENT_PRIVILEGES`: The user does not have the privilege to send the chat.
+   *     - `INVALID_PARAMETERS`: Issue with the parameter sent.
    */
   function send(text: string, userId: number): Promise<ChatMessage | Error>;
 
   /**
-   * To send a chat to all participants, call the chat.sendToAll() function.
-   * @param text message
+   * Sends a chat message to all participants.
+   * @param text Message to send.
    * @returns ExecutedPromise
    */
   function sendToAll(text: string): Promise<ChatMessage | Error>;
 
   /**
-   * The host or manager can control the chat privilege in the session. Following are the definition of the privilege:
+   * The host or manager can control chat privileges in the session. The following table shows privilege values and descriptions:
    *
    
-   | value                          | description                                            |
-   |--------------------------------|-----------------------------------------------------|
-   | ChatPrivilege.All              | user can chat to everyone                      |
-   | ChatPrivilege.NoOne            | user can chat to no one                         |
-   | ChatPrivilege.EveryonePublicly | user can chat to host, manager and everyone    |
+   | Value                          | Description                                          |
+   |--------------------------------|------------------------------------------------------|
+   | ChatPrivilege.All              | The user can chat to everyone.                       |
+   | ChatPrivilege.NoOne            | The user can chat to no one.                         |
+   | ChatPrivilege.EveryonePublicly | The user can chat to the host, manager, and everyone.|
    *
-   * #### example
+   * #### Example
    *
    * ```js
    * chat.setPrivilege(ChatPrivilege.All)
@@ -146,8 +146,8 @@ export declare namespace ChatClient {
   function setPrivilege(privilege: ChatPrivilege): ExecutedResult;
 
   /**
-   * Get the current chat privilege
-   * #### example
+   * Gets the current chat privilege.
+   * #### Example
    * ```js
    * const privilege = chat.getPrivilege();
    * ```
@@ -155,8 +155,8 @@ export declare namespace ChatClient {
    */
   function getPrivilege(): ChatPrivilege;
   /**
-   * get the history chat list
-   * #### example
+   * Gets the chat list history.
+   * #### Example
    * ```js
    * const historyChatList = chat.getHistory();
    * ```
@@ -164,7 +164,7 @@ export declare namespace ChatClient {
    */
   function getHistory(): Array<ChatMessage>;
   /**
-   * Get available chat receivers list
+   * Gets the list of available chat receivers.
    */
   function getReceivers(): Array<ChatUserItem>;
 }

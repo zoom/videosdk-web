@@ -8,6 +8,8 @@ import {
   AudioChangeAction,
   MutedSource,
   VideoQuality,
+  FarEndCameraControlDeclinedReason,
+  PTZCameraCapability,
 } from './common';
 import { LiveTranscriptionMessage } from './live-transcription';
 /**
@@ -15,129 +17,129 @@ import { LiveTranscriptionMessage } from './live-transcription';
  */
 export interface ParticipantPropertiesPayload {
   /**
-   * Identify of the user
+   * User ID.
    */
   userId: number;
   /**
-   * Avatar of the user
+   * User's avatar.
    */
   avatar?: string;
   /**
-   * Display name
+   * User's display name.
    */
   displayName?: string;
   /**
-   * Whether the user is host
+   * Whether the user is the host.
    */
   isHost?: boolean;
   /**
-   * Whether the user is manager
+   * Whether the user is a manager.
    */
   isManager: boolean;
   /**
-   * Whether the audio is muted
+   * Whether the audio is muted.
    */
   muted?: boolean;
   /**
-   * Whether the user is starting the video
+   * Whether the user started video.
    */
   bVideoOn?: boolean;
   /**
-   * Whether the user is starting share
+   * Whether the user started sharing.
    */
   sharerOn?: boolean;
   /**
-   * Whether the sharing is paused
+   * Whether sharing is paused.
    */
   sharerPause?: boolean;
 }
 /**
- * The State of Meeting connection.
+ * The session's connection state.
  */
 export declare enum ConnectionState {
   /**
-   * Connected
+   * Connected.
    */
   Connected = 'Connected',
   /**
-   * Reconnection, usually occurs in failover
+   * Reconnecting (usually occurs in failover).
    */
   Reconnecting = 'Reconnecting',
   /**
-   * Closed
+   * Closed.
    */
   Closed = 'Closed',
   /**
-   * Fail
+   * Failed.
    */
   Fail = 'Fail',
 }
 
 /**
- * The State of Video
+ * The video state.
  */
 export declare enum VideoActiveState {
   /**
-   * Active
+   * Active.
    */
   Active = 'Active',
   /**
-   * Inactive
+   * Inactive.
    */
   Inactive = 'Inactive',
 }
 /**
- * The State of Current User's Video Capturing
+ * The current user's video capture state.
  */
 export declare enum VideoCapturingState {
   /**
-   * Started
+   * Started.
    */
   Started = 'Started',
   /**
-   * Stopped
+   * Stopped.
    */
   Stopped = 'Stopped',
   /**
-   * Failed
+   * Failed.
    */
   Failed = 'Failed',
 }
 
 /**
- * Reason of passively stop screen share
+ * Reason for passively stopping screen sharing.
  */
 export declare enum PassiveStopShareReason {
   /**
-   * Privilege change or others start new sharing
+   * Privilege change or another user started sharing.
    */
   PrivilegeChange = 'PrivilegeChange',
   /**
-   * User click the stop share on the browser control bar
+   * User clicked stop share on the browser control bar.
    */
   StopScreenCapture = 'StopScreenCapture',
 }
 /**
- * Reason of the meeting closed
- * - `kicked by host`: Been kicked by the host.
- * - `ended by host`: The meeting is ended by the hose.
- * - `expeled by host`: Been expeled by the host.
+ * Reason for closing the meeting.
+ * - `kicked by host`: User kicked off by the host.
+ * - `ended by host`: Meeting ended by the host.
+ * - `expeled by host`: User expeled by the host.
  */
 type ClosedReason = 'kicked by host' | 'ended by host' | 'expeled by host';
 /**
- * Interface of Connection Changed Payload
+ * Connection changed payload interface.
  */
 interface ConnectionChangePayload {
   /**
-   * Connection State
+   * Connection state.
    */
   state: ConnectionState;
   /**
-   * Reason of the change.
+   * Reason for the change.
    */
   reason?: ReconnectReason | ClosedReason;
   /**
-   * If the reason is JoinSubsession or MoveToSubsession, this is the subsession name
+   * If the reason is `JoinSubsession` or `MoveToSubsession`, this is the subsession name.
    */
   subsessionName?: string;
 }
@@ -147,29 +149,29 @@ interface ConnectionChangePayload {
  */
 interface ActiveSpeaker {
   /**
-   * Identify of user
+   * User ID.
    */
   userId: number;
   /**
-   * Display name of user
+   * User's display name.
    */
   displayName?: string;
 }
 
 /**
- * Media workers status
+ * Media worker's status.
  */
 interface MediaSDKEncDecPayload {
   /**
-   * encode or decode
+   * Encode or decode.
    */
   action: 'encode' | 'decode';
   /**
-   * type of the worker
+   * Type of worker.
    */
   type: 'audio' | 'video' | 'share';
   /**
-   * result of the initialization
+   * Result of initialization.
    */
   result: 'success' | 'fail';
 }
@@ -187,7 +189,7 @@ export declare function event_connection_change(
 ): void;
 
 /**
- * Occurs when new participant join the session
+ * Occurs when a new participant joins the session.
  *
  * ```javascript
  * client.on('user-added',(payload)=>{
@@ -195,7 +197,7 @@ export declare function event_connection_change(
  *  const participants = client.getParticipantsList();
  * })
  * ```
- * @param payload The event detail
+ * @param payload The event detail.
  * @event
  * @category Session
  */
@@ -203,7 +205,7 @@ export declare function event_user_add(
   payload: Array<ParticipantPropertiesPayload>,
 ): void;
 /**
- * Occurs when the properties of the participants updated.
+ * Occurs when the properties of the participants are updated.
  * @param payload The event detail
  * @event
  * @category Session
@@ -212,7 +214,7 @@ export declare function event_user_update(
   payload: Array<ParticipantPropertiesPayload>,
 ): void;
 /**
- * Occurs when the participants leave the session
+ * Occurs when the participants leaves the session.
  * @param payload The event detail
  * @event
  * @category Session
@@ -222,7 +224,7 @@ export declare function event_user_remove(
 ): void;
 
 /**
- * Occurs when remote video stream changes.
+ * Occurs when the remote video stream changes.
  *
  * ```javascript
  * client.on('video-active-change', async(payload) => {
@@ -237,22 +239,22 @@ export declare function event_user_remove(
  *   }
  * });
  * ```
- * @param payload The event detail
+ * @param payload The event detail.
  * @event
  * @category Video
  */
 export declare function event_video_active_change(payload: {
   /**
-   * Active state of video
+   * Active state of video.
    */
   state: VideoActiveState;
   /**
-   * user id
+   * User ID.
    */
   userId: number;
 }): void;
 /**
- * Occurs when local video capture stream changes.
+ * Occurs when the local video capture stream changes.
  *
  * ```javascript
  * client.on('video-capturing-change', (payload) => {
@@ -269,18 +271,18 @@ export declare function event_video_active_change(payload: {
  *   }
  * });
  * ```
- * @param payload The event detail
+ * @param payload The event detail.
  * @event
  * @category Video
  */
 export declare function event_video_capturing_change(payload: {
   /**
-   * Capture state of video
+   * Capture state of video.
    */
   state: VideoCapturingState;
 }): void;
 /**
- * Occurs when received video content dimension change
+ * Occurs when the received video content dimension changes.
  * ```javascript
  * client.on('video-dimension-change', payload=>{
  *  viewportElement.style.width = `${payload.width}px`;
@@ -293,21 +295,21 @@ export declare function event_video_capturing_change(payload: {
  */
 export declare function event_video_dimension_change(payload: {
   /**
-   * width
+   * Width.
    */
   width: number;
   /**
-   * height
+   * Height.
    */
   height: number;
   /**
-   * type: received video
+   * Type: received video.
    */
   type: 'received';
 }): void;
 /**
  *
- * Occurs when other participants start/stop video
+ * Occurs when other participants start or stop video.
  *
  * ```javascript
  * client.on('peer-video-state-change', (payload) => {
@@ -324,24 +326,24 @@ export declare function event_video_dimension_change(payload: {
  */
 export declare function event_peer_video_state_change(payload: {
   /**
-   * action of the peer video, Start or Stop
+   * Action of the peer video, `Start` or `Stop`.
    */
   action: 'Start' | 'Stop';
   /**
-   * userId
+   * User ID.
    */
   userId: number;
 }): void;
 /**
- * Occurs when some participants in the session are talking
+ * Occurs when some participants in the session are talking.
  *
  * ```javascript
  * client.on('active-speaker', (payload) => {
  *    console.log(`Active user:`,payload);
  * });
  * ```
- * @param payload active user
- * - Distinguish activity level by the volume, the bigest is the first element.
+ * @param payload Active user.
+ * - Distinguish activity level by volume, the largest is the first element.
  * @event
  * @category Audio
  */
@@ -349,11 +351,11 @@ export declare function event_audio_active_speaker(
   payload: Array<ActiveSpeaker>,
 ): void;
 /**
- * Occurs when host ask you to unmute audio.
- * @param payload the event detail
- * - reason:
- *  - `Spotlight`: Host spotlighted you, and if you are muted, you will receive the consent.
- *  - `Unmute`: Host ask you to unmute audio.
+ * Occurs when the host asks you to unmute audio.
+ * @param payload The event detail.
+ * - Reason:
+ *  - `Spotlight`: Host spotlighted you. If you are muted, you will receive the consent message.
+ *  - `Unmute`: Host asks you to unmute audio.
  *  - `Allow to talk`: You are an attendee of a webinar, the host allowed you to talk.
  *
  * ```javascript
@@ -366,26 +368,26 @@ export declare function event_audio_active_speaker(
  */
 export declare function event_host_ask_unmute_audio(payload: {
   /**
-   * The reason of unmute consent
+   * The unmute consent reason.
    */
   reason: 'Unmute';
 }): void;
 /**
- * Occurs when current audio is changed
- * @param payload the event detail
- * - action
- *  - `join`: Join the audio. refer to the `type` attribute get the detail.
- *  - `leave`: Leave the audio.
- *  - `muted`: Audio muted, refer to the `source` attribute get the detail.
- *  - `unmuted`: Audio unmuted,refer to the `source` attribute get the detail.
- * - type
- *  - `computer': Join by the computer audio.
- *  - `phone`: Join by the phone.
- * - source
+ * Occurs when current audio is changed.
+ * @param payload The event detail.
+ * - Action:
+ *  - `join`: Join audio. Refer to the `type` attribute for details.
+ *  - `leave`: Leave audio.
+ *  - `muted`: Audio muted, refer to the `source` attribute for details.
+ *  - `unmuted`: Audio unmuted, refer to the `source` attribute for details.
+ * - Type:
+ *  - `computer': Join by computer audio.
+ *  - `phone`: Join by phone.
+ * - Source:
  *  - `active`: User active action.
- *  - `passive(mute all)`: Muted due to the host muted all.
- *  - `passive(mute one)`: Muted due to the host muted you.
- *  - `passive`: Umnuted due to the host unmuted you.
+ *  - `passive(mute all)`: Muted due to the host muting all.
+ *  - `passive(mute one)`: Muted due to the host muting you.
+ *  - `passive`: Umnuted due to the host unmuting you.
  *
  * ```javascript
  * client.on('current-audio-change', (payload) => {
@@ -399,20 +401,20 @@ export declare function event_host_ask_unmute_audio(payload: {
  */
 export declare function event_current_audio_change(payload: {
   /**
-   * The action of current audio change
+   * The current audio change action.
    */
   action: AudioChangeAction;
   /**
-   * The type of audio
+   * Type of audio.
    */
   type?: 'phone' | 'computer';
   /**
-   * If the action is muted, the extra field to show the source of muted
+   * If the action is muted, an extra field to show the muted source.
    */
   source?: MutedSource;
 }): void;
 /**
- * Occurs when the SDK try to auto play audio failed. It may occur invoke stream.startAudio() immediately after join the session.
+ * Occurs when the SDK tried and failed to auto play audio. This may occur when invoking `stream.startAudio()` immediately after joining the session.
  *
  * ```javascript
  * client.on('auto-play-audio-failed',()=>{
@@ -424,8 +426,8 @@ export declare function event_current_audio_change(payload: {
  */
 export declare function event_auto_play_audio_failed(): void;
 /**
- * Occurs when receive a chat
- * @param payload the event detail
+ * Occurs when receiving a chat.
+ * @param payload The event details.
  * ```javascript
  * client.on('chat-on-message',payload=>{
  *  console.log('from %s, message:%s',payload.sender.name,payload.message);
@@ -437,8 +439,8 @@ export declare function event_auto_play_audio_failed(): void;
 export declare function event_chat_received_message(payload: ChatMessage): void;
 
 /**
- * Occurs when message is deleted
- * @param payload id of message
+ * Occurs when a message is deleted.
+ * @param payload Message ID.
  * ```javascript
  * client.on('chat-delete-message',payload=>{
  *  console.log('from %s, message:%s',payload.sender.name,payload.message);
@@ -449,14 +451,14 @@ export declare function event_chat_received_message(payload: ChatMessage): void;
  */
 // export declare function event_chat_delete_message(payload: {
 //   /**
-//    * message id
+//    * Message ID.
 //    */
 //   id: string;
 // }): void;
 
 /**
- * Occurs when the host change the privilege of chat
- * @param payload the event detail
+ * Occurs when the host changes the chat privileges.
+ * @param payload The event detail.
  * ```javascript
  * client.on('chat-privilege-change',payload=>{
  *  console.log(payload.chatPrivilege);
@@ -467,13 +469,13 @@ export declare function event_chat_received_message(payload: ChatMessage): void;
  */
 export declare function event_chat_privilege_change(payload: {
   /**
-   * chat privilege
+   * Chat privilege.
    */
   chatPrivilege: ChatPrivilege;
 }): void;
 
 /**
- * Occurs when the command channel status changed
+ * Occurs when the command channel status changes.
  * @param payload
  *```javascript
  * client.on('command-channel-status',payload=>{
@@ -486,8 +488,8 @@ export declare function event_chat_privilege_change(payload: {
 export declare function event_command_channel_status(payload: ConnectionState): void;
 
 /**
- * Occurs when command channel receive msg
- * @param payload the event detail
+ * Occurs when command channel receives a message.
+ * @param payload The event details.
  * ```javascript
  * client.on('command-channel-message',payload=>{
  *  console.log('from %s, message:%s',payload.senderId, payload.text, payload.timestamp);
@@ -498,53 +500,66 @@ export declare function event_command_channel_status(payload: ConnectionState): 
  */
 export declare function event_command_channel_message(payload: {
   /**
-   * sender user id
+   * Sender's user ID.
    */
   senderId: string;
   /**
-   * sender display name
+   * Sender's display name.
    */
   senderName: string;
   /**
-   * message content
+   * Message content.
    */
   text: string;
   /**
-   * timestamp
+   * Timestamp.
    */
   timestamp: number;
   /**
-   * message id
+   * Message ID.
    */
   msgid: string;
 }): void;
 /**
- * Occurs when cloud recording status changes.
- * @param payload The recording status
+ * Occurs when the cloud recording status changes.
+ * @param payload The recording status.
  * @event
  * @category Recording
  */
 export declare function event_recording_change(payload: {
   /**
-   * recording status
+   * Recording status.
    */
   state: RecordingStatus;
 }): void;
+
 /**
- * Occurs when add or remove the microphone/speaker/camera
+ * Occurs when individual cloud recording status changes.
+ * Ask: when host start individual cloud recording, user will be asked to accept or decline.
+ * Accept: when user accepts individual cloud recording.
+ * Decline: when user declines individual cloud recording.
+ * @param payload The individual recording status.
+ */
+export declare function event_individual_recording_change(payload: {
+  state: RecordingStatus;
+  userId?: number;
+}): void;
+
+/**
+ * Occurs when adding or removing the microphone, speaker, or camera.
  * @event
  * @category Media
  */
 export declare function event_device_change(): void;
 /**
- * Occurs when the encode or decode state of media sdk changes
+ * Occurs when the encode or decode state of the media SDK changes.
  * @param payload
  * @event
  * @category Media
  */
 export declare function event_media_sdk_change(payload: MediaSDKEncDecPayload): void;
 /**
- * Occurs when some participant is start sharing screen
+ * Occurs when some participant starts screen sharing.
  *
  * ```javascript
  * client.on('active-share-change',payload=>{
@@ -561,16 +576,16 @@ export declare function event_media_sdk_change(payload: MediaSDKEncDecPayload): 
  */
 export declare function event_active_share_change(payload: {
   /**
-   * state of share
+   * Sharing state.
    */
   state: 'Active' | 'Inactive';
   /**
-   * user id of active share
+   * User ID of active share.
    */
   userId: number;
 }): void;
 /**
- * Occurs when shared content dimension change
+ * Occurs when shared content dimensions change.
  * ```javascript
  * client.on('share-content-dimension-change',payload=>{
  *  viewportElement.style.width = `${payload.width}px`;
@@ -583,15 +598,15 @@ export declare function event_active_share_change(payload: {
  */
 export declare function event_share_content_dimension_change(payload: {
   /**
-   *  sended: current share; received: others' share
+   * Values: sended: current share; received: others' share.
    */
   type: 'sended' | 'received';
   /**
-   * width
+   * Width.
    */
   width: number;
   /**
-   * height
+   * Height.
    */
   height: number;
 }): void;
@@ -605,7 +620,7 @@ export declare function event_passively_stop_share(
   payload: PassiveStopShareReason,
 ): void;
 /**
- * Occurs when some participant starts or stops screen share.
+ * Occurs when some participant starts or stops screen sharing.
  *
  * ```javascript
  * client.on('peer-share-state-change',payload=>{
@@ -622,42 +637,42 @@ export declare function event_passively_stop_share(
  */
 export declare function event_peer_share_state_change(payload: {
   /**
-   * userId
+   * User ID.
    */
   userId: number;
   /**
-   * action of peer share
+   * Peer share action.
    */
   action: 'Start' | 'Stop';
 }): void;
 /**
- * Occurs when received shared content automatically changed
- * - Maybe host start new sharing, received shared content will be automatically changed
+ * Occurs when received shared content automatically changes.
+ * - For example, if the host start new sharing, received shared content will be automatically changed.
  * @param payload
  * @event
  * @category Screen share
  */
 export declare function event_share_content_change(payload: {
   /**
-   * the current receiving sharing user id
+   * User ID currently receiving sharing.
    */
   userId: number;
 }): void;
 /**
- * Occurs when the host change the share privilege
+ * Occurs when the host changes the share privileges.
  * @param payload
  * @event
  * @category Screen share
  */
 export declare function event_share_privilege_change(payload: {
   /**
-   * share privilege
+   * Share privilege.
    */
   privilege: SharePrivilege;
 }): void;
 
 /**
- * Occurs when dial out state change
+ * Occurs when the dial out state changes.
  *
  * ```javascript
  * client.on('dialout-state-change', (payload) => {
@@ -670,46 +685,46 @@ export declare function event_share_privilege_change(payload: {
  */
 export declare function event_dial_out_change(payload: {
   /**
-   * the state code of phone call
+   * The state code of the phone call.
    */
   code: DialoutState;
 }): void;
 /**
- * Occurs when share audio state changes. It is usually used to cooperatively change the state of computer audio
+ * Occurs when the share audio state changes. Usually used to cooperatively change the state of computer audio.
  * @param payload
  * @event
  * @category Audio
  */
 export declare function event_share_audio_change(payload: {
   /**
-   * the state of share chrome tab audio
+   * The state of the Chrome browser shared tab audio.
    */
   state: 'on' | 'off';
 }): void;
 
 /**
- * Occur when virtual background is enabled,and vb model is loaded
+ * Occurs when the virtual background (VB) is enabled and the VB model is loaded.
  * @param payload
  * @event
  * @category Video
  */
 export declare function event_video_vb_preload_change(payload: {
   /**
-   * is ready for apply the virtual background
+   * Is ready to apply the virtual background.
    */
   isReady: boolean;
 }): void;
 /**
- * Occurs when decode (recevied) the audio statistics data is changed
- * @param payload the event detail
+ * Occurs when the audio statistics data is changed; decode (received).
+ * @param payload The event detail.
  * - `data`
- *  - `encoding`: if encoding is true, means that the data is encoding audio data statisitics.
- *  - `avg_loss`: average package loss for audio
- *  - `jitter`: jitter for audio
- *  - `max_loss`: max package loss for audio
- *  - `rtt`: round trip time for audio .
- *  - `sample_rate`: sample rate audio
- * - `type` : string AUDIO_QOS_DATA
+ *  - `encoding`: If encoding is true, the data is encoding audio data statistics.
+ *  - `avg_loss`: Audio's average package loss.
+ *  - `jitter`: Audio's jitter.
+ *  - `max_loss`: Audio's maximum package loss.
+ *  - `rtt`: Audio's round trip time.
+ *  - `sample_rate`: Audio's sample rate.
+ * - `type` : String `AUDIO_QOS_DATA`
  * ```javascript
  * client.on('audio-statistic-data-change', (payload) => {
  *   console.log('emit', payload);
@@ -721,53 +736,53 @@ export declare function event_video_vb_preload_change(payload: {
 
 export declare function event_audio_statistic_data_change(payload: {
   /**
-   * data
+   * Data
    */
   data: {
     /**
-     * average package loss for audio
+     * Audio's Average package loss.
      */
     avg_loss: number;
     /**
-     * if encoding is true, means that the data is encoding audio data statisitics.
+     * If encoding is true, the data is encoding audio data statistics.
      */
     encoding: boolean;
     /**
-     * jitter for audio
+     * Audio's jitter.
      */
     jitter: number;
     /**
-     * max package loss for audio
+     * Audio's maximum package loss.
      */
     max_loss: number;
     /**
-     * round trip time for audio .
+     * Audio's round trip time.
      */
     rtt: number;
     /**
-     * sample rate audio
+     * Audio's sample rate.
      */
     sample_rate: number;
   };
   /**
-   * type
+   * Type.
    */
   type: 'AUDIO_QOS_DATA';
 }): void;
 /**
- * Occurs when decode (recevied) the video statistics data is changed
- * @param payload the event detail
+ * Occurs when the video statistics data is changed; decode (received).
+ * @param payload The event detail
  * - `data`
- *  - `encoding`: if encoding is true, means that the data is encoding video data statisitics.
- *  - `avg_loss`: average package loss for video
- *  - `jitter`: jitter for video
- *  - `max_loss`: max package loss for video
- *  - `rtt`: round trip time for video .
- *  - `sample_rate`: sample rate video
- *  - `width`: width for video
- *  - `height`: height for video
- *  - `fps`: fps for video
- * - `type` : string VIDEO_QOS_DATA
+ *  - `encoding`: If encoding is true, the data is encoding video data statistics.
+ *  - `avg_loss`: Video's average package loss.
+ *  - `jitter`: Video's jitter.
+ *  - `max_loss`: Video's maximum package loss.
+ *  - `rtt`: Video's round trip time.
+ *  - `sample_rate`: Video's sample rate.
+ *  - `width`: Video's width.
+ *  - `height`: Video's height.
+ *  - `fps`: Video's frame rate in frames per second (fps).
+ * - `type` : String `VIDEO_QOS_DATA`
  *
  * ```javascript
  * client.on('video-statistic-data-change', (payload) => {
@@ -780,87 +795,87 @@ export declare function event_audio_statistic_data_change(payload: {
 
 export declare function event_video_statistic_data_change(payload: {
   /**
-   * data
+   * Data.
    */
   data: {
     /**
-     * average package loss for video
+     * Video's average package loss.
      */
     avg_loss: number;
     /**
-     * if encoding is true, means that the data is encoding video data statisitics.
+     * If encoding is true, the data is encoding video data statistics.
      */
     encoding: boolean;
     /**
-     * jitter for video
+     * Video's jitter.
      */
     jitter: number;
     /**
-     * max package loss for video
+     * Video's maximum package loss.
      */
     max_loss: number;
     /**
-     * round trip time for video .
+     * Video's round trip time.
      */
     rtt: number;
     /**
-     * sample rate video
+     * Video's sample rate.
      */
     sample_rate: number;
     /**
-     * resolution width for video
+     * Video's resolution width.
      */
     width: number;
     /**
-     * resolution height for video
+     * Video's resolution height.
      */
     height: number;
     /**
-     * fps
+     * Video's frame rate in frames per second (fps).
      */
     fps: number;
   };
   /**
-   * type
+   * Type.
    */
   type: 'VIDEO_QOS_DATA';
 }): void;
 
 /**
- * Occurs on video cell statistic data changes
+ * Occurs on video cell statistic data changes.
  * @param payload
  *
  *  @event
  */
 export declare function event_video_cell_detailed_change(payload: {
   /**
-   * userId
+   * User ID.
    */
   userId: number;
   /**
-   * resolution width of the video
+   * Video resolution width.
    */
   width?: number;
   /**
-   * resolution height of the video
+   * Video resolution height.
    */
   height?: number;
   /**
-   * video quality
+   * Video quality.
    */
   quality?: VideoQuality;
   /**
-   * fps
+   * Video frame rate in frames per second.
    */
   fps?: number;
 }): void;
 
-/** breakout room start */
+/** Subsession start. */
 
 /**
  *
- * Occurs when the host assigned you in to a subsession, you can decide whether to join the subsession
- * Use `SubsessionClient.joinSubsession(subsessionId)` to join the subsession
+ * Occurs when the host assigns you to a subsession. You can decide whether to join the subsession or not.
+ * Use `SubsessionClient.joinSubsession(subsessionId)` to join the subsession.
  *
  * @param payload
  *
@@ -869,28 +884,28 @@ export declare function event_video_cell_detailed_change(payload: {
  */
 export declare function event_bo_invite_to_join(payload: {
   /**
-   * subsession id
+   * Subsession ID.
    */
   subsessionId: string;
   /**
-   * subsession name
+   * Subsession name.
    */
   subsessionName: string;
 }): void;
 
 /**
  *
- * Occurs when the subsession has a countdown, this event will be triggered every second until time up
+ * Occurs when the subsession has a countdown. This event will be triggered every second until time is up.
  *
  * @param payload
- *  -countdown: seconds remaining
+ *  - Countdown: seconds remaining.
  *
  * @event
  * @category Subsession
  */
 export declare function event_bo_room_countdown(payload: {
   /**
-   * countdown for subsession
+   * Countdown for subsession.
    */
   countdown: number;
 }): void;
@@ -904,21 +919,22 @@ export declare function event_bo_room_countdown(payload: {
 export declare function event_bo_room_time_up(): void;
 
 /**
- * Occurs when there is a buffer countdown when the subsession is about to be closed, this event will be triggered every second until countdown is over
+ * Occurs when there is a buffer countdown when the subsession is about to be closed.
+ * This event will be triggered every second until the countdown is over.
  * @param payload
- *  -countdown: seconds remaining
+ *  - Countdown: seconds remaining.
  *
  * @event
  * @category Subsession
  */
 export declare function event_bo_closing_room_countdown(payload: {
   /**
-   * countdown for closing subsession
+   * Countdown for closing the subsession.
    */
   countdown: number;
 }): void;
 /**
- * Occurs when the host broadcasts content to all
+ * Occurs when the host broadcasts content to all in the subsession.
  * @param payload
  *
  * @event
@@ -926,13 +942,13 @@ export declare function event_bo_closing_room_countdown(payload: {
  */
 export declare function event_bo_broadcast_message(payload: {
   /**
-   * message
+   * Broadcast message.
    */
   message: string;
 }): void;
 
 /**
- * Occurs when the host received the request for help
+ * Occurs when the host receives a request for help from a user in a subsession.
  * @param payload
  *
  * @event
@@ -940,45 +956,45 @@ export declare function event_bo_broadcast_message(payload: {
  */
 export declare function event_bo_ask_for_help(payload: {
   /**
-   * userId of the user who request the help
+   * User ID of the user who requested help.
    */
   userId: number;
   /**
-   * display name
+   * User's display name.
    */
   displayName: string;
   /**
-   * subsession name of the user current in
+   * Subsession name.
    */
   subsessionName: string;
   /**
-   * subsession id
+   * Subsession ID.
    */
   subsessionId: string;
 }): void;
 /**
- * Response of ask host help
+ * Host's response to request for help.
  */
 export declare enum AskHostHelpResponse {
   /**
-   * received
+   * Received.
    */
   Received = 0,
   /**
-   * busy, host is helping other users
+   * Busy, host is helping other users.
    */
   Busy = 1,
   /**
-   * host postphone the request
+   * Host postpones the request.
    */
   Ignore = 2,
   /**
-   * host already in the room
+   * Host already in the room.
    */
   AlreadyInRoom = 3,
 }
 /**
- * Occurs when the attendee received the repose the request for help
+ * Occurs when the attendee received the response for the request for help.
  * @param payload
  *
  * @event
@@ -986,12 +1002,12 @@ export declare enum AskHostHelpResponse {
  */
 export declare function event_bo_ask_for_help_response(payload: {
   /**
-   * the response of ask for help
+   * The response for the request for help.
    */
   result: AskHostHelpResponse;
 }): void;
 /**
- * Occurs when the status of subsession changed
+ * Occurs when the status of the subsession changes.
  * @param payload
  *
  * @event
@@ -999,21 +1015,21 @@ export declare function event_bo_ask_for_help_response(payload: {
  */
 export declare function event_bo_room_state_change(payload: {
   /**
-   * the status of subsession
+   * Subsession's status.
    */
   status: SubsessionStatus;
 }): void;
 /**
- * Occurs when the host is in subsession,  main session user changed
+ * Occurs when the host is in the subsession and the main session user changed.
  * @param payload
  *
  * @event
  * @category Subsession
  */
 export declare function event_bo_main_session_change(payload: any): void;
-/** breakout room end */
+/** Subsession end */
 /**
- * Occurs when  the  live transcription status changes
+ * Occurs when the live transcription status changes.
  * @param payload the event detail
  * ```javascript
  * client.on('caption-status',payload=>{
@@ -1024,16 +1040,16 @@ export declare function event_bo_main_session_change(payload: any): void;
  */
 export declare function event_caption_status(payload: {
   /**
-   * is auto caption enabled
+   * Is auto caption enabled.
    */
   autoCaption: boolean;
   /**
-   * language code
+   * Language code.
    */
   lang?: number;
 }): void;
 /**
- * Occurs when the live transcription or live translation or manual captions message received.
+ * Occurs when the SDK receives the live transcription, live translation, or manual captions message.
  * @param payload the event detail
  * ```javascript
  * client.on('caption-message',payload=>{
@@ -1046,13 +1062,116 @@ export declare function event_caption_message(
   payload: LiveTranscriptionMessage,
 ): void;
 /**
- * Occurs if the automatical live transcription enable status change
+ * Occurs if the automatic live transcription enable status changes.
  * @param payload
  */
 export declare function event_caption_enable(payload: boolean): void;
 
 /**
- * Occurs on when the `requestReadReceipt` option is true in the `startShareScreen` method, the sharer can receive the event if someone can see the shared screen
+ * Occurs when the `requestReadReceipt` option is true in the `startShareScreen` method. The sharer can receive the event if someone can see the shared screen.
  *  @event
  */
 export declare function event_share_can_see_screen(): void;
+
+/**
+ * Occurs when the SDK received the far end camera request.
+ * @param payload the event detail
+ *
+ * @event
+ */
+export declare function event_far_end_camera_request(payload: {
+  /**
+   * The user ID who requested control.
+   */
+  userId: number;
+  /**
+   * The display name who requested control.
+   */
+  displayName: string;
+  /**
+   * The user ID who is controlling the camera.
+   */
+  currentControllingUserId?: number;
+  /**
+   * The display name who is controlling the camera.
+   */
+  currentControllingDisplayName?: string;
+}): void;
+/**
+ * Occurs when the SDK received the far end camera response.
+ * @param payload The event detail.
+ *
+ * @event
+ */
+export declare function event_far_end_camera_response(payload: {
+  /**
+   * Is approved.
+   */
+  isApproved: boolean;
+  /**
+   * User ID.
+   */
+  userId: number;
+  /**
+   * Display name.
+   */
+  displayName: string;
+  /**
+   * Reason for refusal.
+   */
+  reason?: FarEndCameraControlDeclinedReason;
+}): void;
+/**
+ * Occurs when the camera in control status changes.
+ * @param payload The event detail.
+ *
+ * @event
+ */
+export declare function event_far_end_camera_in_control_change(payload: {
+  /**
+   * Is controlled by other user.
+   */
+  isControlled: boolean;
+  /**
+   * User ID.
+   */
+  userId?: number;
+}): void;
+/**
+ * Occurs when camera capability changes.
+ * @param payload
+ */
+export declare function event_far_end_camera_capability_change(payload: {
+  /**
+   * User ID.
+   */
+  userId: number;
+  /**
+   * Capability of PTZ.
+   */
+  ptz: PTZCameraCapability;
+}): void;
+/**
+ * Occurs when network quality changes.
+ * The network quality reflects the video quality, so only the user starts video, the data will broadcast to all users.
+ * @param payload the network quality
+ *
+ * @event
+ */
+export declare function event_network_quality_change(payload: {
+  /**
+   * User ID.
+   */
+  userId: number;
+  /**
+   * Uplink or downlink.
+   */
+  type: 'uplink' | 'downlink';
+  /**
+   * Level
+   * 0,1: bad
+   * 2: normal
+   * 3,4,5: good
+   */
+  level: number;
+}): void;

@@ -1,4 +1,23 @@
 ## CHANGELOG
+## v1.6.0
+### Added
+* Pan-Tilt-Zoom (PTZ) camera control and far end camera control: With `stream.requestFarEndCameraControl()` and `stream.approveFarEndCameraControl()` and `stream.controlFarEndCamera` methods and several related events, now you can control the far end camera.
+* Network quality event: now you can listen to the `network-quality-change` event to get the network level of users.
+* Individual cloud recording: now with the JWT payload configured, you can record users in individual recordings.
+* Log report and bug records for development and debugging.
+
+### Enhanced
+* Added `isVideoConnect`  to user properties, it indicates whether there is a camera connected to the device.
+* Add Global user ID, `userGuid`, to user properties. This is a correlated property to share between a main session and subsession.
+* Improve the 720P video rendering on high-performance devices.
+* Add `stream.isRenderSelfViewWithVideoElement()` and `stream.isStartShareScreenWithVideoElement()` methods. Now you no longer need redundant conditional judgments to determine which element to render. The Video SDK simplifies the judgment using these methods.
+* Improved the payload of the `user-removed` event.
+
+### Fixed
+* Video cannot work on iOS Safari with SharedArrayBuffer enabled.
+* Issue with `testSpeaker()` in the second call.
+* Issue with the `stayAwake` function.
+
 ## v1.5.5
 ### Added
 * Support for multi-sharing at the same time. Enable with `stream.setSharePrivilege(SharePrivilege.MultipleShare)`. Use `stream.switchShareView` to switch the share view. 

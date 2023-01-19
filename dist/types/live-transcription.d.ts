@@ -1,28 +1,28 @@
 import { ExecutedResult } from './common';
 
 /**
- * Source of the live transcription message
+ * Source of the live transcription message.
  */
 export enum LiveTranscriptionMessageSource {
   /**
-   * unspecified
+   * Unspecified.
    */
   Unspecified = 0,
   /**
-   *  user typed caption in the meeting
+   * User-typed caption in the meeting.
    */
   InMeetingManual = 1,
   /**
-   * using the external captioner
+   * Using the external captioner.
    */
   ExternalCaptioner = 2,
   /**
-   * 	automatic speech recognition
+   * Automatic speech recognition.
    */
   ASR = 4,
 }
 /**
- * language code of the live transcription
+ * Language code of the live transcription.
  */
 export enum LiveTranscriptionLanguageCode {
   /**
@@ -162,17 +162,17 @@ export enum LiveTranscriptionLanguageCode {
    */
   Turkish = 33,
   /**
-   * No translation
+   * No translation.
    */
   NoTranslation = 400,
   /**
-   * manual caption
+   * Manual caption.
    */
   DefaultManualInput = 401,
 }
 
 /**
- * live transcription language
+ * Live transcription language.
  */
 export enum LiveTranscriptionLanguage {
   /**
@@ -313,147 +313,147 @@ export enum LiveTranscriptionLanguage {
   Turkish = 'tr',
 }
 /**
- *  live transcription message
+ *  Live transcription message.
  */
 interface LiveTranscriptionMessage {
   /**
-   * message ID
+   * Message ID.
    */
   msgId: string;
   /**
-   * user ID of the message
+   * User ID of the message.
    */
   userId: number;
   /**
-   * display name
+   * Display name.
    */
   displayName: string;
   /**
-   * text content
+   * Text content.
    */
   text: string;
   /**
-   * source of the live transcription message
+   * Source of the live transcription message.
    */
   source: LiveTranscriptionMessageSource;
   /**
-   *  language code of the live translation
+   * Language code of the live translation.
    */
   language: LiveTranscriptionLanguageCode;
   /**
-   * timestamp
+   * Timestamp.
    */
   timestamp: number;
   /**
-   * Is this sentence over?
+   * Whether the sentence is over.
    */
   done?: boolean;
 }
 
 /**
- * Status of live transcription
+ * Status of live transcription.
  */
 interface LiveTranscriptionStatus {
   /**
-   * is live transcription enabled
+   * Is live transcription enabled?
    */
   isLiveTranscriptionEnabled: boolean;
   /**
-   * is live translation enabled
+   * Is live translation enabled?
    */
   isLiveTranslationEnabled: boolean;
   /**
-   * is manual caption enabled
+   * Is manual caption enabled?
    */
   isManualCaptionerEnabled: boolean;
   /**
-   * supported transcription language, separated by semicolons
+   * Supported transcription language, separated by semicolons.
    */
   transcriptionLanguage: string;
   /**
-   * supported translation language, a list of speaking language and supported translation language pairs.
+   * Supported translation language, a list of speaking language and supported translation language pairs.
    */
   translatedSetting: Array<{
     /**
-     * speaking language
+     * Speaking language.
      */
     speakingLanguage: string;
     /**
-     * translation language,separated by semicolons
+     * Translation language, separated by semicolons.
      */
     translatedToLanguage: string;
   }>;
 }
 /**
- * Language
+ * Language.
  */
 interface Language {
   /**
-   * Language code
+   * Language code.
    */
   code: string;
   /**
-   * Language name
+   * Language name.
    */
   name: string;
 }
 /**
- * The client of live transcription
+ * The client of live transcription.
  */
 export declare namespace LiveTranscriptionClient {
   /**
-   * Start live transcription
+   * Start live transcription.
    *
    * ``` javascript
    * zmClient.on('caption-message',(payload)=>{
    *  console.log(`receive new transcription:${payload.text}`)
    * });
    *
-   * const lttClient = zmClient.getFeatureModule('liveTranscription');
+   * const lttClient = zmClient.getLiveTranscriptionClient();
    * lttClient.startLiveTranscription();
    * ```
    *
    */
   function startLiveTranscription(): ExecutedResult;
   /**
-   * Set speaking language
-   * Note
-   *  - need to start live transcription before calling this function
+   * Set speaking language.
+   * Note:
+   *  - Need to start live transcription before calling this function.
    * @param language
    */
   function setSpeakingLanguage(language: LiveTranscriptionLanguage): ExecutedResult;
   /**
-   * Set translation language
-   * Note
-   *  - check the `translatedSetting` from the `getLiveTranscriptionStatus` to verify whether the language is in the supported list
-   *  - need to start live transcription before calling this function
-   * @param language undefined is no traslation
+   * Set translation language.
+   * Notes:
+   *  - Check the `translatedSetting` from the `getLiveTranscriptionStatus` to verify whether the language is in the supported list.
+   *  - Need to start live transcription before calling this function.
+   * @param language Undefined is no translation.
    */
   function setTranslationLanguage(
     language?: LiveTranscriptionLanguage,
   ): ExecutedResult;
   /**
-   * Get the live transcription status
+   * Get the live transcription status.
    */
   function getLiveTranscriptionStatus(): LiveTranscriptionStatus;
   /**
-   * Get current transcription language
+   * Get the current transcription language.
    */
   function getCurrentTranscriptionLanguage(): Language | null;
   /**
-   * Get current translation language
+   * Get the current translation language.
    */
   function getCurrentTranslationLanguage(): Language | null;
   /**
-   * Get the latest transcription message
+   * Get the latest transcription message.
    */
   function getLatestTranscription(): string;
   /**
-   * Get the latest translation message
+   * Get the latest translation message.
    */
   function getLatestTranslation(): string;
   /**
-   * Get the full records of live transcription
+   * Get the full records of live transcription.
    * Usually the return value is an array type, when the number of records exceeds 100,000, it will be an Promise type.
    */
   function getFullTranscriptionHistory():

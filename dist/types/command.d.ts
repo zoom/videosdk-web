@@ -1,47 +1,47 @@
 import { ExecutedFailure } from './common';
 /**
- * Command channel message
+ * Command channel message object.
  */
 export interface CommandChannelMsg {
   /**
-   * sender id
+   * Sender ID
    */
   senderId: number;
   /**
-   * sender name
+   * Sender name.
    */
   senderName?: string;
   /**
-   * receiver id, when send to all no receiverId
+   * Receiver ID. When sent to all, there is no `receiverId`.
    */
   receiverId?: number;
   /**
-   * content
+   * Message content.
    */
   text: string;
   /**
-   * timestamp
+   * Timestamp.
    */
   timestamp: number;
   /**
-   * msgid
+   * Message ID.
    */
   msgid?: string;
 }
 /**
- * The CommandChannelClient can be accessed by `getCommandClient` method of the `VideoClient`
+ * Use the `getCommandClient` method for the `VideoClient` to access the command channel client.
  */
 export declare namespace CommandChannel {
   /**
-   * send string text through command channel
-   * #### example only work to VideoSDK
+   * Send string text through command channel.
+   * #### Example
    * ```js
    *  const cmdChannel = client.getCommandClient()
    *  cmdChannel.send('test', userId)
    * ```
    *
-   * @param text
-   * @param userId is not pass userId, will send to all
+   * @param text The text to send.
+   * @param userId User to send to. If you don't pass a `userId`, the SDK sends the message to all users.
    *
    * @return ExecutedResult
    */

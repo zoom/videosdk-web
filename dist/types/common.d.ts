@@ -1,15 +1,15 @@
 /**
  * Define error types of operations.
- * - INVALID_OPERATION: The operation is invalid, perhaps causeed by the duplicated operations.
+ * - INVALID_OPERATION: The operation is invalid, perhaps caused by duplicated operations.
  * - INTERNAL_ERROR: The remote service is temporarily unavailable.
  * - INSUFFICIENT_PRIVILEGES: The operation is only applicable for host or manager.
- * - OPERATION_TIMEOUT: The operation is timeout, try again later.
- * - IMPROPER_MEETING_STATE: The user is not in meeting, refer to the relevant reason for the detail.
+ * - OPERATION_TIMEOUT: The operation timed out, try again later.
+ * - IMPROPER_MEETING_STATE: The user is not in a meeting, see the reason for details.
  *  - `closed`: The meeting is not joined.
- *  - `on hold`: You are on hold.
+ *  - `on hold`: The user is on hold.
  *  - `reconnecting`: The meeting is reconnecting.
- * - INVALID_PARAMETERS: The parameters passing to the method is invala, perhaps the wrong user id or the wrong value, refer to the relevant reason for the detail.
- * - OPERATION_LOCKED: The operation can not be completed because the relevant property is locked, refer to the relevant reason for the detail.
+ * - INVALID_PARAMETERS: The parameters passed to the method are invalid, perhaps the wrong user ID or value, see the reason for details.
+ * - OPERATION_LOCKED: The operation can not be completed because the relevant property is locked, see the reason for details.
  */
 export type ErrorTypes =
   | 'INVALID_OPERATION'
@@ -31,22 +31,22 @@ interface ExecutedFailure {
 export type ExecutedResult = Promise<'' | ExecutedFailure>;
 
 /**
- * Interface of a participant
+ * The participant interface.
  */
 interface Participant {
   /**
-   * Identify of a user.
+   * User ID.
    */
   userId: number;
   /**
-   * Display name of a user.
+   * User's display name.
    */
   displayName: string;
   /**
-   * Audio state of a user.
+   * User's audio state.
    * - `''`: No audio.
    * - `computer`: Joined by computer audio.
-   * - `phone`: Joined by phone
+   * - `phone`: Joined by phone.
    */
   audio: '' | 'computer' | 'phone';
   /**
@@ -54,55 +54,67 @@ interface Participant {
    */
   muted: boolean;
   /**
-   * Whether the user is host.
+   * Whether the user is the host.
    */
   isHost: boolean;
   /**
-   * Whether the user is manager.
+   * Whether the user is a manager.
    */
   isManager: boolean;
   /**
-   * The avatar of a user.
-   * You can set the avatar in the [web profile](https://zoom.us/profile).
+   * User's avatar.
+   * Users can set their avatar in their [web profile](https://zoom.us/profile).
    */
   avatar?: string;
   /**
-   * Whether the user is started video.
+   * Whether the user started video.
    */
   bVideoOn: boolean;
   /**
-   * Whether the user is started share.
+   * Whether the user started sharing.
    */
   sharerOn: boolean;
   /**
-   * Whether the share is paused
+   * Whether the share is paused.
    */
   sharePause: boolean;
+  /**
+   * The unified ID of a user among the main session or subsessions.
+   */
+  userGuid?: string;
+  /**
+   * Whether is allow individual recording
+   */
+  isAllowIndividualRecording: boolean;
+  /*
+   * Whether the user has a camera connected to the device
+   */
+  isVideoConnect: boolean;
 }
 /**
- * Status of subsession
+ * Subsession's status.
  */
 export enum SubsessionStatus {
   /**
-   * Subsession is not open
+   * Subsession is not open.
    */
   NotStarted = 1,
   /**
-   * Subsession is open
+   * Subsession is open.
    */
   InProgress = 2,
   /**
-   * Subsession is closing, there may be a closing countdown
+   * Subsession is closing, there may be a closing countdown.
    */
   Closing = 3,
   /**
-   * Subsession is closed
+   * Subsession is closed.
    */
   Closed = 4,
 }
 
 /**
- * The state of dial out state
+ * Dial out state.
  *
  * Normal process: Calling-> Ringing->Accepted->Success
  *
@@ -110,118 +122,118 @@ export enum SubsessionStatus {
  */
 export enum DialoutState {
   /**
-   * Calling
+   * Calling.
    */
   Calling = 1,
   /**
-   * Ringing
+   * Ringing.
    */
   Ringing = 2,
   /**
-   * Accepted the call
+   * User accepted the call.
    */
   Accepted = 3,
   /**
-   * Busy
+   * Busy.
    */
   Busy = 4,
   /**
-   * Service unavailable
+   * Service unavailable.
    */
   NotAvailable = 5,
   /**
-   * Hang up the call
+   * User hung up the call.
    */
   HangUp = 6,
   /**
-   * Fail
+   * Call failed.
    */
   Fail = 7,
   /**
-   * Success
+   * Call succeeded.
    */
   Success = 8,
   /**
-   * Timeout
+   * Timeout.
    */
   Timeout = 9,
   /**
-   * Canceling the call
+   * Canceling the call.
    */
   Canceling = 10,
   /**
-   * Canceled the call
+   * Canceled the call.
    */
   Canceled = 11,
   /**
-   * Cancel the call failed
+   * Failed to cancel the call.
    */
   CancelFailed = 12,
 }
 
 /**
- * Payload audio muted source type for current-audio-change event
+ * Payload audio muted source type for current-audio-change event.
  */
 export enum MutedSource {
   /**
-   * User actively muted
+   * User actively muted.
    */
   Active = 'active',
   /**
-   * The host muted you
+   * The host muted the user.
    */
   PassiveByMuteOne = 'passive(mute one)',
   /**
-   * The host muted all
+   * The host muted all users.
    */
   PassiveByMuteAll = 'passive(mute all)',
 }
 
 /**
- * Payload for action type of current audio change
+ * Payload for action type of current audio change.
  */
 export enum AudioChangeAction {
   /**
-   * Join the audio
+   * Join the audio.
    */
   Join = 'join',
   /**
-   * Leave the audio
+   * Leave the audio.
    */
   Leave = 'leave',
   /**
-   * Muted
+   * Muted.
    */
   Muted = 'muted',
   /**
-   * Unmuted
+   * Unmuted.
    */
   Unmuted = 'unmuted',
 }
 
 /**
- * Payload of connection-change, the reconnecting reason
+ * The reconnecting reason for the connection-change payload.
  */
 export enum ReconnectReason {
   /**
-   * meeting failover
+   * Meeting failover.
    */
   Failover = 'failover',
   /**
-   * join the breakout subsession
+   * Join the breakout subsession.
    */
   JoinSubsession = 'join breakout room',
   /**
-   * move among the breakout subsessions
+   * Move among the breakout subsessions.
    */
   MoveToSubsession = 'move to breakout room',
   /**
-   * back to the main session
+   * Back to the main session.
    */
   BackToMainSession = 'back to main session',
 }
 /**
- * Enumeration of video quality
+ * Enumeration of video quality.
  * @enum
  */
 export enum VideoQuality {
@@ -243,15 +255,15 @@ export enum VideoQuality {
   Video_720P = 3,
 }
 /**
- *  `facingMode` for mobile browser, see https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/facingMode
+ *  `facingMode` for mobile browser, see https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/facingMode.
  */
 export enum MobileVideoFacingMode {
   /**
-   * The video source is facing toward the user; this includes, for example, the front-facing camera on a smartphone.
+   * The video source is facing toward the user, such as a front-facing camera on a smartphone.
    */
   User = 'user',
   /**
-   * The video source is facing away from the user, thereby viewing their environment. This is the back camera on a smartphone.
+   * The video source is facing away from the user, such as the back camera on a smartphone facing their environment.
    */
   Environment = 'environment',
   /**
@@ -262,4 +274,75 @@ export enum MobileVideoFacingMode {
    * The video source is facing toward the user but to their right, such as a camera aimed toward the user but over their right shoulder.
    */
   Right = 'right',
+}
+
+/**
+ * Enumeration of camera control command.
+ * @enum
+ */
+export enum CameraControlCmd {
+  /**
+   * Zoom in.
+   */
+  ZoomIn = 2,
+  /**
+   * Zoom out.
+   */
+  ZoomOut = 3,
+  /**
+   * Pan left.
+   */
+  Left = 4,
+  /**
+   * Pan right.
+   */
+  Right = 5,
+  /**
+   * Tilt up.
+   */
+  Up = 6,
+  /**
+   * Tilt down.
+   */
+  Down = 7,
+  /**
+   * Switch camera.
+   */
+  SwitchCamera = 8,
+}
+
+/**
+ * Capability of camera.
+ */
+export interface PTZCameraCapability {
+  /**
+   * Pan
+   */
+  pan: boolean;
+  /**
+   * Tilt
+   */
+  tilt: boolean;
+  /**
+   * Zoom
+   */
+  zoom: boolean;
+}
+
+/**
+ * Reasons for refusal to control far-end camera.
+ */
+export enum FarEndCameraControlDeclinedReason {
+  /**
+   * Normal.
+   */
+  None = 0,
+  /**
+   * Approved another user.
+   */
+  ApproveAnother = 3,
+  /**
+   * User withdrew the control.
+   */
+  Stop = 5,
 }

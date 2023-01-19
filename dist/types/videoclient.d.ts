@@ -32,6 +32,7 @@ import {
   event_command_channel_status,
   event_command_channel_message,
   event_recording_change,
+  event_individual_recording_change,
   event_share_audio_change,
   event_video_vb_preload_change,
   event_bo_invite_to_join,
@@ -51,70 +52,75 @@ import {
   event_caption_message,
   event_caption_enable,
   event_share_can_see_screen,
+  event_far_end_camera_request,
+  event_far_end_camera_response,
+  event_far_end_camera_in_control_change,
+  event_far_end_camera_capability_change,
+  event_network_quality_change,
 } from './event-callback';
 
 /**
- * Interface for the result of check system requirements.
+ * Check system requirements result interface
  */
 interface MediaCompatiblity {
   /**
-   * If `audio` is `false`, it means the browser is not compatible with voip.
+   * If `audio` is `false`, the browser is not compatible with Voice over IP (VoIP).
    */
   audio: boolean;
   /**
-   * If `video` if `false`, it means the browser is not compatible with video feature.
+   * If `video` if `false`, the browser is not compatible with the video feature.
    */
   video: boolean;
   /**
-   * If `screen` if `false`, it means the browser is not compatible with share screen feature.
+   * If `screen` if `false`, the browser is not compatible with the share screen feature.
    */
   screen: boolean;
 }
 
 interface SessionInfo {
   /**
-   * topic
+   * The session topic.
    */
   topic: string;
   /**
-   * password if it exists
+   * Password (if it exists).
    */
   password: string;
   /**
-   * user name
+   * User name.
    */
   userName: string;
   /**
-   * user id
+   * User ID
    */
   userId: number;
   /**
-   * Whether the user is in the meeting
+   * Whether the user is in the session.
    */
   isInMeeting: boolean;
   /**
-   * session id
+   * Session ID
    */
   sessionId: string;
 }
 
 /**
- * Init options of `init` method
+ * Initialize options of the `init` method.
  */
 interface InitOptions {
   /**
-   * optional spcify the web endpoint,default is zoom.us
+   * optional specify the web endpoint, default is zoom.us.
    */
   webEndpoint?: string;
   /**
    * optional
-   * Enforce multiple videos(up to 3 videos of others and 1 video of self) on Chromium-like browser without SharedArrayBuffer.
+   * Enforce multiple videos (up to 3 videos of others and 1 video of self) on Chromium-like browser without SharedArrayBuffer.
    * Note that this may result in high CPU and memory usage.
    */
   enforceMultipleVideos?: boolean;
   /**
-   * optional do not load dependent assets
-   * Used to address specific edge-cases, please do not use for almost all use-cases
+   * optional
+   * Do not load dependent assets. Used to address specific edge-cases, please do not use for almost all use-cases.
    */
   skipJsMedia?: boolean;
   /**
@@ -127,16 +133,19 @@ interface InitOptions {
  */
 export declare namespace VideoClient {
   /**
-   * Initilize the ZOOM Video SDK before join a meeting.
-   * The ZOOM Video SDK uses an SDK key & Secret for authentication. Login to the Zoom Marketplace and [Create a JWT App](https://devmp.zoomdev.us/guides/getting-started/app-types/create-jwt-app) to get SDK keys & Secrets.
-   * @param language The language of Zoom Video Web SDK. Default is `en-US`
-   * @param dependentAssets In the ZOOM Video SDK, web workers and web assembly are used to process media stream. This part of the code is separated from the SDK, so it is necessary to specify the dependent assets path.
-   * When the SDK is released, the web worker and the web assembly will be also included(the `lib` folder), you can either deploy these assets to your private servers or use the cloud assets provided by ZOOM. The property has following value:
+   * Initialize the Zoom Video SDK before join a session.
+   * The Zoom Video SDK uses an [SDK key & secret](https://marketplace.zoom.us/docs/sdk/video/auth/) for authentication.
+   * @param language The language of the Video SDK. The default is `en-US`.
+   * @param dependentAssets In the Zoom Video SDK, web workers and web assembly are used to process the media stream.
+   * This part of the code is separated from the SDK, so it is necessary to specify the dependent assets path.
+   * When the SDK is released, the web worker and the web assembly will be also included (the `lib` folder).
+   * You can either deploy these assets to your private servers or use the cloud assets provided by Zoom.
+   * The property has following value:
    * - `Global`: The default value. The dependent assets path will be `https://source.zoom.us/videosdk/{version}/lib/`
    * - `CDN`: The dependent assets path will be `https://dmogdx0jrul3u.cloudfront.net/videosdk/{version}/lib/`
    * - `CN`: Only applicable for China. The dependent assets path will be https://jssdk.zoomus.cn/videosdk/{version}/lib
-   * - `{FULL_ASSETS_PATH}`: The SDK will load the dependent assets spcified by the developer.
-   * @param options optional additional options for initialization
+   * - `{FULL_ASSETS_PATH}`: The SDK will load the dependent assets specified by the developer.
+   * @param options Optional additional options for initialization.
    */
   function init(
     language: string,
@@ -144,16 +153,16 @@ export declare namespace VideoClient {
     options?: InitOptions,
   ): ExecutedResult;
   /**
-   * Get the media stream instance for managing the media.
+   * Gets the media stream instance for managing the media.
    *
    * This usually the first step of using media.
    */
   function getMediaStream(): typeof Stream;
 
   /**
-   * Listen for the events and handle them.
-   * @param event event name
-   * @param callback the event handler
+   * Listens for events and handles them.
+   * @param event Event name.
+   * @param callback Ehe event handler.
    */
   function on(event: string, callback: (payload: any) => void): void;
   /**
@@ -297,6 +306,16 @@ export declare namespace VideoClient {
     event: 'recording-change',
     listener: typeof event_recording_change,
   ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_iso_recording_change}.
+   */
+  function on(
+    event: 'individual-recording-change',
+    listener: typeof event_individual_recording_change,
+  ): void;
+
   /**
    * @param event
    * @param listener Details in {@link event_auto_play_audio_failed}.
@@ -520,27 +539,72 @@ export declare namespace VideoClient {
     event: 'share-can-see-screen',
     listener: typeof event_share_can_see_screen,
   ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_far_end_camera_request}
+   */
+  function on(
+    event: 'far-end-camera-request-control',
+    listener: typeof event_far_end_camera_request,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_far_end_camera_response}
+   */
+  function on(
+    event: 'far-end-camera-response-control',
+    listener: typeof event_far_end_camera_response,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_far_end_camera_in_control_change}
+   */
+  function on(
+    event: 'far-end-camera-in-control-change',
+    listener: typeof event_far_end_camera_in_control_change,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_far_end_camera_capability_change}
+   */
+  function on(
+    event: 'far-end-camera-capability-change',
+    listener: typeof event_far_end_camera_capability_change,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_network_quality_change}
+   */
+  function on(
+    event: 'network-quality-change',
+    listener: typeof event_network_quality_change,
+  ): void;
 
   /**
    * Remove the event handler.
-   * @param event event name
-   * @param callback the event handler
+   * @param event Event name.
+   * @param callback The event handler.
    */
   function off(event: string, callback: (payload: any) => void): void;
   /**
-   * Join the meeting
-   * - Make sure call `init` method before join.
+   * Join the session
+   * - Make sure to call the `init` method before joining.
    * @param topic
    * @param token A JWT, should be generated on server.
-   * @param userName user name
-   * @param password If a password is required when joining the meeting, pass the password, otherwise omit it
-   * @param sessionIdleTimeoutMins Idle timeout to end the session
+   * @param userName User name.
+   * @param password If a password is required when joining the session, pass the password, otherwise omit it.
+   * @param sessionIdleTimeoutMins Idle timeout to end the session.
    *
-   * @returns a executed promise. Following are the possible error reasons:
-   * - `duplicated operation`: Duplicated invoke the `join` method.
-   * - `invalid apiKey/sdkKey or signature`: ApiKey/SdkKey or signature is not correct.
+   * @returns an executed promise. Following are the possible error reasons:
+   * - `duplicated operation`: Duplicated invoking of the `join` method.
+   * - `invalid apiKey/sdkKey or signature`: API key, SDK key, or signature is not correct.
    * - `invalid password`: Password is not correct.
-   * - `invalid parameters`: Can not join the meeting because the invalid parameters.
+   * - `invalid parameters`: Can not join the session because of invalid parameters.
    * - `internal error`: Internal error.
    */
   function join(
@@ -551,48 +615,48 @@ export declare namespace VideoClient {
     sessionIdleTimeoutMins?: number,
   ): ExecutedResult;
   /**
-   * Leave or end the meeting
+   * Leaves or ends the session.
    *
-   * @param end optional default false, if true, the session will end. Only the host has the privilege.
+   * @param end Optional. Default is false. If true, the session ends. Only the host has the privilege to do this.
    *
    */
   function leave(end?: boolean): ExecutedResult;
   /**
-   * Rename your name or other user's name
+   * Renames your name or another user's name.
    * - Only the **host** or **manager** can rename others.
-   * - The host can set whether the user are allowed to rename themselves. refer to the `client.isAllowToRename()` get the value.
+   * - The host can set whether the user is allowed to rename themselves. See `client.isAllowToRename()` to get the value.
    *
-   * @param name new display name
-   * @param userId rename the spcified user
+   * @param name New display name.
+   * @param userId User ID of the user to rename.
    *
    */
   function changeName(name: string, userId?: number): ExecutedResult;
   /**
-   * Remove the participant
+   * Removes the participant.
    * - Only the **host** or **manager** can remove others.
    *
    * @param userId
    */
   function removeUser(userId: number): ExecutedResult;
   /**
-   * Make other participant as the host.
-   * - Only the **host** can make host.
-   * - There is only one host in the meeting. Once make other as the host, the original host is not the meeting host.
+   * Makes other participant the host.
+   * - Only the **host** can make someone else the host.
+   * - There is only one host in a session. Once the host makes another user the host, the original host will no longer be the host.
    *
    * @param userId
    */
   function makeHost(userId: number): ExecutedResult;
   /**
-   * Make other participants as the manager
-   * - Only the **host** can make manager.
+   * Makes another participant a manager.
+   * - Only the **host** can make others into managers.
    * - There may be multiple managers in session.
    *
    * @param userId
    */
   function makeManager(userId: number): ExecutedResult;
   /**
-   * Revoke the manager permission from the participant
-   * - Only the **host** can revoke Manager.
+   * Revokes the manager permission from the participant.
+   * - Only the **host** can revoke manager permissions.
    * @param userId
    */
   function revokeManager(userId: number): ExecutedResult;
@@ -602,49 +666,50 @@ export declare namespace VideoClient {
    */
   function getCurrentUserInfo(): Participant;
   /**
-   * Get the in meeting users of the meeting.
+   * Get the in session users of the session.
    */
   function getAllUser(): Array<Participant>;
 
   /**
-   * Get the user by userId.
+   * Gets the user by user ID.
    */
   function getUser(userId: number): Participant | undefined;
 
   /**
-   * Get chat client.
+   * Gets chat client.
    */
   function getChatClient(): typeof ChatClient;
   /**
-   * Get Command client.
+   * Gets command client.
    */
   function getCommandClient(): typeof CommandChannel;
   /**
-   * Get Recording client.
+   * Gets recording client.
    */
   function getRecordingClient(): typeof RecordingClient;
   /**
-   * Get Breakout Room client.
+   * Gets subsession client.
    */
   function getSubsessionClient(): typeof SubsessionClient;
+
   /**
    * Get LiveTranscription client
    */
   function getLiveTranscriptionClient(): typeof LiveTranscriptionClient;
   /**
-   * Gets the current session’s info.
+   * Gets the current session’s information.
    */
   function getSessionInfo(): SessionInfo;
   /**
-   * Whether current user is host
+   * Determines whether the current user is the host.
    */
   function isHost(): boolean;
   /**
-   * Get the host of the session
+   * Gets the host of the session.
    */
   function getSessionHost(): Participant | undefined;
   /**
-   * Whether current user is manager
+   * Determines whether the current user is a manager.
    */
   function isManager(): boolean;
 }

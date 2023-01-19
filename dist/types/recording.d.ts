@@ -1,25 +1,37 @@
 /**
- * Cloud recording Status
+ * Cloud recording status.
  */
 export enum RecordingStatus {
   /**
-   * Recording
+   * Recording.
    */
   Recording = 'Recording',
   /**
-   * Recording is paused
+   * Recording paused.
    */
   Paused = 'Paused',
   /**
-   * Recording is stopped
+   * Recording stopped.
    */
   Stopped = 'Stopped',
+  /**
+   * when start ISO recording
+   */
+  Ask = 'Ask',
+  /**
+   * when user accept ISO recording
+   */
+  Accept = 'Accept',
+  /**
+   * when user decline ISO recording
+   */
+  Decline = 'Decline',
 }
 
 /**
- * The `RecordingClient` class provides methods that define the behaviors of a RecordingClient object, such as start/stop cloud recording.
+ * The `RecordingClient` class provides methods that define the behaviors of a `RecordingClient` object, such as starting or stopping cloud recording.
  *
- * The RecordingClient object can be accessed by `getRecordingClient` method of a `ZoomVideo` instance.
+ * Use the `getRecordingClient` method for a `ZoomVideo` instance to access the `RecordingClient` object.
  */
 export declare namespace RecordingClient {
   /**
@@ -42,7 +54,7 @@ export declare namespace RecordingClient {
    */
   export function stopCloudRecording(): Promise<'' | Error>;
   /**
-   * Pause cloud recording.
+   * Pauses cloud recording.
    *
    *
    * @returns
@@ -51,15 +63,29 @@ export declare namespace RecordingClient {
    */
   export function pauseCloudRecording(): Promise<'' | Error>;
   /**
-   * Resume cloud recording
+   * Resumes cloud recording.
    */
   export function resumeCloudRecording(): Promise<'' | Error>;
   /**
-   * Get status of cloud recording
+   * Gets the status of cloud recording.
    */
   export function getCloudRecordingStatus(): RecordingStatus;
   /**
-   * Whether the meeting enabled the recording.
+   * Determines whether the session enabled cloud recording.
    */
   export function canStartRecording(): boolean;
+  /**
+   * Accept individual cloud recording.
+   * @returns
+   * - `''`: Success
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   */
+  export function acceptIndividualRecording(): Promise<'' | Error>;
+  /**
+   * Decline individual cloud recording.
+   * @returns
+   * - `''`: Success
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   */
+  export function declineIndividualRecording(): Promise<'' | Error>;
 }

@@ -1,135 +1,135 @@
 /**
- * Interface for testSpeaker options
+ * Interface for test speaker options.
  */
 interface TestSpeakerOption {
   /**
-   * The speaker id. If it is not specified, use the default speaker
+   * The speaker ID. If not specified, the SDK uses the default speaker.
    */
   speakerId?: string;
   /**
-   * The sample audio file to play, usually it is a mp3 file. If it is not specified, use the ring audio
+   * The sample audio file to play, usually an mp3 file. If not specified, the SDK uses the ring audio.
    */
   sampleAudioUrl?: string;
   /**
-   * The average frequency of the stream, usually it is used to create audio visualization.
+   * The average frequency of the stream, usually used to create audio visualization.
    */
   onAnalyseFrequency?: (averageFrequency: number) => void;
 }
 /**
- * Interface of the return of testSpeaker
+ * Interface for the test speaker return.
  */
 interface TestSpeakerReturn {
   /**
-   * Stop the tester
+   * Stop the tester.
    */
   stop: () => void;
   /**
-   *  Destroy the tester
+   *  Destroy the tester.
    */
   destroy: () => void;
 }
 /**
- * Interface for testMicrophone options
+ * Interface for test microphone options.
  */
 interface TestMicrophoneOption {
   /**
-   * The microphone id. If it is not specified, use the default microphone
+   * The microphone ID. If not specified, the SDK uses the default microphone.
    */
   microphoneId?: string;
   /**
-   *  The speaker id. The Speaker to play the recording.
+   *  The speaker ID. The Speaker to play the recording.
    */
   speakerId?: string;
   /**
-   * Whether need to record and play an audio fragment to test the microphone.
+   * Whether the user needs to record and play an audio fragment to test the microphone.
    */
   recordAndPlay?: boolean;
   /**
-   * The maxmum seconds if allowing to record. Default is 10 second
+   * The maximum seconds to record, the user needs to record. Default is 10 seconds.
    */
   maxRecordDuration?: number;
   /**
-   * The average frequency of the stream, usually it is used to create audio visualization.
+   * The average frequency of the stream, usually used to create audio visualization.
    */
   onAnalyseFrequency?: (averageFrequency: number) => void;
   /**
-   * The timing when start recording
+   * When to start recording.
    */
   onStartRecording?: () => void;
   /**
-   * The timing when stop recording
+   * When to stop recording.
    */
   onStopRecording?: () => void;
   /**
-   * The timing when start playing the recording
+   * When to start playing the recording.
    */
   onStartPlayRecording?: () => void;
   /**
-   * The timing when stop playing the recording
+   * When to stop playing the recording.
    */
   onStopPlayRecording?: () => void;
 }
 interface TestMicrophoneReturn {
   /**
-   * Stop the tester
+   * Stop the tester.
    */
   stop: () => void;
   /**
-   * Stop recording the audio
+   * Stop recording audio.
    */
   stopRecording: () => void;
   /**
-   *  Destroy the tester
+   *  Destroy the tester.
    */
   destroy: () => void;
 }
 /**
- * Interface for starting/stopping local video capture
+ * Interface for starting or stopping local video capture.
  */
 export interface LocalVideoTrack {
   /**
-   * Starts local video capture and plays it back in a video DOM element
+   * Starts local video capture and plays it back in a video DOM element.
    *
-   * @param videoDOMElement Video DOM element that will contain the video playback
+   * @param videoDOMElement Video DOM element that will contain the video playback.
    */
   start(videoDOMElement: HTMLVideoElement): Promise<void | Error>;
   /**
-   * Stops local video capture
+   * Stops local video capture.
    */
   stop(): Promise<void | Error>;
 }
 /**
- * Interface for managing local audio capture
+ * Interface for managing local audio capture.
  */
 export interface LocalAudioTrack {
   /**
-   * Starts local audio capture with mic muted
+   * Starts local audio capture with microphone muted.
    */
   start(): Promise<void | Error>;
   /**
-   * Unmutes mic if audio was started, and mic is not already unmuted
+   * Unmutes microphone if audio was started, and microphone is not already unmuted.
    */
   unmute(): Promise<void | Error>;
   /**
-   * Mutes mic if audio was started, and mic is not already muted
+   * Mutes microphone if audio was started, and microphone is not already muted.
    */
   mute(): Promise<void | Error>;
   /**
-   * Returns the current volume of the local input device
+   * Returns the current volume of the local input device.
    */
   getCurrentVolume(): number;
   /**
-   * Stops local audio capture
+   * Stops local audio capture.
    */
   stop(): Promise<void | Error>;
   /**
-   * Test the speaker, usually it is used to test the speaker before a meeting
-   * @param options the option of tester
+   * Test the speaker, usually used to test the speaker before a meeting.
+   * @param options The test speaker option.
    */
   testSpeaker(options?: TestSpeakerOption): TestSpeakerReturn | undefined;
   /**
-     Test the microphone, usually it is used to test the microphone before a meeting. 
-     * @param options the option of tester
+     Test the microphone, usually used to test the microphone before a meeting. 
+     * @param options the test microphone option.
      */
   testMicrophone(options?: TestMicrophoneOption): TestMicrophoneReturn | undefined;
 }

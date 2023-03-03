@@ -1,4 +1,21 @@
 ## CHANGELOG
+## v1.6.2
+### Added
+* Support for optimizing screen share for video clips
+  * With `optimizedForSharedVideo` option in `stream.startShareScreen` method, `stream.enableOptimizeForSharedVideo(true)`, and `stream.updateSharedVideoQuality(quality)` methods to optimize the experience of sharing video clips
+* “Sharing” statistic data
+  * With `stream.subscribeShareStatisticData()` and the `share-statistic-data-change` event, you can get the statistic metrics of sharing, such as 'latency', 'resolution', 'fps', etc.
+* Virtual background support for Chromium-like browsers without SharedArrayBuffer
+  * With `enforceVirtualBackground` option in the `client.init` method to enable the feature; note that this may result in high CPU and memory usage on low-performance devices.
+
+### Enhanced
+* `user_identity` support, which is now also returned as a `participant` attribute
+* Timing of the Promise resolve call returned by the `stream.startAudio` method
+
+### Fixed
+* An issue where command channel messages could not be properly decrypted between main session and subsessions
+* An edge case that could sometimes cause others’ videos to not show properly
+
 ## v1.6.0
 ### Added
 * Pan-Tilt-Zoom (PTZ) camera control and far end camera control: With `stream.requestFarEndCameraControl()` and `stream.approveFarEndCameraControl()` and `stream.controlFarEndCamera` methods and several related events, now you can control the far end camera.

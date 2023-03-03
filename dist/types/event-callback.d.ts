@@ -1175,3 +1175,39 @@ export declare function event_network_quality_change(payload: {
    */
   level: number;
 }): void;
+/**
+ * Occurs when decode (recevied) or encode (sent) the share statistics data is changed
+ * @param payload the event detail
+ * - `data`
+ *  - `encoding`: if encoding is true, means that the data is encoding video data statisitics.
+ *  - `avg_loss`: average package loss for video
+ *  - `jitter`: jitter for video
+ *  - `max_loss`: max package loss for video
+ *  - `rtt`: round trip time for video .
+ *  - `sample_rate`: sample rate video
+ *  - `width`: width for video
+ *  - `height`: height for video
+ *  - `fps`: fps for video
+ * - `type` : string share
+ *
+ * ```javascript
+ * client.on('share_statistic_data_change', (payload) => {
+ *   console.log('emit', payload);
+ *  });
+ * ```
+ * @event
+ */
+export declare function event_share_statistic_data_change(payload: {
+  data: {
+    avg_loss: number;
+    encoding: boolean;
+    jitter: number;
+    max_loss: number;
+    rtt: number;
+    sample_rate: number;
+    width: number;
+    height: number;
+    fps: number;
+  };
+  type: string;
+}): void;

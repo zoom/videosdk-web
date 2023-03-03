@@ -69,6 +69,9 @@ interface TestMicrophoneOption {
    */
   onStopPlayRecording?: () => void;
 }
+/**
+ * Interface for the test microphone return.
+ */
 interface TestMicrophoneReturn {
   /**
    * Stop the tester.

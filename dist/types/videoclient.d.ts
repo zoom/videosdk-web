@@ -1,10 +1,11 @@
-import { ExecutedResult, Participant } from './common';
+import { ExecutedResult, LoggerInitOption, Participant } from './common';
 import { Stream } from './media';
 import { ChatClient } from './chat';
 import { CommandChannel } from './command';
 import { RecordingClient } from './recording';
 import { SubsessionClient } from './subsession';
 import { LiveTranscriptionClient } from './live-transcription';
+import { LoggerClient } from './logger';
 import {
   event_connection_change,
   event_user_add,
@@ -57,6 +58,7 @@ import {
   event_far_end_camera_in_control_change,
   event_far_end_camera_capability_change,
   event_network_quality_change,
+  event_share_statistic_data_change,
 } from './event-callback';
 
 /**
@@ -118,6 +120,14 @@ interface InitOptions {
    * Note that this may result in high CPU and memory usage.
    */
   enforceMultipleVideos?: boolean;
+  /**
+   * optional
+   * Enforce virtual background on Chromium-like browser without SharedArrayBuffer.
+   * Note
+   * - This may result in high CPU and memory usage.
+   * - Use CanvasElement to render the self video.
+   */
+  enforceVirtualBackground?: boolean;
   /**
    * optional
    * Do not load dependent assets. Used to address specific edge-cases, please do not use for almost all use-cases.
@@ -584,6 +594,15 @@ export declare namespace VideoClient {
     event: 'network-quality-change',
     listener: typeof event_network_quality_change,
   ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_share_statistic_data_change}
+   */
+  function on(
+    event: 'share-statistic-data-change',
+    listener: typeof event_share_statistic_data_change,
+  ): void;
 
   /**
    * Remove the event handler.
@@ -696,6 +715,11 @@ export declare namespace VideoClient {
    * Get LiveTranscription client
    */
   function getLiveTranscriptionClient(): typeof LiveTranscriptionClient;
+  /**
+   * Get logger client
+   * @param options logger option
+   */
+  function getLoggerClient(options?: LoggerInitOption): typeof LoggerClient;
   /**
    * Gets the current session’s information.
    */

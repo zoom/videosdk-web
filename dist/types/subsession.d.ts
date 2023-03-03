@@ -141,7 +141,8 @@ export declare namespace SubsessionClient {
    *
    * @param subsessions Subsession list required. Must include subsession ID and name.
    * @param options Subsession option; Default options =
-   * ```{
+   * ```javascript
+   * {
    *  isAutoJoinSubsession: false,
    *  isBackToMainSessionEnabled: true,
    *  isTimerEnabled: false,

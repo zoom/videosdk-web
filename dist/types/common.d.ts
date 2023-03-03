@@ -19,8 +19,17 @@ export type ErrorTypes =
   | 'IMPROPER_MEETING_STATE'
   | 'INVALID_PARAMETERS'
   | 'OPRATION_LOCKED';
+/**
+ * Failure reason for async operation
+ */
 interface ExecutedFailure {
+  /**
+   * type
+   */
   type: ErrorTypes;
+  /**
+   * reason
+   */
   reason: string;
 }
 /**
@@ -345,4 +354,70 @@ export enum FarEndCameraControlDeclinedReason {
    * User withdrew the control.
    */
   Stop = 5,
+}
+/**
+ * Log level
+ */
+type LogLevelLabel = 'debug' | 'log' | 'info' | 'print' | 'warn' | 'error';
+/**
+ * Log level object
+ */
+export type LogLevelDetail = {
+  /**
+   * debug
+   */
+  debug: boolean;
+  /**
+   * log
+   */
+  log: boolean;
+  /**
+   * info
+   */
+  info: boolean;
+  /**
+   * print
+   */
+  print: boolean;
+  /**
+   * warn
+   */
+  warn: boolean;
+  /**
+   * error
+   */
+  error: boolean;
+};
+/**
+ * Logger init option
+ */
+export interface LoggerInitOption {
+  /**
+   * Whether logger is enabled
+   */
+  enable?: boolean;
+  /**
+   * whether is enable to report log
+   */
+  enableReport?: boolean;
+  /**
+   * Whether is in debug mode, in this mode,the log will print to console
+   */
+  debugMode?: boolean;
+  /**
+   *  The report url
+   */
+  reportUrl?: string;
+  /**
+   * Log level
+   */
+  logLevel?: LogLevelLabel | LogLevelDetail;
+  /**
+   * The AES encrypt key for encrypting when the logs are cached in local,the key must be 128-bits, 192-bits, or 256-bits in length.
+   */
+  encryptKeys?: string | Array<string>;
+  /**
+   * The external tracking id
+   */
+  trackingId?: string;
 }

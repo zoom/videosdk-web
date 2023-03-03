@@ -161,15 +161,15 @@ export interface AudioQosData {
   max_loss: number;
 }
 /**
- * Audio statistic option interface.
+ * Statistic option interface.
  */
-interface AudioStatisticOption {
+interface StatisticOption {
   /**
-   * Subscribe or unsubscribe to encoding data (sending audio).
+   * Subscribe or unsubscribe to encoding data (sending ).
    */
   encode?: boolean;
   /**
-   * Subscribe or unsubscribe to decoding data (receiving audio).
+   * Subscribe or unsubscribe to decoding data (receiving).
    */
   decode?: boolean;
 }
@@ -198,6 +198,15 @@ export interface ScreenShareOption {
    * The capture height of share video, only enabled when the value of `secondaryCameraId` is not undefined.
    */
   captureHeight?: number;
+  /**
+   * Option to show (default, false) or hide (true) the "Share Audio" checkbox when sharing a Chrome tab
+   */
+  hideShareAudioOption?: boolean;
+  /**
+   * optimized for video share
+   * If sharing a video file that is stored locally on the computer, we recommend using the video share feature, which will provide better quality due to decreased CPU usage.
+   */
+  optimizedForSharedVideo?: boolean;
 }
 /**
  * Share audio status interface.
@@ -617,7 +626,7 @@ export declare namespace Stream {
    *
    * @category Audio
    */
-  function subscribeAudioStatisticData(type?: AudioStatisticOption): ExecutedResult;
+  function subscribeAudioStatisticData(type?: StatisticOption): ExecutedResult;
   /**
    * Unsubscribes to audio statistic data based on the type parameter.
    *
@@ -639,9 +648,7 @@ export declare namespace Stream {
    *
    * @category Audio
    */
-  function unsubscribeAudioStatisticData(
-    type?: AudioStatisticOption,
-  ): ExecutedResult;
+  function unsubscribeAudioStatisticData(type?: StatisticOption): ExecutedResult;
 
   /**
    * Mutes someone's audio locally. This operation doesn't affect other participants' audio.
@@ -1381,6 +1388,44 @@ export declare namespace Stream {
    */
   function stopShareToSubsession(): ExecutedResult;
   /**
+   * Enable/disable optimized for video share
+   * @param enable boolean
+   * @returns executed promise.
+   * @category Screen Share
+   */
+  function enableOptimizeForSharedVideo(enable: boolean): ExecutedResult;
+  /**
+   * Update the share quality when video share enabled
+   * Note: high resolution will lead to low fps
+   * @param quality quality
+   * @returns executed promise.
+   * @category Screen Share
+   */
+  function updateSharedVideoQuality(quality: VideoQuality): ExecutedResult;
+  /**
+   * Subscribe share statistic data base on the type parameter.
+   * Client will receive video quality data every second.
+   * @param type optional. Object { encode: Boolean, decode: Boolean }, Can specify which type of audio should be subscribe.
+   *
+   * @returns
+   * - `''`: Success.
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   *
+   * @category Screen Share
+   */
+  function subscribeShareStatisticData(type?: StatisticOption): ExecutedResult;
+  /**
+   * Unsubscribe video statistic data base on the type parameter.
+   * @param type optional. Object { encode: Boolean, decode: Boolean }, Can specify which type of audio should be unsubscribe.
+   *
+   * @returns
+   * - `''`: Success.
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   *
+   * @category Video
+   */
+  function unsubscribeShareStatisticData(type?: StatisticOption): ExecutedResult;
+  /**
    * Determines whether the host locked the share.
    * @returns Whether screen share is locked.
    * @category Screen Share
@@ -1416,6 +1461,27 @@ export declare namespace Stream {
    * @category Screen Share
    */
   function isStartShareScreenWithVideoElement(): boolean;
+  /**
+   * Whether is video share enabled
+   * @returns
+   * @category Screen Share
+   */
+  function isOptimizeForSharedVideoEnabled(): boolean;
+  /**
+   * Whether current platform supports video share
+   * @returns
+   * @category Screen Share
+   */
+  function isSupportOptimizedForSharedVideo(): boolean;
+  /**
+   * Get the share statistic data
+   * @returns data of video statistic.{@link VideoQosData}
+   * @category Screen Share
+   */
+  function getShareStatisticData(): {
+    encode?: VideoQosData;
+    decode?: VideoQosData;
+  };
 
   // -------------------------------------------------[camera]-----------------------------------------------------------
 
@@ -1532,6 +1598,7 @@ export declare namespace Stream {
   function getCameraPTZCapability(cameraId?: string): PTZCameraCapability;
   /**
    * Determined whether current browser support PTZ function
+   * @category Camera
    */
   function isBrowserSupportPTZ(): boolean;
   /**

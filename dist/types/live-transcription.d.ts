@@ -373,7 +373,7 @@ interface LiveTranscriptionStatus {
   /**
    * Supported translation language, a list of speaking language and supported translation language pairs.
    */
-  translatedSetting: Array<{
+  translationLanguage: Array<{
     /**
      * Speaking language.
      */

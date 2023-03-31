@@ -2,7 +2,7 @@
 
 Use of this SDK is subject to our [Terms of Use](https://explore.zoom.us/en/video-sdk-terms/).
 
-The [Zoom Video SDK](https://marketplace.zoom.us/docs/sdk/video/web) enables you to build custom video experiences with Zoom's core technology through a highly optimized WebAssembly module.
+The [Zoom Video SDK](https://developers.zoom.us/docs/video-sdk/web/) enables you to build custom video experiences with Zoom's core technology through a highly optimized WebAssembly module.
 
 ## Installation
 
@@ -16,7 +16,7 @@ $ npm install @zoom/videosdk --save
 
 ![Zoom Video SDK](https://marketplace.zoom.us/docs/static/vsdk-example-139e25db205f5e1daacf06a51ae7c8d6.gif)
 
-> The Video SDK provides video, audio, screen sharing, chat, data streams, and more, as a service. You can build with all of these features, or pick and choose. The Video SDK also comes with a full set of server side [APIs](https://marketplace.zoom.us/docs/api-reference/video-sdk/methods) and [Webhooks](https://marketplace.zoom.us/docs/api-reference/video-sdk/events).
+> The Video SDK provides video, audio, screen sharing, chat, data streams, and more, as a service. You can build with all of these features, or pick and choose. The Video SDK also comes with a full set of server side [APIs](https://developers.zoom.us/docs/api/rest/reference/video-sdk/methods/#overview) and [Webhooks](https://developers.zoom.us/docs/api/rest/reference/video-sdk/events/#overview).
 
 In the component file where you want to use the Video SDK, import `ZoomVideo` and create the client.
 
@@ -39,7 +39,7 @@ Now we will start or join the session.  Here are the required parameters for the
 | Parameter              | Parameter Description |
 | -----------------------|-------------|
 | topic  | Required, a session name of your choice or the name of the session you are joining. |
-| token  | Required, your [Video SDK JWT](https://marketplace.zoom.us/docs/sdk/video/auth). |
+| token  | Required, your [Video SDK JWT](https://developers.zoom.us/docs/video-sdk/auth/). |
 | userName | Required, a name for the participant. |
 | password | Required, a session passcode of your choice or the passcode of the session you are joining. |
 
@@ -67,7 +67,7 @@ Now that we are in a session, we can start using core features like `stream.star
 - [Audio Video Preview](https://marketplace.zoom.us/docs/sdk/video/web/essential/test)
 - [Subsessions](https://marketplace.zoom.us/docs/sdk/video/web/advanced/breakout-rooms)
 
-For the full list of features and event listeners, as well as additional guides, see our [Video SDK docs](https://marketplace.zoom.us/docs/sdk/video/web).
+For the full list of features and event listeners, as well as additional guides, see our [Video SDK docs](https://developers.zoom.us/docs/video-sdk/web/).
 
 ## Sample Apps
 

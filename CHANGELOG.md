@@ -1,4 +1,25 @@
 ## CHANGELOG
+## v1.7.0
+### Added
+* checkFeatureRequirements API to check browser compatibility with supported features.
+* reclaimHost method to allow the original host to reclaim host privileges when lost.
+* Original host support. Set the role_type property in the SDK JWT payload to 1 and use the client.isOriginalHost() method to reclaim host privilege.
+* Mask background feature, which is supported on more browsers than virtual backgrounds. Use a background image or a clip to mask the background.
+  * Background image: Similar to the virtual background feature, it covers the background behind the user.
+  * Clip: The shape to use to mask the background of the video. The shape includes the following: rectangle, square, circle, or SVG.
+  * To enable this function, use the mask option in the stream.startVideo method, or preview the video via the stream.previewVideoMask method.
+
+### Enhanced
+* Audio latency.
+* stream.startShareScreen method with a displaySurface option to allow users to specify the default surface when starting screen share on Chromium-like browsers.
+* Participant interface with isSpeakerOnly attribute; the speakerOnly audio status will broadcast to all users in the session.
+* HTMLElement checking in APIs that require a canvas or video element to return a friendly reason if the parameter is incorrect.
+
+### Fixed
+* userIdentity property is not in the stream.getAllUser returned value.
+* Incorrectly returned Promise by stream.switchCamera method when the camera doesn't work.
+* mirrorVideo on Firefox with SharedArrayBuffer disabled.
+
 ## v1.6.2
 ### Added
 * Support for optimizing screen share for video clips

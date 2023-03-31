@@ -1,6 +1,6 @@
 {
   "name": "@zoom/videosdk",
-  "version": "1.6.2",
+  "version": "1.7.0",
   "description": "Zoom Web Video SDK",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -22,8 +22,10 @@
     "/docs",
     "/dist",
     "oss_attribution.txt",
-    "readme.md",
-    "CHANGELOG.md"
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE.md",
+    "CONTRIBUTING.md"
   ],
   "bugs": {
     "url": "https://github.com/zoom/videosdk-web/issues"

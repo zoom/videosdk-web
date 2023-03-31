@@ -79,6 +79,26 @@ interface MediaCompatiblity {
   screen: boolean;
 }
 
+/**
+ * Interface for the result of check feature support information on user's platform.
+ * If a feature in supportFeatures array, means this feature is supported on current platform.
+ * If a feature in unSupportFeatures array, means this feature is not supported on current platform.
+ */
+export interface SupportFeatures {
+  /**
+   * @ignore
+   */
+  platform: string;
+  /**
+   * @ignore
+   */
+  supportFeatures: Array<string>;
+  /**
+   * @ignore
+   */
+  unSupportFeatures: Array<string>;
+}
+
 interface SessionInfo {
   /**
    * The session topic.
@@ -144,7 +164,7 @@ interface InitOptions {
 export declare namespace VideoClient {
   /**
    * Initialize the Zoom Video SDK before join a session.
-   * The Zoom Video SDK uses an [SDK key & secret](https://marketplace.zoom.us/docs/sdk/video/auth/) for authentication.
+   * The Zoom Video SDK uses an [SDK key & secret](https://developers.zoom.us/docs/video-sdk/auth/) for authentication.
    * @param language The language of the Video SDK. The default is `en-US`.
    * @param dependentAssets In the Zoom Video SDK, web workers and web assembly are used to process the media stream.
    * This part of the code is separated from the SDK, so it is necessary to specify the dependent assets path.
@@ -679,6 +699,11 @@ export declare namespace VideoClient {
    * @param userId
    */
   function revokeManager(userId: number): ExecutedResult;
+  /**
+   * Reclaim the host privilege if the user is now the host
+   * - Only the **original host** can do this.
+   */
+  function reclaimHost(): ExecutedResult;
 
   /**
    * Get current user info.
@@ -736,4 +761,9 @@ export declare namespace VideoClient {
    * Determines whether the current user is a manager.
    */
   function isManager(): boolean;
+  /**
+   * Determines whether the current user is the original host.
+   * `role_type` in JWT payload =1 is the original host.
+   */
+  function isOriginalHost(): boolean;
 }

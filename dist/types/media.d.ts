@@ -35,6 +35,112 @@ interface PhoneCallCountry {
   id: string;
 }
 /**
+ * Mask shape - Rectangle
+ */
+interface MaskRectangle {
+  /**
+   * type
+   */
+  type: 'rectangle';
+  /**
+   * width
+   */
+  width: number;
+  /**
+   * height
+   */
+  height: number;
+}
+/**
+ * Mask shape - Squal
+ */
+interface MaskSquare {
+  /**
+   * type
+   */
+  type: 'square';
+  /**
+   * side length
+   */
+  length: number;
+}
+/**
+ * Mask shape - Circle
+ */
+interface MaskCircle {
+  /**
+   * type
+   */
+  type: 'circle';
+  /**
+   * radius
+   */
+  radius: number;
+}
+/**
+ * Mask shape- SVG
+ */
+interface MaskSVG {
+  /**
+   * type
+   */
+  type: 'svg';
+  /**
+   * svg url
+   */
+  svg: string;
+  /**
+   * width
+   */
+  width: number;
+  /**
+   * height
+   */
+  height: number;
+}
+/**
+ * Mask shape
+ */
+type MaskShape = MaskRectangle | MaskSquare | MaskCircle | MaskSVG;
+/**
+ * Mask clip
+ */
+type MaskClip = {
+  /**
+   * x
+   */
+  x: number;
+  /**
+   * y
+   */
+  y: number;
+} & MaskShape;
+/**
+ * Mask option
+ */
+export interface MaskOption {
+  /**
+   * background image url
+   */
+  imageUrl?: string | null;
+  /**
+   * Determines whether to crop the background image to an appropriate aspect ratio (16/9), default is false.
+   */
+  cropped?: boolean;
+  /**
+   * width of clip canvas, default is 1280
+   */
+  rootWidth?: number;
+  /**
+   * height of clip canvas, default is 720
+   */
+  rootHeight?: number;
+  /**
+   * clip
+   */
+  clip?: MaskClip | Array<MaskClip>;
+}
+/**
  * Share privilege.
  */
 export declare enum SharePrivilege {
@@ -131,9 +237,18 @@ export interface CaptureVideoOption {
     cropped?: boolean;
   };
   /**
+   * mask option
+   * Note virtual background and mask are mutually exclusive, you can only enable either virtual background or mask
+   */
+  mask?: MaskOption;
+  /**
    * Whether to capture the video in the original ratio, the default is to crop the ratio to 16:9.
    */
   originalRatio?: boolean;
+  /**
+   *  Determines whether to enable ptz when capturing video
+   */
+  ptz?: boolean;
 }
 /**
  * Audio QoS data interface.
@@ -207,6 +322,11 @@ export interface ScreenShareOption {
    * If sharing a video file that is stored locally on the computer, we recommend using the video share feature, which will provide better quality due to decreased CPU usage.
    */
   optimizedForSharedVideo?: boolean;
+  /**
+   * Specifies the types of display surface that the user may select.
+   * See the MDN link https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/displaySurface
+   */
+  displaySurface?: string;
 }
 /**
  * Share audio status interface.
@@ -1047,6 +1167,39 @@ export declare namespace Stream {
    */
   function stopPreviewVirtualBackground(): ExecutedResult;
   /**
+   * Preview the video mask, if the video is on, preview mask will apply to current video.
+   * @param canvas
+   * @param option mask option
+   * @returns
+   * - `''`: Success.
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   *
+   * @category Video
+   */
+  function previewVideoMask(
+    canvas: HTMLCanvasElement,
+    option: MaskOption,
+  ): ExecutedResult;
+  /**
+   * Update the option of video mask, you can update each option individually
+   * @param option mask option
+   *  @returns
+   * - `''`: Success.
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   *
+   *  @category Video
+   */
+  function updateVideoMask(option: MaskOption): ExecutedResult;
+  /**
+   * Stop previewing the video mask
+   * @returns
+   * - `''`: Success.
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   *
+   * @category Video
+   */
+  function stopPreviewVideoMask(): ExecutedResult;
+  /**
    * Subscribes to video statistic data based on the type parameter.
    * Client will receive video quality data every second.
    *
@@ -1189,6 +1342,8 @@ export declare namespace Stream {
 
   /**
    * Gets the dimension of received video.
+   * Note this is only available when multi-video rendering is not supported.
+   *  For the case of multi-video rendering, get each video's resolution from the `video-detailed-data-change` event
    * @return Received video dimension.
    * @category Video
    */
@@ -1232,6 +1387,23 @@ export declare namespace Stream {
    * @category Video
    */
   function isRenderSelfViewWithVideoElement(): boolean;
+  /**
+   * Get network quality,only the network quality of users who start video is meaningful.
+   * @param userId optional, default is current user
+   *
+   * @category Video
+   */
+  function getNetworkQuality(userId?: number): NetworkQuality;
+  /**
+   * Get captured video resolution
+   * @category Video
+   */
+  function getCapturedVideoResolution(): { height: number; width: number };
+  /**
+   * Get video mask status
+   * @category Video
+   */
+  function getVideoMaskStatus(): MaskOption;
 
   // -------------------------------------------------[share]-----------------------------------------------------------
 
@@ -1303,7 +1475,7 @@ export declare namespace Stream {
    * @category Screen Share
    */
   function startShareScreen(
-    canvas: HTMLCanvasElement,
+    canvas: HTMLCanvasElement | HTMLVideoElement,
     options?: ScreenShareOption,
   ): ExecutedResult;
   /**
@@ -1388,7 +1560,7 @@ export declare namespace Stream {
    */
   function stopShareToSubsession(): ExecutedResult;
   /**
-   * Enable/disable optimized for video share
+   * Enable or disable video share optimization
    * @param enable boolean
    * @returns executed promise.
    * @category Screen Share
@@ -1396,7 +1568,7 @@ export declare namespace Stream {
   function enableOptimizeForSharedVideo(enable: boolean): ExecutedResult;
   /**
    * Update the share quality when video share enabled
-   * Note: high resolution will lead to low fps
+   * Note: high resolution will lead to low FPS
    * @param quality quality
    * @returns executed promise.
    * @category Screen Share
@@ -1405,7 +1577,7 @@ export declare namespace Stream {
   /**
    * Subscribe share statistic data base on the type parameter.
    * Client will receive video quality data every second.
-   * @param type optional. Object { encode: Boolean, decode: Boolean }, Can specify which type of audio should be subscribe.
+   * @param type optional. Object { encode: Boolean, decode: Boolean }, Can specify which type of share to subscribe to.
    *
    * @returns
    * - `''`: Success.
@@ -1415,8 +1587,8 @@ export declare namespace Stream {
    */
   function subscribeShareStatisticData(type?: StatisticOption): ExecutedResult;
   /**
-   * Unsubscribe video statistic data base on the type parameter.
-   * @param type optional. Object { encode: Boolean, decode: Boolean }, Can specify which type of audio should be unsubscribe.
+   * Unsubscribe to share statistic data bases on the parameter type.
+   * * @param type optional. Object { encode: Boolean, decode: Boolean }, Can specify which type of share to subscribe to.
    *
    * @returns
    * - `''`: Success.
@@ -1462,7 +1634,7 @@ export declare namespace Stream {
    */
   function isStartShareScreenWithVideoElement(): boolean;
   /**
-   * Whether is video share enabled
+   ** Whether video sharing is enabled
    * @returns
    * @category Screen Share
    */
@@ -1592,20 +1764,13 @@ export declare namespace Stream {
   function getFarEndCameraPTZCapability(userId: number): PTZCameraCapability;
   /**
    * Get the capability of the camera on current device
-   * @param cameraId default is active camera id
+   * @param cameraId default is active camera ID
    * @category Camera
    */
   function getCameraPTZCapability(cameraId?: string): PTZCameraCapability;
   /**
-   * Determined whether current browser support PTZ function
+   * Whether current browser supports Pan-Tilt-Zoom (PTZ) function
    * @category Camera
    */
   function isBrowserSupportPTZ(): boolean;
-  /**
-   * Get network quality,only the network quality of users who start video is meaningful.
-   * @param userId optional, default is current user
-   *
-   * @category Video
-   */
-  function getNetworkQuality(userId?: number): NetworkQuality;
 }

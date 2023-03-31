@@ -60,8 +60,9 @@ interface Participant {
   audio: '' | 'computer' | 'phone';
   /**
    * Whether audio is muted.
+   * If the user is not joined the audio(not connected to the microphone), the value is undefined
    */
-  muted: boolean;
+  muted?: boolean;
   /**
    * Whether the user is the host.
    */
@@ -84,9 +85,25 @@ interface Participant {
    */
   sharerOn: boolean;
   /**
-   * Whether the share is paused.
+   * Whether the share is paused
    */
-  sharePause: boolean;
+  sharerPause: boolean;
+  /**
+   * Whether the share is optimized for video
+   */
+  bVideoShare?: boolean;
+  /**
+   * Whether the sharer is also sharing the tab audio
+   */
+  bShareAudioOn?: boolean;
+  /**
+   *  Whether the sharer is also sharing to the subsession
+   */
+  bShareToSubsession?: boolean;
+  /**
+   *  Whether the user is phone call user.
+   */
+  isPhoneUser?: boolean;
   /**
    * The unified ID of a user among the main session or subsessions.
    */
@@ -99,6 +116,14 @@ interface Participant {
    * Whether the user has a camera connected to the device
    */
   isVideoConnect: boolean;
+  /**
+   * customized user identity
+   */
+  userIdentity?: string;
+  /**
+   * Whether the user is only connected to the speaker, not the microphone
+   */
+  isSpeakerOnly?: boolean;
 }
 /**
  * Subsession's status.
@@ -397,15 +422,15 @@ export interface LoggerInitOption {
    */
   enable?: boolean;
   /**
-   * whether is enable to report log
+   * Whether enabled to report logs
    */
   enableReport?: boolean;
   /**
-   * Whether is in debug mode, in this mode,the log will print to console
+   * Whether in debug mode or not. In debug mode, the log prints to console
    */
   debugMode?: boolean;
   /**
-   *  The report url
+   *  The report URL
    */
   reportUrl?: string;
   /**
@@ -417,7 +442,7 @@ export interface LoggerInitOption {
    */
   encryptKeys?: string | Array<string>;
   /**
-   * The external tracking id
+   * The external tracking ID
    */
   trackingId?: string;
 }

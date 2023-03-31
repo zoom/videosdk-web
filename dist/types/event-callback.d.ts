@@ -29,13 +29,20 @@ export interface ParticipantPropertiesPayload {
    */
   displayName?: string;
   /**
+   * User's audio state.
+   * - `''`: No audio.
+   * - `computer`: Joined by computer audio.
+   * - `phone`: Joined by phone.
+   */
+  audio?: '' | 'computer' | 'phone';
+  /**
    * Whether the user is the host.
    */
   isHost?: boolean;
   /**
    * Whether the user is a manager.
    */
-  isManager: boolean;
+  isManager?: boolean;
   /**
    * Whether the audio is muted.
    */
@@ -52,6 +59,42 @@ export interface ParticipantPropertiesPayload {
    * Whether sharing is paused.
    */
   sharerPause?: boolean;
+  /**
+   * Whether the share is optimized for video
+   */
+  bVideoShare?: boolean;
+  /**
+   * Whether the sharer is also sharing the tab's audio
+   */
+  bShareAudioOn?: boolean;
+  /**
+   *  Whether the sharer is also sharing to the subsession
+   */
+  bShareToSubsession?: boolean;
+  /**
+   *  Whether the user is phone call user.
+   */
+  isPhoneUser?: boolean;
+  /**
+   * The unified ID of a user among the main session or subsessions.
+   */
+  userGuid?: string;
+  /**
+   * Whether to allow individual recordings
+   */
+  isAllowIndividualRecording: boolean;
+  /*
+   * Whether the user has a camera connected to the device
+   */
+  isVideoConnect?: boolean;
+  /**
+   * Customized user identity
+   */
+  userIdentity?: string;
+  /**
+   * Whether the user is only connected to the speaker, not the microphone
+   */
+  isSpeakerOnly?: boolean;
 }
 /**
  * The session's connection state.
@@ -1198,16 +1241,46 @@ export declare function event_network_quality_change(payload: {
  * @event
  */
 export declare function event_share_statistic_data_change(payload: {
+  /**
+   * Data.
+   */
   data: {
+    /**
+     * Share's average package loss. (On Safari or Firefox, this value is always 0)
+     */
     avg_loss: number;
+    /**
+     * If encoding is true, the data is encoding video data statistics.
+     */
     encoding: boolean;
+    /**
+     * Share's jitter. (On Safari or Firefox, this value is always 0)
+     */
     jitter: number;
+    /**
+     * Share's maximum package loss. (On Safari or Firefox, this value is always 0)
+     */
     max_loss: number;
+    /**
+     * Share's round trip time. (On Safari or Firefox, this value is always 0)
+     */
     rtt: number;
+    /**
+     * Share's sample rate. (On Safari or Firefox, this value is always 0)
+     */
     sample_rate: number;
+    /**
+     * Share's resolution width.
+     */
     width: number;
+    /**
+     * Share's resolution height.
+     */
     height: number;
+    /**
+     * Share's frame rate in frames per second (fps).
+     */
     fps: number;
   };
-  type: string;
+  type: 'VIDEOSHARE_QOS_DATA';
 }): void;

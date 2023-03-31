@@ -33,7 +33,7 @@ export interface CommandChannelMsg {
  */
 export declare namespace CommandChannel {
   /**
-   * Send string text through command channel.
+   * Sends string text through the command channel.
    * #### Example
    * ```js
    *  const cmdChannel = client.getCommandClient()

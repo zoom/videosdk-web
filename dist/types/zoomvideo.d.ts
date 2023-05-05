@@ -1,4 +1,4 @@
-import { MediaCompatiblity, VideoClient,SupportFeatures } from './videoclient';
+import { MediaCompatiblity, VideoClient, SupportFeatures } from './videoclient';
 import { LocalVideoTrack, LocalAudioTrack } from './preview';
 
 /**
@@ -28,15 +28,15 @@ export declare namespace ZoomVideo {
    */
   function checkSystemRequirements(): MediaCompatiblity;
 
-    /**
-   * Get the support or unsuppport features on the current browser/platform.
+  /**
+   * Show which features are supported and not supported on the current browser or platform.
    *
    * @returns A `SupportFeatures` object. The object has following properties:
    * - `platform`: string, the browser version info or platform version info.
    * - `supportFeatures`: Array<string>, contains all the support features on current platform.
    * - `unSupportFeatures`: Array<string>, contains all the unsupport features on current platform.
    */
-    function checkFeatureRequirements(): SupportFeatures;
+  function checkFeatureRequirements(): SupportFeatures;
 
   /**
    * Enumerates the media input and output devices available, such as microphones, cameras, and headsets.

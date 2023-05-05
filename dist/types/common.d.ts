@@ -60,7 +60,7 @@ interface Participant {
   audio: '' | 'computer' | 'phone';
   /**
    * Whether audio is muted.
-   * If the user is not joined the audio(not connected to the microphone), the value is undefined
+   * If the user is not joined to audio (not connected to the microphone), the value is undefined
    */
   muted?: boolean;
   /**
@@ -117,13 +117,18 @@ interface Participant {
    */
   isVideoConnect: boolean;
   /**
-   * customized user identity
+   * The `user_identity` from the JWT payload.
    */
   userIdentity?: string;
   /**
    * Whether the user is only connected to the speaker, not the microphone
    */
   isSpeakerOnly?: boolean;
+  /**
+   * The phone number if the user is call out user
+   * For the privacy concern, only the calling user has the property.
+   */
+  phoneNumber?: string;
 }
 /**
  * Subsession's status.

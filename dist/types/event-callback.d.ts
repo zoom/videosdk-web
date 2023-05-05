@@ -72,11 +72,11 @@ export interface ParticipantPropertiesPayload {
    */
   bShareToSubsession?: boolean;
   /**
-   *  Whether the user is phone call user.
+   *  Whether the user joined via a phone call.
    */
   isPhoneUser?: boolean;
   /**
-   * The unified ID of a user among the main session or subsessions.
+   * The unified ID of a user within the main session or subsessions.
    */
   userGuid?: string;
   /**
@@ -88,13 +88,23 @@ export interface ParticipantPropertiesPayload {
    */
   isVideoConnect?: boolean;
   /**
-   * Customized user identity
+   * The `user_identity` from the JWT payload, not the in-session user ID.
    */
   userIdentity?: string;
   /**
    * Whether the user is only connected to the speaker, not the microphone
    */
   isSpeakerOnly?: boolean;
+  /**
+   * The phone number if the user is call out user
+   * For the privacy concern, only the calling user has the property.
+   */
+  phoneNumber?: string;
+  /**
+   * Subsession ID.
+   * It's available if the user is in a subsession.
+   */
+  subsessionId?: string;
 }
 /**
  * The session's connection state.
@@ -1219,19 +1229,19 @@ export declare function event_network_quality_change(payload: {
   level: number;
 }): void;
 /**
- * Occurs when decode (recevied) or encode (sent) the share statistics data is changed
+ * Occurs when the share statistics data is changed during decoding (receipt) or encoding (sent)
  * @param payload the event detail
  * - `data`
- *  - `encoding`: if encoding is true, means that the data is encoding video data statisitics.
+ *  - `encoding`: if encoding is true, means that the data is encoding video data statistics.
  *  - `avg_loss`: average package loss for video
  *  - `jitter`: jitter for video
  *  - `max_loss`: max package loss for video
- *  - `rtt`: round trip time for video .
+ *  - `rtt`: round trip time for video
  *  - `sample_rate`: sample rate video
  *  - `width`: width for video
  *  - `height`: height for video
- *  - `fps`: fps for video
- * - `type` : string share
+ *  - `fps`: Frames per second (FPS) for video
+ * - `type` : string "VIDEOSHARE_QOS_DATA"
  *
  * ```javascript
  * client.on('share_statistic_data_change', (payload) => {
@@ -1242,7 +1252,7 @@ export declare function event_network_quality_change(payload: {
  */
 export declare function event_share_statistic_data_change(payload: {
   /**
-   * Data.
+   * Quality of Service (QoS) data.
    */
   data: {
     /**
@@ -1278,9 +1288,16 @@ export declare function event_share_statistic_data_change(payload: {
      */
     height: number;
     /**
-     * Share's frame rate in frames per second (fps).
+     * Share's frame rate in frames per second (FPS).
      */
     fps: number;
   };
   type: 'VIDEOSHARE_QOS_DATA';
 }): void;
+/**
+ * Occurs when host disable caption
+ * @param payload boolean
+ *
+ * @event
+ */
+export declare function event_caption_host_disable(payload: boolean): void;

@@ -1,4 +1,21 @@
 ## CHANGELOG
+## v1.7.5
+### Added
+*  liveTranscriptionClient.disableCaptions method to allow hosts to disable captions in a session.
+*  stream.getCurrentSessionCallinInfo method to retrieve call-in info when the PSTN plan is available.
+
+### Enhanced
+*  Noise suppression support by adding a backgroundNoiseSuppression option to the stream.startAudio method, and a new stream.enableBackgroundNoiseSuppression method.
+*  stream.startAudio method with a syncButtonsOnHeadset option to support mute state sync'ing with specific audio devices.
+*  stream.startAudio method with a mute option to automatically mute users upon joining audio.
+*  Phone user payload with a phoneNumber attribute on the side of caller.
+*  Share Tab Audio such that it can now also support using a microphone simultaneously.
+
+### Fixed
+*  A/V sync issues when enabling "Optimize for Video Clip".
+*  stream.updateSharingCanvasDimension not working on certain browsers.
+*  Promise returned from stream.switchCamera method not resolving properly.
+
 ## v1.7.0
 ### Added
 * checkFeatureRequirements API to check browser compatibility with supported features.

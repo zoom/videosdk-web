@@ -39,28 +39,28 @@ interface PhoneCallCountry {
  */
 interface MaskRectangle {
   /**
-   * type
+   * Type
    */
   type: 'rectangle';
   /**
-   * width
+   * Width, in pixels.
    */
   width: number;
   /**
-   * height
+   * Height, in pixels.
    */
   height: number;
 }
 /**
- * Mask shape - Squal
+ * Mask shape - Square
  */
 interface MaskSquare {
   /**
-   * type
+   * Type
    */
   type: 'square';
   /**
-   * side length
+   * Length for each side of the square, in pixels.
    */
   length: number;
 }
@@ -69,11 +69,11 @@ interface MaskSquare {
  */
 interface MaskCircle {
   /**
-   * type
+   * Type
    */
   type: 'circle';
   /**
-   * radius
+   * Radius of the circle, in pixels.
    */
   radius: number;
 }
@@ -82,19 +82,19 @@ interface MaskCircle {
  */
 interface MaskSVG {
   /**
-   * type
+   * Type
    */
   type: 'svg';
   /**
-   * svg url
+   * SVG's URL
    */
   svg: string;
   /**
-   * width
+   * Width, in pixels.
    */
   width: number;
   /**
-   * height
+   * Height, in pixels.
    */
   height: number;
 }
@@ -120,7 +120,7 @@ type MaskClip = {
  */
 export interface MaskOption {
   /**
-   * background image url
+   * Background image URL
    */
   imageUrl?: string | null;
   /**
@@ -128,15 +128,15 @@ export interface MaskOption {
    */
   cropped?: boolean;
   /**
-   * width of clip canvas, default is 1280
+   * Width of clip canvas, default is 1280
    */
   rootWidth?: number;
   /**
-   * height of clip canvas, default is 720
+   * Height of clip canvas, default is 720
    */
   rootHeight?: number;
   /**
-   * clip
+   * Clip
    */
   clip?: MaskClip | Array<MaskClip>;
 }
@@ -173,6 +173,19 @@ interface AudioOption {
    * Other than that, the value should always be `false` or unset.
    */
   autoStartAudioInSafari?: boolean;
+  /**
+   * Join audio with microphone muted
+   */
+  mute?: boolean;
+  /**
+   * Suppress kinds of background noise(e.g. dog barking,lawn mower,clapping, fans, pen tapping)
+   * > ***Note***: Enabling this option may increase CPU utilization. It's only supported on Chromium-like browsers with SharedArrayBuffer enabled.
+   */
+  backgroundNoiseSuppression?: boolean;
+  /**
+   * Sync mute/unmute state for the audio devices made by these manufactures:AVer, Crestron, Jabra, Logitech, Plantronics, Polycom, Shure, Yamaha, and Yealink.
+   */
+  syncButtonsOnHeadset?: boolean;
 }
 
 /**
@@ -238,7 +251,7 @@ export interface CaptureVideoOption {
   };
   /**
    * mask option
-   * Note virtual background and mask are mutually exclusive, you can only enable either virtual background or mask
+   * Note virtual background and mask are mutually exclusive, you can enable either virtual background or mask, not both.
    */
   mask?: MaskOption;
   /**
@@ -246,7 +259,7 @@ export interface CaptureVideoOption {
    */
   originalRatio?: boolean;
   /**
-   *  Determines whether to enable ptz when capturing video
+   *  Determines whether to enable Pan-Tilt-Zoom (PTZ) when capturing video.
    */
   ptz?: boolean;
 }
@@ -280,7 +293,7 @@ export interface AudioQosData {
  */
 interface StatisticOption {
   /**
-   * Subscribe or unsubscribe to encoding data (sending ).
+   * Subscribe or unsubscribe to encoding data (sending).
    */
   encode?: boolean;
   /**
@@ -314,7 +327,7 @@ export interface ScreenShareOption {
    */
   captureHeight?: number;
   /**
-   * Option to show (default, false) or hide (true) the "Share Audio" checkbox when sharing a Chrome tab
+   * Option to show (default, false) or hide (true) the "Share Audio" checkbox when sharing a Chrome tab.
    */
   hideShareAudioOption?: boolean;
   /**
@@ -324,7 +337,7 @@ export interface ScreenShareOption {
   optimizedForSharedVideo?: boolean;
   /**
    * Specifies the types of display surface that the user may select.
-   * See the MDN link https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/displaySurface
+   * See for details: https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/displaySurface
    */
   displaySurface?: string;
 }
@@ -516,6 +529,60 @@ interface NetworkQuality {
   downlink?: number;
 }
 /**
+ * Interface of dialin number
+ */
+export interface DialInNumber {
+  /**
+   * toll number
+   */
+  number: string;
+  /**
+   * country code
+   */
+  country: string;
+  /**
+   * country name
+   */
+  countryName: string;
+  /**
+   * display of toll number
+   */
+  displayNumber: string;
+  /**
+   * country id
+   */
+  countryId: string;
+  /**
+   * is a toll-free number
+   */
+  free?: boolean;
+  /**
+   * dc
+   */
+  dc: string;
+}
+/**
+ * Interface of dial in infomation
+ */
+export interface CallInInfo {
+  /**
+   * Meeting ID
+   */
+  meetingId: string;
+  /**
+   * Participant ID. Optional. Use to bind a user in session
+   */
+  participantId?: number;
+  /**
+   * Password
+   */
+  password?: string;
+  /**
+   * Toll Numbers
+   */
+  tollNumbers: Array<DialInNumber>;
+}
+/**
  * The stream interface provides methods that define the behaviors of a stream object, such as mute audio or capture video.
  *
  * The stream object is created by the `getMediaStream` method.
@@ -671,6 +738,12 @@ export declare namespace Stream {
    */
   function hangup(): ExecutedResult;
   /**
+   * Get call in info
+   * @return
+   * @category Phone
+   */
+  function getCurrentSessionCallinInfo(): CallInInfo;
+  /**
    * Mutes self share audio or other's share audio locally.
    * If `userId` is empty, will mute share audio. Other participants will not be able to hear the share audio.
    * If `userId` is set, will mute share audio locally, other participants are not affected.
@@ -802,6 +875,22 @@ export declare namespace Stream {
     volume: number,
   ): ExecutedResult;
   /**
+   * Enable/disable background suppression.
+   * > ***Note***: Enabling this option may increase CPU utilization. It's only supported on Chromium-like browsers with SharedArrayBuffer enabled.
+   * @param enabled enabled
+   *
+   * @category Audio
+   */
+  function enableBackgroundNoiseSuppression(enabled: boolean): ExecutedResult;
+  /**
+   * Enable/disable sync mute/unmute state on headset
+   * > It's only supported on Chromium-like browsers
+   *
+   * @param enabled enabled
+   * @category Audio
+   */
+  function enableSyncButtonsOnHeadset(enabled: boolean): ExecutedResult;
+  /**
    * Determines whether the user is muted.
    * - If the user ID is not specified, gets the muted status of the current user.
    * @param userId Default `undefined`
@@ -888,6 +977,12 @@ export declare namespace Stream {
    * @category Audio
    */
   function getUserVolumeLocally(userId: number): number;
+  /**
+   * Determines whether the platform support microphone audio and share tab audio work at the same time.
+   * @returns boolean.
+   * @category Audio
+   */
+  function isSupportMicrophoneAndShareAudioSimultaneously(): boolean;
 
   // -------------------------------------------------[video]-----------------------------------------------------------
 
@@ -1181,7 +1276,7 @@ export declare namespace Stream {
     option: MaskOption,
   ): ExecutedResult;
   /**
-   * Update the option of video mask, you can update each option individually
+   * Update the option of video mask. You can update each option individually.
    * @param option mask option
    *  @returns
    * - `''`: Success.
@@ -1191,7 +1286,7 @@ export declare namespace Stream {
    */
   function updateVideoMask(option: MaskOption): ExecutedResult;
   /**
-   * Stop previewing the video mask
+   * Stop previewing the video mask.
    * @returns
    * - `''`: Success.
    * - `Error`: Failure. Details in {@link ErrorTypes}.
@@ -1388,7 +1483,7 @@ export declare namespace Stream {
    */
   function isRenderSelfViewWithVideoElement(): boolean;
   /**
-   * Get network quality,only the network quality of users who start video is meaningful.
+   * Get network quality. Only the network quality of users who start video is meaningful.
    * @param userId optional, default is current user
    *
    * @category Video
@@ -1575,7 +1670,7 @@ export declare namespace Stream {
    */
   function updateSharedVideoQuality(quality: VideoQuality): ExecutedResult;
   /**
-   * Subscribe share statistic data base on the type parameter.
+   * Subscribe to share statistic data base on the type parameter.
    * Client will receive video quality data every second.
    * @param type optional. Object { encode: Boolean, decode: Boolean }, Can specify which type of share to subscribe to.
    *
@@ -1594,7 +1689,7 @@ export declare namespace Stream {
    * - `''`: Success.
    * - `Error`: Failure. Details in {@link ErrorTypes}.
    *
-   * @category Video
+   * @category Screen Share
    */
   function unsubscribeShareStatisticData(type?: StatisticOption): ExecutedResult;
   /**

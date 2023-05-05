@@ -59,6 +59,7 @@ import {
   event_far_end_camera_capability_change,
   event_network_quality_change,
   event_share_statistic_data_change,
+  event_caption_host_disable,
 } from './event-callback';
 
 /**
@@ -80,9 +81,9 @@ interface MediaCompatiblity {
 }
 
 /**
- * Interface for the result of check feature support information on user's platform.
- * If a feature in supportFeatures array, means this feature is supported on current platform.
- * If a feature in unSupportFeatures array, means this feature is not supported on current platform.
+ * Interface for the result of `checkFeatureRequirements` information on a user's platform.
+ * If a feature is in the `supportFeatures` array, it means the current platform supports this feature.
+ * If a feature is in the `unSupportFeatures` array, means the current platform does not support this feature.
  */
 export interface SupportFeatures {
   /**
@@ -623,7 +624,15 @@ export declare namespace VideoClient {
     event: 'share-statistic-data-change',
     listener: typeof event_share_statistic_data_change,
   ): void;
-
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_caption_host_disable}
+   */
+  function on(
+    event: 'caption-host-disable',
+    listener: typeof event_caption_host_disable,
+  ): void;
   /**
    * Remove the event handler.
    * @param event Event name.

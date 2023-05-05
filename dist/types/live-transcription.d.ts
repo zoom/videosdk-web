@@ -459,4 +459,10 @@ export declare namespace LiveTranscriptionClient {
   function getFullTranscriptionHistory():
     | Array<LiveTranscriptionMessage>
     | Promise<Array<LiveTranscriptionMessage>>;
+  /**
+   * Disable/enable the captions in meeting.
+   * 
+   * @param disable Boolean, true to disable the captions, false to enable the captions.
+   */
+    function disableCaptions(disable:boolean): ExecutedResult;
 }

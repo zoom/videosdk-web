@@ -1,4 +1,8 @@
 ## CHANGELOG
+## v1.7.7
+### Fixed 
+* An issue where video captured and rendered from iOS Mobile Web Browsers (Safari and Chrome) were unintentionally stretched and skewed.
+
 ## v1.7.5
 ### Added
 *  liveTranscriptionClient.disableCaptions method to allow hosts to disable captions in a session.

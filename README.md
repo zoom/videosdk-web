@@ -14,7 +14,7 @@ $ npm install @zoom/videosdk --save
 
 ## Usage
 
-![Zoom Video SDK](https://marketplace.zoom.us/docs/static/vsdk-example-139e25db205f5e1daacf06a51ae7c8d6.gif)
+![Zoom Video SDK](https://github.com/zoom/videosdk-web-sample/raw/master/images/videosdk.gif)
 
 > The Video SDK provides video, audio, screen sharing, chat, data streams, and more, as a service. You can build with all of these features, or pick and choose. The Video SDK also comes with a full set of server side [APIs](https://developers.zoom.us/docs/api/rest/reference/video-sdk/methods/#overview) and [Webhooks](https://developers.zoom.us/docs/api/rest/reference/video-sdk/events/#overview).
 
@@ -57,23 +57,25 @@ Now that we are in a session, we can start using core features like `stream.star
 
 ### Core Features:
 
-- [Video](https://marketplace.zoom.us/docs/sdk/video/web/essential/video)
-- [Audio](https://marketplace.zoom.us/docs/sdk/video/web/essential/audio)
-- [Chat](https://marketplace.zoom.us/docs/sdk/video/web/essential/chat)
-- [Call Out](https://marketplace.zoom.us/docs/sdk/video/web/advanced/call-out)
-- [Screen Share](https://marketplace.zoom.us/docs/sdk/video/web/essential/screen-share)
-- [Cloud Recording](https://marketplace.zoom.us/docs/sdk/video/web/essential/recording)
-- [Command Channel](https://marketplace.zoom.us/docs/sdk/video/web/advanced/command-channel)
-- [Audio Video Preview](https://marketplace.zoom.us/docs/sdk/video/web/essential/test)
-- [Subsessions](https://marketplace.zoom.us/docs/sdk/video/web/advanced/breakout-rooms)
+- [Video](https://developers.zoom.us/docs/video-sdk/web/video/)
+- [Audio](https://developers.zoom.us/docs/video-sdk/web/audio/)
+- [Chat](https://developers.zoom.us/docs/video-sdk/web/chat/)
+- [PSTN](https://developers.zoom.us/docs/video-sdk/web/pstn/)
+- [Screen Share](https://developers.zoom.us/docs/video-sdk/web/share/)
+- [Cloud Recording](https://developers.zoom.us/docs/video-sdk/web/recording/)
+- [Command Channel](https://developers.zoom.us/docs/video-sdk/web/command-channel/)
+- [Audio Video Preview](https://developers.zoom.us/docs/video-sdk/web/preview/)
+- [Subsessions](https://developers.zoom.us/docs/video-sdk/web/subsessions/)
+- [Transcription/Translation](https://developers.zoom.us/docs/video-sdk/web/transcription-translation/)
+- [Virtual Background](https://developers.zoom.us/docs/video-sdk/web/video/#use-virtual-background)
 
 For the full list of features and event listeners, as well as additional guides, see our [Video SDK docs](https://developers.zoom.us/docs/video-sdk/web/).
 
 ## Sample Apps
 
-- [Video SDK Web Sample](https://github.com/zoom/videosdk-web-sample)
-- [Video SDK Auth Sample (Node.js)](https://github.com/zoom/videosdk-sample-signature-node.js)
-- [Webhook Sample (Node.js)](https://github.com/zoom/webhook-sample-node.js)
+- [Video SDK web Sample](https://github.com/zoom/videosdk-web-sample)
+- [Video SDK Auth Endpoint](https://github.com/zoom/videosdk-auth-endpoint-sample)
+- [Webhook Sample](https://github.com/zoom/webhook-sample)
 
 ## Need help?
 

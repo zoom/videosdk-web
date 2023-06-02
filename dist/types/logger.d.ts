@@ -94,7 +94,7 @@ export interface CachedLogItem {
   userName?: string;
 }
 /**
- * Define types of functional filter.
+ * Define type of functional filter.
  */
 export type FunctionFilter = (logItem: CachedLogItem) => boolean;
 /**
@@ -111,7 +111,7 @@ export interface ObjectFilter {
   filter?: FunctionFilter;
 }
 /**
- * Define types of log filter.
+ * Define type of log filter.
  */
 export type LogFilter = string | Tags | FunctionFilter | ObjectFilter | undefined;
 /**

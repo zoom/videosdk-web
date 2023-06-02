@@ -61,11 +61,11 @@ interface ChatUserItem {
    */
   displayName: string;
   /**
-   * Whether the user is the host.
+   * Indicates whether the user is the host or not.
    */
   isHost: boolean;
   /**
-   * Whether the user is a manager.
+   * Indicates whether the user is a manager or not.
    */
   isManager: boolean;
 }

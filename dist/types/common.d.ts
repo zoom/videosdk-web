@@ -1,8 +1,8 @@
 /**
- * Define error types of operations.
+ * Definition of error types for operations.
  * - INVALID_OPERATION: The operation is invalid, perhaps caused by duplicated operations.
  * - INTERNAL_ERROR: The remote service is temporarily unavailable.
- * - INSUFFICIENT_PRIVILEGES: The operation is only applicable for host or manager.
+ * - INSUFFICIENT_PRIVILEGES: The operation is only applicable for a host or manager.
  * - OPERATION_TIMEOUT: The operation timed out, try again later.
  * - IMPROPER_MEETING_STATE: The user is not in a meeting, see the reason for details.
  *  - `closed`: The meeting is not joined.
@@ -20,20 +20,20 @@ export type ErrorTypes =
   | 'INVALID_PARAMETERS'
   | 'OPRATION_LOCKED';
 /**
- * Failure reason for async operation
+ * Failure reason for async operation.
  */
 interface ExecutedFailure {
   /**
-   * type
+   * Error type.
    */
   type: ErrorTypes;
   /**
-   * reason
+   * Error reason.
    */
   reason: string;
 }
 /**
- * The result of asynchronous operation. It is a promise object.
+ * The result of an asynchronous operation. It is a promise object.
  * - '': Success
  * - ExecutedFailure: Failure. Use `.catch(error=>{})` or `try{ *your code* }catch(error){}` to handle the errors.
  */
@@ -85,35 +85,35 @@ interface Participant {
    */
   sharerOn: boolean;
   /**
-   * Whether the share is paused
+   * Whether the share is paused.
    */
   sharerPause: boolean;
   /**
-   * Whether the share is optimized for video
+   * Whether the share is optimized for video.
    */
   bVideoShare?: boolean;
   /**
-   * Whether the sharer is also sharing the tab audio
+   * Whether the sharer is also sharing the tab audio.
    */
   bShareAudioOn?: boolean;
   /**
-   *  Whether the sharer is also sharing to the subsession
+   *  Whether the sharer is also sharing to the subsession.
    */
   bShareToSubsession?: boolean;
   /**
-   *  Whether the user is phone call user.
+   *  Whether the user connected via the phone.
    */
   isPhoneUser?: boolean;
   /**
-   * The unified ID of a user among the main session or subsessions.
+   * The unified ID of a user among the main session or subsession.
    */
   userGuid?: string;
   /**
-   * Whether is allow individual recording
+   * Whether to allow individual recording.
    */
   isAllowIndividualRecording: boolean;
   /*
-   * Whether the user has a camera connected to the device
+   * Whether the user has a camera connected to the device.
    */
   isVideoConnect: boolean;
   /**
@@ -121,12 +121,12 @@ interface Participant {
    */
   userIdentity?: string;
   /**
-   * Whether the user is only connected to the speaker, not the microphone
+   * Whether the user is only connected to the audio speaker, not the microphone.
    */
   isSpeakerOnly?: boolean;
   /**
-   * The phone number if the user is call out user
-   * For the privacy concern, only the calling user has the property.
+   * The phone number if the user is a public switched telephone network (PSTN) call out user.
+   * For privacy concerns, only the calling user has this property.
    */
   phoneNumber?: string;
 }
@@ -298,11 +298,11 @@ export enum VideoQuality {
  */
 export enum MobileVideoFacingMode {
   /**
-   * The video source is facing toward the user, such as a front-facing camera on a smartphone.
+   * The video source is facing toward the user, such as a front-facing camera on a mobile device.
    */
   User = 'user',
   /**
-   * The video source is facing away from the user, such as the back camera on a smartphone facing their environment.
+   * The video source is facing away from the user, such as the back camera on a mobile device facing the user's environment.
    */
   Environment = 'environment',
   /**
@@ -423,31 +423,49 @@ export type LogLevelDetail = {
  */
 export interface LoggerInitOption {
   /**
-   * Whether logger is enabled
+   * Whether logger is enabled.
    */
   enable?: boolean;
   /**
-   * Whether enabled to report logs
+   * Whether enabled to report logs.
    */
   enableReport?: boolean;
   /**
-   * Whether in debug mode or not. In debug mode, the log prints to console
+   * Whether in debug mode or not. In debug mode, the log prints to console.
    */
   debugMode?: boolean;
   /**
-   *  The report URL
+   *  The report URL.
    */
   reportUrl?: string;
   /**
-   * Log level
+   * Log level.
    */
   logLevel?: LogLevelLabel | LogLevelDetail;
   /**
-   * The AES encrypt key for encrypting when the logs are cached in local,the key must be 128-bits, 192-bits, or 256-bits in length.
+   * The AES encrypt key for encrypting when the logs are cached in local storage. The key must be 128-bits, 192-bits, or 256-bits in length.
    */
   encryptKeys?: string | Array<string>;
   /**
-   * The external tracking ID
+   * The external tracking ID.
    */
   trackingId?: string;
+}
+
+/**
+ * Media playback file for audio or video input
+ */
+export interface MediaPlaybackFile {
+  /**
+   * Media playback file URL.
+   */
+  url: string;
+  /**
+   * Start time of file playback.
+   */
+  currentTime?: number;
+  /**
+   * Is loop
+   */
+  loop?: boolean;
 }

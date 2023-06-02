@@ -15,15 +15,15 @@ export enum RecordingStatus {
    */
   Stopped = 'Stopped',
   /**
-   * when start ISO recording
+   * When to start ISO recording.
    */
   Ask = 'Ask',
   /**
-   * when user accept ISO recording
+   * When user accepts ISO recording.
    */
   Accept = 'Accept',
   /**
-   * when user decline ISO recording
+   * When user declines ISO recording.
    */
   Decline = 'Decline',
 }
@@ -45,7 +45,7 @@ export declare namespace RecordingClient {
   export function startCloudRecording(): Promise<'' | Error>;
 
   /**
-   * Stop cloud recording.
+   * Stops cloud recording.
    *
    *
    * @returns
@@ -75,14 +75,14 @@ export declare namespace RecordingClient {
    */
   export function canStartRecording(): boolean;
   /**
-   * Accept individual cloud recording.
+   * Accepts individual cloud recording.
    * @returns
    * - `''`: Success
    * - `Error`: Failure. Details in {@link ErrorTypes}.
    */
   export function acceptIndividualRecording(): Promise<'' | Error>;
   /**
-   * Decline individual cloud recording.
+   * Declines individual cloud recording.
    * @returns
    * - `''`: Success
    * - `Error`: Failure. Details in {@link ErrorTypes}.

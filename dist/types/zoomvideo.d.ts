@@ -29,7 +29,7 @@ export declare namespace ZoomVideo {
   function checkSystemRequirements(): MediaCompatiblity;
 
   /**
-   * Show which features are supported and not supported on the current browser or platform.
+   * Shows which features are supported and not supported on the current browser or platform.
    *
    * @returns A `SupportFeatures` object. The object has following properties:
    * - `platform`: string, the browser version info or platform version info.
@@ -83,11 +83,11 @@ export declare namespace ZoomVideo {
    */
   function createLocalVideoTrack(deviceId?: string): LocalVideoTrack;
   /**
-   * Destroy the client.
+   * Destroys the client.
    */
   function destroyClient(): void;
   /**
-   * Preload dependent assets to optimize performance.
+   * Preloads dependent assets to optimize performance.
    */
   function preloadDependentAssets(path?: string): void;
 }

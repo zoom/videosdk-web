@@ -433,6 +433,11 @@ export declare namespace LiveTranscriptionClient {
     language?: LiveTranscriptionLanguage,
   ): ExecutedResult;
   /**
+   * Disable or enable captions. Only the host can call this function.
+   * @param disable
+   */
+  function disableCaptions(disable: boolean): ExecutedResult;
+  /**
    * Get the live transcription status.
    */
   function getLiveTranscriptionStatus(): LiveTranscriptionStatus;
@@ -459,10 +464,4 @@ export declare namespace LiveTranscriptionClient {
   function getFullTranscriptionHistory():
     | Array<LiveTranscriptionMessage>
     | Promise<Array<LiveTranscriptionMessage>>;
-  /**
-   * Disable/enable the captions in meeting.
-   * 
-   * @param disable Boolean, true to disable the captions, false to enable the captions.
-   */
-    function disableCaptions(disable:boolean): ExecutedResult;
 }

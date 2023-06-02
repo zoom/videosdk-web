@@ -1,4 +1,13 @@
 ## CHANGELOG
+## v1.7.10
+### Added
+* `mediaFile` option to `stream.startAudio` and `stream.startVideo` methods to support using media playback files as video or audio input.
+* `stream.muteAllUserAudioLocally` method to mute all users' voices locally.
+### Enhanced
+* `stream.startShareScreen` method by adding the `sourceId` option to support screen sharing in the Electron app.
+* Support for gallery view on mobile browsers.
+* Virtual background support on Firefox with SharedArrayBuffer enabled.
+
 ## v1.7.7
 ### Fixed 
 * An issue where video captured and rendered from iOS Mobile Web Browsers (Safari and Chrome) were unintentionally stretched and skewed.

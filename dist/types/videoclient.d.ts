@@ -63,7 +63,7 @@ import {
 } from './event-callback';
 
 /**
- * Check system requirements result interface
+ * Checks system requirements result interface.
  */
 interface MediaCompatiblity {
   /**
@@ -114,7 +114,7 @@ interface SessionInfo {
    */
   userName: string;
   /**
-   * User ID
+   * User ID.
    */
   userId: number;
   /**
@@ -122,40 +122,41 @@ interface SessionInfo {
    */
   isInMeeting: boolean;
   /**
-   * Session ID
+   * Session ID.
    */
   sessionId: string;
 }
 
 /**
- * Initialize options of the `init` method.
+ * Initializes options of the `init` method.
  */
 interface InitOptions {
   /**
-   * optional specify the web endpoint, default is zoom.us.
+   * Optional
+   * Specifies the web endpoint. The default is zoom.us.
    */
   webEndpoint?: string;
   /**
-   * optional
-   * Enforce multiple videos (up to 3 videos of others and 1 video of self) on Chromium-like browser without SharedArrayBuffer.
+   * Optional
+   * Enforces multiple videos (up to 3 videos of others and 1 video of self) on platform without SharedArrayBuffer.
    * Note that this may result in high CPU and memory usage.
    */
   enforceMultipleVideos?: boolean;
   /**
-   * optional
-   * Enforce virtual background on Chromium-like browser without SharedArrayBuffer.
+   * Optional
+   * Enforces virtual background on Chromium-like browser without SharedArrayBuffer.
    * Note
    * - This may result in high CPU and memory usage.
    * - Use CanvasElement to render the self video.
    */
   enforceVirtualBackground?: boolean;
   /**
-   * optional
+   * Optional
    * Do not load dependent assets. Used to address specific edge-cases, please do not use for almost all use-cases.
    */
   skipJsMedia?: boolean;
   /**
-   * Prevent devices from dimming or locking the screen when in a session.
+   * Prevents devices from dimming or locking the screen when in a session.
    */
   stayAwake?: boolean;
 }
@@ -164,7 +165,7 @@ interface InitOptions {
  */
 export declare namespace VideoClient {
   /**
-   * Initialize the Zoom Video SDK before join a session.
+   * Initializes the Zoom Video SDK before join a session.
    * The Zoom Video SDK uses an [SDK key & secret](https://developers.zoom.us/docs/video-sdk/auth/) for authentication.
    * @param language The language of the Video SDK. The default is `en-US`.
    * @param dependentAssets In the Zoom Video SDK, web workers and web assembly are used to process the media stream.
@@ -634,13 +635,13 @@ export declare namespace VideoClient {
     listener: typeof event_caption_host_disable,
   ): void;
   /**
-   * Remove the event handler.
+   * Removes the event handler.
    * @param event Event name.
    * @param callback The event handler.
    */
   function off(event: string, callback: (payload: any) => void): void;
   /**
-   * Join the session
+   * Joins the session
    * - Make sure to call the `init` method before joining.
    * @param topic
    * @param token A JWT, should be generated on server.
@@ -709,17 +710,17 @@ export declare namespace VideoClient {
    */
   function revokeManager(userId: number): ExecutedResult;
   /**
-   * Reclaim the host privilege if the user is now the host
+   * Reclaims the host privilege if the user is now the host.
    * - Only the **original host** can do this.
    */
   function reclaimHost(): ExecutedResult;
 
   /**
-   * Get current user info.
+   * Gets the current user info.
    */
   function getCurrentUserInfo(): Participant;
   /**
-   * Get the in session users of the session.
+   * Get the in-session participants of the session.
    */
   function getAllUser(): Array<Participant>;
 
@@ -729,28 +730,28 @@ export declare namespace VideoClient {
   function getUser(userId: number): Participant | undefined;
 
   /**
-   * Gets chat client.
+   * Gets the chat client.
    */
   function getChatClient(): typeof ChatClient;
   /**
-   * Gets command client.
+   * Gets the command client.
    */
   function getCommandClient(): typeof CommandChannel;
   /**
-   * Gets recording client.
+   * Gets the recording client.
    */
   function getRecordingClient(): typeof RecordingClient;
   /**
-   * Gets subsession client.
+   * Gets the subsession client.
    */
   function getSubsessionClient(): typeof SubsessionClient;
 
   /**
-   * Get LiveTranscription client
+   * Gets the LiveTranscription client.
    */
   function getLiveTranscriptionClient(): typeof LiveTranscriptionClient;
   /**
-   * Get logger client
+   * Gets the logger client.
    * @param options logger option
    */
   function getLoggerClient(options?: LoggerInitOption): typeof LoggerClient;

@@ -13,7 +13,7 @@ import {
 } from './common';
 import { LiveTranscriptionMessage } from './live-transcription';
 /**
- * Interface of a ParticipantPropertiesPayload
+ * Interface of a ParticipantPropertiesPayload.
  */
 export interface ParticipantPropertiesPayload {
   /**
@@ -60,15 +60,15 @@ export interface ParticipantPropertiesPayload {
    */
   sharerPause?: boolean;
   /**
-   * Whether the share is optimized for video
+   * Whether the share is optimized for video.
    */
   bVideoShare?: boolean;
   /**
-   * Whether the sharer is also sharing the tab's audio
+   * Whether the sharer is also sharing the tab's audio.
    */
   bShareAudioOn?: boolean;
   /**
-   *  Whether the sharer is also sharing to the subsession
+   *  Whether the sharer is also sharing to the subsession.
    */
   bShareToSubsession?: boolean;
   /**
@@ -80,11 +80,11 @@ export interface ParticipantPropertiesPayload {
    */
   userGuid?: string;
   /**
-   * Whether to allow individual recordings
+   * Whether to allow individual recordings.
    */
   isAllowIndividualRecording: boolean;
   /*
-   * Whether the user has a camera connected to the device
+   * Whether the user has a camera connected to the device.
    */
   isVideoConnect?: boolean;
   /**
@@ -92,12 +92,12 @@ export interface ParticipantPropertiesPayload {
    */
   userIdentity?: string;
   /**
-   * Whether the user is only connected to the speaker, not the microphone
+   * Whether the user is only connected to the audio speaker, not the microphone.
    */
   isSpeakerOnly?: boolean;
   /**
-   * The phone number if the user is call out user
-   * For the privacy concern, only the calling user has the property.
+   * The phone number if the user is a call out user.
+   * For the privacy concern, only the calling user has this property.
    */
   phoneNumber?: string;
   /**
@@ -258,7 +258,7 @@ export declare function event_user_add(
   payload: Array<ParticipantPropertiesPayload>,
 ): void;
 /**
- * Occurs when the properties of the participants are updated.
+ * Occurs when the properties of the participant are updated.
  * @param payload The event detail
  * @event
  * @category Session
@@ -267,7 +267,7 @@ export declare function event_user_update(
   payload: Array<ParticipantPropertiesPayload>,
 ): void;
 /**
- * Occurs when the participants leaves the session.
+ * Occurs when the participant leaves the session.
  * @param payload The event detail
  * @event
  * @category Session
@@ -298,7 +298,7 @@ export declare function event_user_remove(
  */
 export declare function event_video_active_change(payload: {
   /**
-   * Active state of video.
+   * Active video state.
    */
   state: VideoActiveState;
   /**
@@ -330,7 +330,7 @@ export declare function event_video_active_change(payload: {
  */
 export declare function event_video_capturing_change(payload: {
   /**
-   * Capture state of video.
+   * Video capture state.
    */
   state: VideoCapturingState;
 }): void;
@@ -356,7 +356,7 @@ export declare function event_video_dimension_change(payload: {
    */
   height: number;
   /**
-   * Type: received video.
+   * Type: Received video.
    */
   type: 'received';
 }): void;
@@ -725,7 +725,7 @@ export declare function event_share_privilege_change(payload: {
 }): void;
 
 /**
- * Occurs when the dial out state changes.
+ * Occurs when the dial-out state changes.
  *
  * ```javascript
  * client.on('dialout-state-change', (payload) => {
@@ -769,9 +769,10 @@ export declare function event_video_vb_preload_change(payload: {
 }): void;
 /**
  * Occurs when the audio statistics data is changed; decode (received).
+ *
  * @param payload The event detail.
  * - `data`
- *  - `encoding`: If encoding is true, the data is encoding audio data statistics.
+ *  - `encoding`: If encoding is true, the following metrics stand for the Send data statistics, otherwise, it stands for the Receive data statistics.
  *  - `avg_loss`: Audio's average package loss.
  *  - `jitter`: Audio's jitter.
  *  - `max_loss`: Audio's maximum package loss.
@@ -797,7 +798,7 @@ export declare function event_audio_statistic_data_change(payload: {
      */
     avg_loss: number;
     /**
-     * If encoding is true, the data is encoding audio data statistics.
+     * If encoding is true, the following metrics stand for the Send data statistics, otherwise, it stands for the Receive data statistics.
      */
     encoding: boolean;
     /**
@@ -824,9 +825,10 @@ export declare function event_audio_statistic_data_change(payload: {
 }): void;
 /**
  * Occurs when the video statistics data is changed; decode (received).
+ *
  * @param payload The event detail
  * - `data`
- *  - `encoding`: If encoding is true, the data is encoding video data statistics.
+ *  - `encoding`: If encoding is true, the following metrics stand for the Send data statistics, otherwise, it stands for the Receive data statistics.
  *  - `avg_loss`: Video's average package loss.
  *  - `jitter`: Video's jitter.
  *  - `max_loss`: Video's maximum package loss.
@@ -834,7 +836,7 @@ export declare function event_audio_statistic_data_change(payload: {
  *  - `sample_rate`: Video's sample rate.
  *  - `width`: Video's width.
  *  - `height`: Video's height.
- *  - `fps`: Video's frame rate in frames per second (fps).
+ *  - `fps`: Video's frame rate in frames per second (FPS).
  * - `type` : String `VIDEO_QOS_DATA`
  *
  * ```javascript
@@ -856,7 +858,7 @@ export declare function event_video_statistic_data_change(payload: {
      */
     avg_loss: number;
     /**
-     * If encoding is true, the data is encoding video data statistics.
+     * If encoding is true, the following metrics stand for the Send data statistics, otherwise, it stands for the Receive data statistics.
      */
     encoding: boolean;
     /**
@@ -884,7 +886,7 @@ export declare function event_video_statistic_data_change(payload: {
      */
     height: number;
     /**
-     * Video's frame rate in frames per second (fps).
+     * Video's frame rate in frames per second (FPS).
      */
     fps: number;
   };
@@ -1200,13 +1202,13 @@ export declare function event_far_end_camera_capability_change(payload: {
    */
   userId: number;
   /**
-   * Capability of PTZ.
+   * Capabilities of Pan-Tilt-Zoom (PTZ) camera.
    */
   ptz: PTZCameraCapability;
 }): void;
 /**
  * Occurs when network quality changes.
- * The network quality reflects the video quality, so only the user starts video, the data will broadcast to all users.
+ * The network quality reflects the video quality, so only when the user starts video, the data will broadcast to all users.
  * @param payload the network quality
  *
  * @event
@@ -1229,10 +1231,10 @@ export declare function event_network_quality_change(payload: {
   level: number;
 }): void;
 /**
- * Occurs when the share statistics data is changed during decoding (receipt) or encoding (sent)
+ * Occurs when the share statistics data is changed during decoding (received) or encoding (sent)
  * @param payload the event detail
  * - `data`
- *  - `encoding`: if encoding is true, means that the data is encoding video data statistics.
+ *  - `encoding`: If encoding is true, the following metrics stand for the Send data statistics, otherwise, it stands for the Receive data statistics.
  *  - `avg_loss`: average package loss for video
  *  - `jitter`: jitter for video
  *  - `max_loss`: max package loss for video
@@ -1260,7 +1262,7 @@ export declare function event_share_statistic_data_change(payload: {
      */
     avg_loss: number;
     /**
-     * If encoding is true, the data is encoding video data statistics.
+     * If encoding is true, the following metrics stand for the Send data statistics, otherwise, it stands for the Receive data statistics.
      */
     encoding: boolean;
     /**
@@ -1295,7 +1297,7 @@ export declare function event_share_statistic_data_change(payload: {
   type: 'VIDEOSHARE_QOS_DATA';
 }): void;
 /**
- * Occurs when host disable caption
+ * Occurs when the host disables caption.
  * @param payload boolean
  *
  * @event

@@ -20,11 +20,11 @@ interface TestSpeakerOption {
  */
 interface TestSpeakerReturn {
   /**
-   * Stop the tester.
+   * Stops the tester.
    */
   stop: () => void;
   /**
-   *  Destroy the tester.
+   *  Destroys the tester.
    */
   destroy: () => void;
 }
@@ -74,15 +74,15 @@ interface TestMicrophoneOption {
  */
 interface TestMicrophoneReturn {
   /**
-   * Stop the tester.
+   * Stops the tester.
    */
   stop: () => void;
   /**
-   * Stop recording audio.
+   * Stops recording audio.
    */
   stopRecording: () => void;
   /**
-   *  Destroy the tester.
+   *  Destroys the tester.
    */
   destroy: () => void;
 }
@@ -126,12 +126,12 @@ export interface LocalAudioTrack {
    */
   stop(): Promise<void | Error>;
   /**
-   * Test the speaker, usually used to test the speaker before a meeting.
+   * Tests the speaker, usually used to test the speaker before a meeting.
    * @param options The test speaker option.
    */
   testSpeaker(options?: TestSpeakerOption): TestSpeakerReturn | undefined;
   /**
-     Test the microphone, usually used to test the microphone before a meeting. 
+     Tests the microphone, usually used to test the microphone before a meeting. 
      * @param options the test microphone option.
      */
   testMicrophone(options?: TestMicrophoneOption): TestMicrophoneReturn | undefined;

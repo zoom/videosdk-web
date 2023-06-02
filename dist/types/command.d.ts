@@ -4,7 +4,7 @@ import { ExecutedFailure } from './common';
  */
 export interface CommandChannelMsg {
   /**
-   * Sender ID
+   * Sender ID.
    */
   senderId: number;
   /**

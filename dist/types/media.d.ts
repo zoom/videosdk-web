@@ -6,6 +6,7 @@ import {
   VideoQuality,
   CameraControlCmd,
   PTZCameraCapability,
+  MediaPlaybackFile,
 } from './common';
 
 /**
@@ -35,11 +36,11 @@ interface PhoneCallCountry {
   id: string;
 }
 /**
- * Mask shape - Rectangle
+ * Mask shape - Rectangle.
  */
 interface MaskRectangle {
   /**
-   * Type
+   * Type.
    */
   type: 'rectangle';
   /**
@@ -52,11 +53,11 @@ interface MaskRectangle {
   height: number;
 }
 /**
- * Mask shape - Square
+ * Mask shape - Square.
  */
 interface MaskSquare {
   /**
-   * Type
+   * Type.
    */
   type: 'square';
   /**
@@ -65,11 +66,11 @@ interface MaskSquare {
   length: number;
 }
 /**
- * Mask shape - Circle
+ * Mask shape - Circle.
  */
 interface MaskCircle {
   /**
-   * Type
+   * Type.
    */
   type: 'circle';
   /**
@@ -78,11 +79,11 @@ interface MaskCircle {
   radius: number;
 }
 /**
- * Mask shape- SVG
+ * Mask shape- SVG.
  */
 interface MaskSVG {
   /**
-   * Type
+   * Type.
    */
   type: 'svg';
   /**
@@ -99,11 +100,11 @@ interface MaskSVG {
   height: number;
 }
 /**
- * Mask shape
+ * Mask shape.
  */
 type MaskShape = MaskRectangle | MaskSquare | MaskCircle | MaskSVG;
 /**
- * Mask clip
+ * Mask clip.
  */
 type MaskClip = {
   /**
@@ -116,11 +117,11 @@ type MaskClip = {
   y: number;
 } & MaskShape;
 /**
- * Mask option
+ * Mask option.
  */
 export interface MaskOption {
   /**
-   * Background image URL
+   * Background image URL.
    */
   imageUrl?: string | null;
   /**
@@ -128,15 +129,15 @@ export interface MaskOption {
    */
   cropped?: boolean;
   /**
-   * Width of clip canvas, default is 1280
+   * Width of clip canvas, default is 1280.
    */
   rootWidth?: number;
   /**
-   * Height of clip canvas, default is 720
+   * Height of clip canvas, default is 720.
    */
   rootHeight?: number;
   /**
-   * Clip
+   * Clip.
    */
   clip?: MaskClip | Array<MaskClip>;
 }
@@ -162,7 +163,7 @@ export declare enum SharePrivilege {
  */
 interface AudioOption {
   /**
-   * Join audio only with the speaker, the microphone is not connected.
+   * Join audio only with the audio speaker, the microphone is not connected.
    */
   speakerOnly?: boolean;
   /**
@@ -174,18 +175,23 @@ interface AudioOption {
    */
   autoStartAudioInSafari?: boolean;
   /**
-   * Join audio with microphone muted
+   * Join audio with microphone muted.
    */
   mute?: boolean;
   /**
-   * Suppress kinds of background noise(e.g. dog barking,lawn mower,clapping, fans, pen tapping)
+   * Suppress some kinds of background noise (e.g. dog barking,lawn mower,clapping, fans, pen tapping).
    * > ***Note***: Enabling this option may increase CPU utilization. It's only supported on Chromium-like browsers with SharedArrayBuffer enabled.
    */
   backgroundNoiseSuppression?: boolean;
   /**
-   * Sync mute/unmute state for the audio devices made by these manufactures:AVer, Crestron, Jabra, Logitech, Plantronics, Polycom, Shure, Yamaha, and Yealink.
+   * Sync mute or unmute state for the audio devices made by these manufactures: AVer, Crestron, Jabra, Logitech, Plantronics, Polycom, Shure, Yamaha, and Yealink.
    */
   syncButtonsOnHeadset?: boolean;
+  /**
+   * Specify a media file as the audio input. It can be an audio file or a video file.
+   * - If need to use a video file(mp4) as both video and audio input, make sure the URL is exactly the same,and start video first.
+   */
+  mediaFile?: MediaPlaybackFile;
 }
 
 /**
@@ -250,8 +256,7 @@ export interface CaptureVideoOption {
     cropped?: boolean;
   };
   /**
-   * mask option
-   * Note virtual background and mask are mutually exclusive, you can enable either virtual background or mask, not both.
+   * Mask option. Virtual background and mask are mutually exclusive, you can enable either virtual background or mask, not both.
    */
   mask?: MaskOption;
   /**
@@ -262,6 +267,11 @@ export interface CaptureVideoOption {
    *  Determines whether to enable Pan-Tilt-Zoom (PTZ) when capturing video.
    */
   ptz?: boolean;
+  /**
+   * Specify a media file as the video input.
+   * - If use the same playback as audio and video input, when stop video, the audio output will also be paused.
+   */
+  mediaFile?: MediaPlaybackFile;
 }
 /**
  * Audio QoS data interface.
@@ -306,24 +316,24 @@ interface StatisticOption {
  */
 export interface ScreenShareOption {
   /**
-   * Whether the sharing is broadcast to subsessions. Only host or co-host have the privilege
+   * Whether the sharing is broadcast to subsessions. Only host or co-host have this privilege.
    */
   broadcastToSubsession?: boolean;
   /**
-   * Whether the screen sharing user can receive 'share-can-see-screen' event
+   * Whether the screen sharing user can receive the 'share-can-see-screen' event.
    */
   requestReadReceipt?: boolean;
   /**
-   * Secondary camera ID.
-   * Share a secondary camera connected to your computer; for example, a document camera or the integrated camera on your laptop.
+   * Secondary camera ID. Share a secondary camera connected to your computer.
+   * For example, a document camera or the integrated camera on your laptop.
    */
   secondaryCameraId?: string;
   /**
-   * The capture with of share video, only enabled when the value of `secondaryCameraId` is not undefined.
+   * The capture with of the share video. Only enabled when the value of `secondaryCameraId` is not undefined.
    */
   captureWidth?: number;
   /**
-   * The capture height of share video, only enabled when the value of `secondaryCameraId` is not undefined.
+   * The capture height of share video. Only enabled when the value of `secondaryCameraId` is not undefined.
    */
   captureHeight?: number;
   /**
@@ -331,15 +341,22 @@ export interface ScreenShareOption {
    */
   hideShareAudioOption?: boolean;
   /**
-   * optimized for video share
+   * Optimized for video share.
    * If sharing a video file that is stored locally on the computer, we recommend using the video share feature, which will provide better quality due to decreased CPU usage.
    */
   optimizedForSharedVideo?: boolean;
   /**
    * Specifies the types of display surface that the user may select.
-   * See for details: https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/displaySurface
+   * See for details: https://developer.chrome.com/docs/web-platform/screen-sharing-controls/#displaySurface
    */
   displaySurface?: string;
+  /**
+   * Specify the sourceId of selected screen, it's used for electron application or nw.js application
+   * See the detail:
+   * electron https://www.electronjs.org/docs/latest/api/desktop-capturer
+   * nw.js https://docs.nwjs.io/en/latest/References/Screen/#screenchoosedesktopmedia-sources-callback
+   */
+  sourceId?: string;
 }
 /**
  * Share audio status interface.
@@ -422,11 +439,11 @@ export interface VideoQosData {
  */
 interface VideoStatisticOption {
   /**
-   * Subscribe or unsubscribe encoding data (sending video).
+   * Subscribe or unsubscribe to encoding data (sending video).
    */
   encode?: boolean;
   /**
-   * Subscribe or subscribe decoding data (receiving video).
+   * Subscribe or subscribe to decoding data (receiving video).
    */
   decode?: boolean;
   /**
@@ -533,52 +550,52 @@ interface NetworkQuality {
  */
 export interface DialInNumber {
   /**
-   * toll number
+   * Toll number.
    */
   number: string;
   /**
-   * country code
+   * Country code.
    */
   country: string;
   /**
-   * country name
+   * Country name.
    */
   countryName: string;
   /**
-   * display of toll number
+   * Display of toll number.
    */
   displayNumber: string;
   /**
-   * country id
+   * Country ID
    */
   countryId: string;
   /**
-   * is a toll-free number
+   * Is a toll-free number.
    */
   free?: boolean;
   /**
-   * dc
+   * Data center
    */
   dc: string;
 }
 /**
- * Interface of dial in infomation
+ * Interface of dial in information.
  */
 export interface CallInInfo {
   /**
-   * Meeting ID
+   * Meeting ID.
    */
   meetingId: string;
   /**
-   * Participant ID. Optional. Use to bind a user in session
+   * Participant ID. Optional. Use to bind a user in session.
    */
   participantId?: number;
   /**
-   * Password
+   * Password.
    */
   password?: string;
   /**
-   * Toll Numbers
+   * Toll numbers.
    */
   tollNumbers: Array<DialInNumber>;
 }
@@ -635,7 +652,7 @@ export declare namespace Stream {
    *  });
    *
    * ```
-   * @returns Executed promise. Following are the possible error reasons:
+   * @returns Executed promise. Possible error reasons:
    * - type=`USER_FORBIDDEN_MICROPHONE`: The user has blocked accesses to the microphone from the SDK. Try to grant the privilege and rejoin the session.
    * @category Audio
    */
@@ -659,7 +676,7 @@ export declare namespace Stream {
    */
   function muteAudio(userId?: number): ExecutedResult;
   /**
-   * Unmute audio.
+   * Unmutes audio.
    * - If `userId` is not specified, this will unmute self.
    * - For privacy and security concerns, the host can not unmute the participant's audio directly, instead, the participant will receive an unmute audio consent message.
    *
@@ -773,14 +790,16 @@ export declare namespace Stream {
    *  const microphone = // choose another microphone
    *  await switchMicrophone(microphone.deviceId);
    * ```
-   * @param microphoneId Device ID of the microphone.
+   * @param microphoneId Device ID of the microphone or an audio playback file.
    * @returns Executed promise.
    * @category Audio
    *
    */
-  function switchMicrophone(microphoneId: string): ExecutedResult;
+  function switchMicrophone(
+    microphoneId: string | MediaPlaybackFile,
+  ): ExecutedResult;
   /**
-   * Switches the speaker.
+   * Switches the audio speaker.
    *
    * @param speakerId Device ID of the speaker.
    * @returns Executed promise.
@@ -864,9 +883,9 @@ export declare namespace Stream {
    */
   function unmuteUserAudioLocally(userId: number): ExecutedResult;
   /**
-   * Adjust someone's audio locally, this operation doesn't affect other participants' audio
-   * @param userId userId
-   * @param volume number
+   * Adjusts someone's audio locally. This operation doesn't affect other participants' audio.
+   * @param userId User ID.
+   * @param volume Number for volume.
    *
    * @category Audio
    */
@@ -875,7 +894,7 @@ export declare namespace Stream {
     volume: number,
   ): ExecutedResult;
   /**
-   * Enable/disable background suppression.
+   * Enables or disables background suppression.
    * > ***Note***: Enabling this option may increase CPU utilization. It's only supported on Chromium-like browsers with SharedArrayBuffer enabled.
    * @param enabled enabled
    *
@@ -883,13 +902,24 @@ export declare namespace Stream {
    */
   function enableBackgroundNoiseSuppression(enabled: boolean): ExecutedResult;
   /**
-   * Enable/disable sync mute/unmute state on headset
-   * > It's only supported on Chromium-like browsers
+   * Enables or disables sync mute or unmute state on headset.
+   * > Only supported on Chromium-like browsers.
    *
    * @param enabled enabled
    * @category Audio
    */
   function enableSyncButtonsOnHeadset(enabled: boolean): ExecutedResult;
+  /**
+   * Mute all users' audio locally, this operation doesn't affect other users' audio
+   * @category Audio
+   */
+  function muteAllUserAudioLocally(): ExecutedResult;
+  /**
+   * Unute all users' audio locally, this operation doesn't affect other users' audio
+   *
+   * @category Audio
+   */
+  function unmuteAllUserAudioLocally(): ExecutedResult;
   /**
    * Determines whether the user is muted.
    * - If the user ID is not specified, gets the muted status of the current user.
@@ -906,7 +936,7 @@ export declare namespace Stream {
    */
   function getMicList(): Array<MediaDevice>;
   /**
-   * Gets the available speakers.
+   * Gets the available audio speakers.
    * @return Speaker list.
    * @category Audio
    */
@@ -919,7 +949,7 @@ export declare namespace Stream {
    */
   function getActiveMicrophone(): string;
   /**
-   * Gets the active device of the speaker.
+   * Gets the active device of the audio speaker.
    * @returns Device ID.
    * @category Audio
    */
@@ -1054,14 +1084,14 @@ export declare namespace Stream {
    * }
    * ```
    *
-   * @param cameraDeviceId Camera device ID.
+   * @param cameraDeviceId Camera device ID or a video playback file.
    *   - {@link Stream.getCameraList} Can be used to get a list of currently accessible camera devices.
    *
    * @category Video
    *
    */
   function switchCamera(
-    cameraDeviceId: string | typeof MobileVideoFacingMode,
+    cameraDeviceId: string | typeof MobileVideoFacingMode | MediaPlaybackFile,
   ): ExecutedResult;
 
   /**
@@ -1264,7 +1294,7 @@ export declare namespace Stream {
   /**
    * Preview the video mask, if the video is on, preview mask will apply to current video.
    * @param canvas
-   * @param option mask option
+   * @param option Mask option.
    * @returns
    * - `''`: Success.
    * - `Error`: Failure. Details in {@link ErrorTypes}.
@@ -1477,25 +1507,25 @@ export declare namespace Stream {
    */
   function getVideoStatisticData(): { encode: VideoQosData; decode: VideoQosData };
   /**
-   * Whether to use video element to render self-view.
+   * Determines whether to use video element to render self-view.
    * @returns Boolean.
    * @category Video
    */
   function isRenderSelfViewWithVideoElement(): boolean;
   /**
-   * Get network quality. Only the network quality of users who start video is meaningful.
+   * Gets network quality. Only the network quality of users who start video is meaningful.
    * @param userId optional, default is current user
    *
    * @category Video
    */
   function getNetworkQuality(userId?: number): NetworkQuality;
   /**
-   * Get captured video resolution
+   * Gets captured video resolution.
    * @category Video
    */
   function getCapturedVideoResolution(): { height: number; width: number };
   /**
-   * Get video mask status
+   * Gets video mask status.
    * @category Video
    */
   function getVideoMaskStatus(): MaskOption;
@@ -1625,14 +1655,14 @@ export declare namespace Stream {
     height: number,
   ): ExecutedResult;
   /**
-   * Switch camera for sharing.
+   * Switches camera for sharing.
    * @param cameraId Camera ID.
    * @returns Executed promise.
    * @category Screen Share
    */
   function switchSharingSecondaryCamera(cameraId: string): ExecutedResult;
   /**
-   * Set the privilege of screen share.
+   * Sets the privilege of screen share.
    *
    * @param privilege The privilege
    * @returns Executed promise.
@@ -1641,36 +1671,36 @@ export declare namespace Stream {
    */
   function setSharePrivilege(privilege: SharePrivilege): ExecutedResult;
   /**
-   * When screen sharing is started, host or manager can determine whether the shared content is broadcast to subsessions.
+   * Determines whether the shared content is broadcast to subsessions, when screen sharing is started. Available to host or manager.
    *
    * @returns Executed promise.
    * @category Screen Share
    */
   function shareToSubsession(): ExecutedResult;
   /**
-   * Stop broadcasting the shared content to subsessions.
+   * Stops broadcasting the shared content to subsessions.
    *
    * @returns Executed promise.
    * @category Screen Share
    */
   function stopShareToSubsession(): ExecutedResult;
   /**
-   * Enable or disable video share optimization
+   * Enables or disables video share optimization.
    * @param enable boolean
-   * @returns executed promise.
+   * @returns Executed promise.
    * @category Screen Share
    */
   function enableOptimizeForSharedVideo(enable: boolean): ExecutedResult;
   /**
-   * Update the share quality when video share enabled
-   * Note: high resolution will lead to low FPS
-   * @param quality quality
-   * @returns executed promise.
+   * Updates the share quality when video share enabled.
+   * Note: High resolution will lead to low FPS.
+   * @param quality Quality.
+   * @returns Executed promise.
    * @category Screen Share
    */
   function updateSharedVideoQuality(quality: VideoQuality): ExecutedResult;
   /**
-   * Subscribe to share statistic data base on the type parameter.
+   * Subscribes to share statistic data base on the type parameter.
    * Client will receive video quality data every second.
    * @param type optional. Object { encode: Boolean, decode: Boolean }, Can specify which type of share to subscribe to.
    *
@@ -1682,7 +1712,7 @@ export declare namespace Stream {
    */
   function subscribeShareStatisticData(type?: StatisticOption): ExecutedResult;
   /**
-   * Unsubscribe to share statistic data bases on the parameter type.
+   * Unsubscribes to share statistic data bases on the parameter type.
    * * @param type optional. Object { encode: Boolean, decode: Boolean }, Can specify which type of share to subscribe to.
    *
    * @returns
@@ -1699,7 +1729,7 @@ export declare namespace Stream {
    */
   function isShareLocked(): boolean;
   /**
-   * Get the share privilege.
+   * Gets the share privilege.
    * @returns Share privilege.
    * @category Screen Share
    */
@@ -1717,31 +1747,31 @@ export declare namespace Stream {
    */
   function getShareStatus(): ShareStatus;
   /**
-   * Get the list of users who are screen sharing.
+   * Gets the list of users who are screen sharing.
    * @returns shared user list
    * @category Screen Share
    */
   function getShareUserList(): Array<Participant>;
   /**
-   * Whether to use video element to start screen sharing.
+   * Determines whether to use video element to start screen sharing.
    * @returns boolean
    * @category Screen Share
    */
   function isStartShareScreenWithVideoElement(): boolean;
   /**
-   ** Whether video sharing is enabled
+   ** Determines whether video sharing is enabled.
    * @returns
    * @category Screen Share
    */
   function isOptimizeForSharedVideoEnabled(): boolean;
   /**
-   * Whether current platform supports video share
+   * Determines whether the current platform supports video share.
    * @returns
    * @category Screen Share
    */
   function isSupportOptimizedForSharedVideo(): boolean;
   /**
-   * Get the share statistic data
+   * Gets the share statistic data.
    * @returns data of video statistic.{@link VideoQosData}
    * @category Screen Share
    */
@@ -1798,7 +1828,7 @@ export declare namespace Stream {
    */
   function requestFarEndCameraControl(userId: number): ExecutedResult;
   /**
-   * Approve the control request.
+   * Approves the control request.
    *
    * @param userId the requesting user ID.
    * @returns
@@ -1809,7 +1839,7 @@ export declare namespace Stream {
    */
   function approveFarEndCameraControl(userId: number): ExecutedResult;
   /**
-   * Decline the control request.
+   * Declines the control request.
    *
    * @param userId The requesting user ID.
    * @returns
@@ -1820,7 +1850,7 @@ export declare namespace Stream {
    */
   function declineFarEndCameraControl(userId: number): ExecutedResult;
   /**
-   * Give up control of far end camera.
+   * Gives up control of far end camera.
    * @param userId The controlling user ID.
    * @returns
    * - `''`: Success
@@ -1830,7 +1860,7 @@ export declare namespace Stream {
    */
   function giveUpFarEndCameraControl(userId: number): ExecutedResult;
   /**
-   * Control the local camera.
+   * Controls the local camera.
    * @param option The cmd option.
    * @returns
    * - `''`: Success
@@ -1840,7 +1870,7 @@ export declare namespace Stream {
    */
   function controlCamera(option: CameraControlOption): ExecutedResult;
   /**
-   * Control the far-end camera.
+   * Controls the far-end camera.
    * @param option The cmd option.
    *
    *  @returns
@@ -1851,20 +1881,20 @@ export declare namespace Stream {
    */
   function controlFarEndCamera(option: FarEndCameraControlOption): ExecutedResult;
   /**
-   * Get the capability of the far-end camera.
+   * Gets the capability of the far-end camera.
    * @param userId
    *
    * @category Camera
    */
   function getFarEndCameraPTZCapability(userId: number): PTZCameraCapability;
   /**
-   * Get the capability of the camera on current device
-   * @param cameraId default is active camera ID
+   * Gets the capability of the camera on current device.
+   * @param cameraId Default is active camera ID.
    * @category Camera
    */
   function getCameraPTZCapability(cameraId?: string): PTZCameraCapability;
   /**
-   * Whether current browser supports Pan-Tilt-Zoom (PTZ) function
+   * Determines whether the current browser supports Pan-Tilt-Zoom (PTZ).
    * @category Camera
    */
   function isBrowserSupportPTZ(): boolean;

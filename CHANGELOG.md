@@ -1,4 +1,17 @@
 ## CHANGELOG
+## v1.8.0
+### Enhanced
+* Added `leaveOnPageUnload` option to the `client.init` method to support quickly leaving the session when refreshing or closing the page, instead of experiencing session failover.
+* Added `fps` option to the `stream.startVideo` method to set the maximum FPS of the captured video.
+* Added `replacedUserId` parameter to the `stream.stopRenderVideo` method to improve the video experience for the Speaker View scenario.
+* Improved the audio delay on mobile browsers.
+
+### Fixed
+* Fixed audio issues on iOS/iPadOS mobile browsers when starting audio with the `speakerOnly` option.
+* Fixed issues with CORS virtual background images.
+* Fixed audio issues on iOS/iPadOS mobile browsers when switching back from other apps.
+* Fixed issues with live translation not translating other languages to English.
+
 ## v1.7.10
 ### Added
 * `mediaFile` option to `stream.startAudio` and `stream.startVideo` methods to support using media playback files as video or audio input.

@@ -159,6 +159,13 @@ interface InitOptions {
    * Prevents devices from dimming or locking the screen when in a session.
    */
   stayAwake?: boolean;
+  /**
+   * Quickly leave the session when refreshing or closing the page, instead of experiencing session failover.
+   * Caveat for two scenarios:
+   * - PSTN: Phone user who is bound to the current user. The phone will hang up instead of staying connected.
+   * - Subsession: Users in a subsession need to be assigned again instead of having been assigned and auto-joining the subsession.
+   */
+  leaveOnPageUnload?: boolean;
 }
 /**
  * The video client is the core of the Video SDK.

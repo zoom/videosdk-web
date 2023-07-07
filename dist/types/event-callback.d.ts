@@ -587,14 +587,22 @@ export declare function event_recording_change(payload: {
 }): void;
 
 /**
- * Occurs when individual cloud recording status changes.
- * Ask: when host start individual cloud recording, user will be asked to accept or decline.
- * Accept: when user accepts individual cloud recording.
- * Decline: when user declines individual cloud recording.
+ * Occurs when the individual cloud recording status changes.
+ * - Ask: When the host starts individual cloud recording, ask the user to accept or decline recording.
+ * - Accept: When the user accepts individual cloud recording.
+ * - Decline: When the user declines individual cloud recording.
  * @param payload The individual recording status.
+ * @event
+ * @category Recording
  */
 export declare function event_individual_recording_change(payload: {
+  /**
+   * state
+   */
   state: RecordingStatus;
+  /**
+   * The user ID being recorded.
+   */
   userId?: number;
 }): void;
 
@@ -900,7 +908,9 @@ export declare function event_video_statistic_data_change(payload: {
  * Occurs on video cell statistic data changes.
  * @param payload
  *
- *  @event
+ * @event
+ *
+ * @category Video
  */
 export declare function event_video_cell_detailed_change(payload: {
   /**
@@ -1092,6 +1102,9 @@ export declare function event_bo_main_session_change(payload: any): void;
  * })
  * ```
  * @event
+ *
+ * @category Live Transcription
+ *
  */
 export declare function event_caption_status(payload: {
   /**
@@ -1112,6 +1125,8 @@ export declare function event_caption_status(payload: {
  * })
  * ```
  * @event
+ *
+ * @category Live Transcription
  */
 export declare function event_caption_message(
   payload: LiveTranscriptionMessage,
@@ -1119,12 +1134,18 @@ export declare function event_caption_message(
 /**
  * Occurs if the automatic live transcription enable status changes.
  * @param payload
+ *
+ * @event
+ *
+ * @category Live Transcription
  */
 export declare function event_caption_enable(payload: boolean): void;
 
 /**
  * Occurs when the `requestReadReceipt` option is true in the `startShareScreen` method. The sharer can receive the event if someone can see the shared screen.
- *  @event
+ * @event
+ *
+ * @category Screen share
  */
 export declare function event_share_can_see_screen(): void;
 
@@ -1133,6 +1154,8 @@ export declare function event_share_can_see_screen(): void;
  * @param payload the event detail
  *
  * @event
+ *
+ * @category Camera
  */
 export declare function event_far_end_camera_request(payload: {
   /**
@@ -1157,6 +1180,8 @@ export declare function event_far_end_camera_request(payload: {
  * @param payload The event detail.
  *
  * @event
+ *
+ * @category Camera
  */
 export declare function event_far_end_camera_response(payload: {
   /**
@@ -1181,6 +1206,8 @@ export declare function event_far_end_camera_response(payload: {
  * @param payload The event detail.
  *
  * @event
+ *
+ * @category Camera
  */
 export declare function event_far_end_camera_in_control_change(payload: {
   /**
@@ -1195,6 +1222,9 @@ export declare function event_far_end_camera_in_control_change(payload: {
 /**
  * Occurs when camera capability changes.
  * @param payload
+ *
+ * @event
+ * @category Camera
  */
 export declare function event_far_end_camera_capability_change(payload: {
   /**
@@ -1212,6 +1242,8 @@ export declare function event_far_end_camera_capability_change(payload: {
  * @param payload the network quality
  *
  * @event
+ *
+ * @category Video
  */
 export declare function event_network_quality_change(payload: {
   /**
@@ -1251,6 +1283,8 @@ export declare function event_network_quality_change(payload: {
  *  });
  * ```
  * @event
+ *
+ * @category Screen share
  */
 export declare function event_share_statistic_data_change(payload: {
   /**
@@ -1301,5 +1335,7 @@ export declare function event_share_statistic_data_change(payload: {
  * @param payload boolean
  *
  * @event
+ *
+ * @category Live Transcription
  */
 export declare function event_caption_host_disable(payload: boolean): void;

@@ -189,7 +189,7 @@ interface AudioOption {
   syncButtonsOnHeadset?: boolean;
   /**
    * Specify a media file as the audio input. It can be an audio file or a video file.
-   * - If need to use a video file(mp4) as both video and audio input, make sure the URL is exactly the same,and start video first.
+   *  - If you need to use a video file (mp4) for both video and audio input, make sure the URL is exactly the same and start video first.
    */
   mediaFile?: MediaPlaybackFile;
 }
@@ -269,9 +269,13 @@ export interface CaptureVideoOption {
   ptz?: boolean;
   /**
    * Specify a media file as the video input.
-   * - If use the same playback as audio and video input, when stop video, the audio output will also be paused.
+   * - If you need to use the same playback as audio and video input, when you stop video, the audio output will also be paused.
    */
   mediaFile?: MediaPlaybackFile;
+  /**
+   * Specify the maximum frames per second (FPS) limitation. This is limited to between 10-30 FPS (inclusive). The default is 24 FPS.
+   */
+  fps?: number;
 }
 /**
  * Audio QoS data interface.
@@ -351,8 +355,8 @@ export interface ScreenShareOption {
    */
   displaySurface?: string;
   /**
-   * Specify the sourceId of selected screen, it's used for electron application or nw.js application
-   * See the detail:
+   * Specify the sourceId of the selected screen. This is used for the electron or nw.js application
+   * See for details:
    * electron https://www.electronjs.org/docs/latest/api/desktop-capturer
    * nw.js https://docs.nwjs.io/en/latest/References/Screen/#screenchoosedesktopmedia-sources-callback
    */
@@ -1156,6 +1160,7 @@ export declare namespace Stream {
    * @param additionalUserKey Optional. Must be paired with `renderVideo`.
    * @param underlyingColor Optional. Underlying color when video is stopped. Default is transparent.
    * @param isKeepLastFrame Optional. Determines whether to keep the last frame when stopping the video.
+   * @param replacedUserId Optional. Whether to replace the rendered user at the same coordinate position. The benefit of specifying the next user can reduce the gap time between switching two users' videos. Only one user's video can be preloaded at the same time.
    * @returns
    * - `''`: Success.
    * - `Error`: Failure. Details in {@link ErrorTypes}.
@@ -1167,6 +1172,7 @@ export declare namespace Stream {
     additionalUserKey?: string,
     underlyingColor?: UnderlyingColor | string,
     isKeepLastFrame?: boolean,
+    replacedUserId?: number,
   ): ExecutedResult;
 
   /**

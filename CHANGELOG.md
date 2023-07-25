@@ -1,4 +1,8 @@
 ## CHANGELOG
+## v1.8.2
+### Fixed
+* Fixed an issue with `fps` option in `startVideo` method.
+
 ## v1.8.0
 ### Enhanced
 * Added `leaveOnPageUnload` option to the `client.init` method to support quickly leaving the session when refreshing or closing the page, instead of experiencing session failover.

@@ -6,6 +6,7 @@ import { RecordingClient } from './recording';
 import { SubsessionClient } from './subsession';
 import { LiveTranscriptionClient } from './live-transcription';
 import { LoggerClient } from './logger';
+import { LiveStreamClient } from './live-stream';
 import {
   event_connection_change,
   event_user_add,
@@ -60,6 +61,7 @@ import {
   event_network_quality_change,
   event_share_statistic_data_change,
   event_caption_host_disable,
+  event_live_stream_status,
 } from './event-callback';
 
 /**
@@ -642,6 +644,15 @@ export declare namespace VideoClient {
     listener: typeof event_caption_host_disable,
   ): void;
   /**
+   *
+   * @param event
+   * @param listener Details in {@link event_live_stream_status}
+   */
+  function on(
+    event: 'live-stream-status',
+    listener: typeof event_live_stream_status,
+  ): void;
+  /**
    * Removes the event handler.
    * @param event Event name.
    * @param callback The event handler.
@@ -762,6 +773,10 @@ export declare namespace VideoClient {
    * @param options logger option
    */
   function getLoggerClient(options?: LoggerInitOption): typeof LoggerClient;
+  /**
+   * Gets the liveStream client.
+   */
+  function getLiveStreamClient(): typeof LiveStreamClient;
   /**
    * Gets the current session’s information.
    */

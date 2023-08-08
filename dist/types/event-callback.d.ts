@@ -12,6 +12,7 @@ import {
   PTZCameraCapability,
 } from './common';
 import { LiveTranscriptionMessage } from './live-transcription';
+import { LiveStreamStatus } from './live-stream';
 /**
  * Interface of a ParticipantPropertiesPayload.
  */
@@ -1339,3 +1340,12 @@ export declare function event_share_statistic_data_change(payload: {
  * @category Live Transcription
  */
 export declare function event_caption_host_disable(payload: boolean): void;
+/**
+ * Occurs when live stream status changes.
+ * @param payload
+ *
+ * @event
+ *
+ * @category Live Stream
+ */
+export declare function event_live_stream_status(status: LiveStreamStatus): void;

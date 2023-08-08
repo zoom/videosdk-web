@@ -10,4 +10,5 @@ export * from './recording';
 export * from './preview';
 export * from './live-transcription';
 export * from './logger';
+export * from './live-stream';
 export default ZoomVideo;

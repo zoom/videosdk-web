@@ -423,29 +423,9 @@ export type LogLevelDetail = {
  */
 export interface LoggerInitOption {
   /**
-   * Whether logger is enabled.
-   */
-  enable?: boolean;
-  /**
-   * Whether enabled to report logs.
-   */
-  enableReport?: boolean;
-  /**
    * Whether in debug mode or not. In debug mode, the log prints to console.
    */
   debugMode?: boolean;
-  /**
-   *  The report URL.
-   */
-  reportUrl?: string;
-  /**
-   * Log level.
-   */
-  logLevel?: LogLevelLabel | LogLevelDetail;
-  /**
-   * The AES encrypt key for encrypting when the logs are cached in local storage. The key must be 128-bits, 192-bits, or 256-bits in length.
-   */
-  encryptKeys?: string | Array<string>;
   /**
    * The external tracking ID.
    */

@@ -1,4 +1,31 @@
 ## CHANGELOG
+## v1.8.5
+### Added
+* Live streaming support (documentation forthcoming).
+  * Call the `client.getLiveStreamClient()` method to get the live stream client.
+  * Call the `liveStreamClient.startLiveStream(streamUrl, key, broadcastUrl)` function and pass in the streamUrl you are streaming to; the key, token, or livestreaming URL password; and optionally, the broadcast URL to receive or play the stream.
+  * Call `liveStreamClient.stopLiveStream()` to stop the live stream.
+  * Subscribe to the `live-stream-status` event listener for status:
+    ```
+    client.on(`live-stream-status`, (payload) => { console.log(`livestreaming status: ${payload}`) })
+    ```
+* Client telemetry support (documentation forthcoming).
+  * To enable telemetry, add the `telemetry_tracking_id` field in the JWT payload, with an ID value of your choice: `telemetry_tracking_id: "myID"`.
+  * Before joining a session, call `client.getLoggerClient()` to get the client side telemetry client.
+  * To send a detailed client side telemetry report to Zoom’s logging service, call `clientSideTelemetry.reportToGlobalTracing()`.
+
+### Enhanced
+* Improved audio and video sync on mobile platforms.
+* Improved audio quality ([Opus codec](https://opus-codec.org/)).
+* Added 720p video sending on iPhone and Android platforms.
+* Improved virtual background performance.
+
+### Fixed
+* Issue with chat receiver when joining a session before host joining.
+* Issue with incorrect connection state on iOS mobile when the network is off.
+* Issue with sharing screen with system audio on Windows Chrome.
+* Issue with low FPS when received video quality is 180p.
+
 ## v1.8.2
 ### Fixed
 * Fixed an issue with `fps` option in `startVideo` method.

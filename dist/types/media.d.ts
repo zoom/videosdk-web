@@ -355,7 +355,7 @@ export interface ScreenShareOption {
    */
   displaySurface?: string;
   /**
-   * Specify the sourceId of the selected screen. This is used for the electron or nw.js application
+   * Specify the sourceId of the selected screen. This is used for the electron or nw.js application.
    * See for details:
    * electron https://www.electronjs.org/docs/latest/api/desktop-capturer
    * nw.js https://docs.nwjs.io/en/latest/References/Screen/#screenchoosedesktopmedia-sources-callback

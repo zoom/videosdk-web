@@ -61,6 +61,12 @@ import {
   event_network_quality_change,
   event_share_statistic_data_change,
   event_caption_host_disable,
+  event_remote_control_approved_change,
+  event_remote_control_in_control_change,
+  event_remote_control_clipboard_change,
+  event_remote_control_request_change,
+  event_remote_control_app_status_change,
+  event_remote_control_controlled_status_change,
   event_live_stream_status,
 } from './event-callback';
 
@@ -642,6 +648,60 @@ export declare namespace VideoClient {
   function on(
     event: 'caption-host-disable',
     listener: typeof event_caption_host_disable,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_remote_control_approved_change}
+   */
+  function on(
+    event: 'remote-control-approved-change',
+    listener: typeof event_remote_control_approved_change,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_remote_control_in_control_change}
+   */
+  function on(
+    event: 'remote-control-in-control-change',
+    listener: typeof event_remote_control_in_control_change,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_remote_control_clipboard_change}
+   */
+  function on(
+    event: 'remote-control-clipboard-change',
+    listener: typeof event_remote_control_clipboard_change,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_remote_control_request_change}
+   */
+  function on(
+    event: 'remote-control-request-change',
+    listener: typeof event_remote_control_request_change,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_remote_control_app_status_change}
+   */
+  function on(
+    event: 'remote-control-app-status-change',
+    listener: typeof event_remote_control_app_status_change,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_remote_control_controlled_status_change}
+   */
+  function on(
+    event: 'remote-control-controlled-status-change',
+    listener: typeof event_remote_control_controlled_status_change,
   ): void;
   /**
    *

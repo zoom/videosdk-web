@@ -1904,4 +1904,231 @@ export declare namespace Stream {
    * @category Camera
    */
   function isBrowserSupportPTZ(): boolean;
+  // -------------------------------------------------[remote control]-----------------------------------------------------------
+  /**
+   * Request remotely control user who is sharing
+   * There are two roles in this process.
+   * - Controlling user: User who is remotely controlling other user
+   * - Controlled user: User who is sharing and being controlled by other user
+   *
+   * A normal process is like this:
+   * 1. Controlling user initiates a remote control request to the sharing user
+   * 2. Sharing user receives the request, approves the request.
+   * 3. Due to the browser capability limitation, the controlled user is required to download and install a Remote Control App.
+   *   3.1 If the App is not installed, the controlled user needs to download and install the app manully.
+   *   3.2 If the App is installed, the App will be launched automatically.
+   * 4. Controlling user start remote control
+   * 5. Both controlling user and controlled user can stop the remotely controlling.
+   *
+   * ```JavaScript
+   * // step 1, On controlling user side
+   * if (stream.isTargetShareSupportRemoteControl(userId)) {
+   *   stream.requestRemoteControl();
+   * }
+   * // step 2, On controlled user side
+   * client.on("remote-control-request-change", (payload) => {
+   *   const { userId, displayName, isSharingEntireScreen } = payload;
+   *   // Currently, we only support remote control over sharing entire screen,
+   *   // if not,the controlled user has to re-select the sharing content.
+   *   if (isSharingEntireScreen) {
+   *     stream.approveRemoteControl(userId);
+   *   }
+   * });
+   * // step 3. On controlled user side
+   * client.on("remote-control-app-status-change", (payload) => {
+   *   if (payload === RemoteControlAppStatus.Uninstalled) {
+   *     // prompt the App download and launch action dialog
+   *     // if app is downloaded and installed, launch the app
+   *     stream.launchRemoteControlApp();
+   *   } else if (payload === RemoteControlAppStatus.Installed) {
+   *     console.log("Remote App is launching");
+   *   } else if (payload === RemoteControlAppStatus.Launched) {
+   *     console.log("Remote App is launched");
+   *   }
+   * });
+   *
+   * // step 4. On controlling user side
+   * client.on("remote-control-approved-change", (payload) => {
+   *   if (payload.state === ApprovedState.Approved) {
+   *     stream.startRemoteControl(viewport);
+   *   }
+   * });
+   *
+   * // step 5. On controlling user side
+   * stream.giveUpRemoteControl();
+   *
+   * // step 5. On controlled user side
+   * stream.stopRemoteControl();
+   *
+   * ```
+   *
+   * @returns
+   * - `''`: Success
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   *
+   * @category RemoteControl
+   */
+  function requestRemoteControl(): ExecutedResult;
+  /**
+   * The controlled user approves the remote control request
+   * > ***Note***: Due to the browser capability limitation, we need to use an extra App to complete remote control, which requires the controlled user to download and install this App
+   * > If the App is installed, we will try to launch it automatically right after the controlled user approved the request.
+   * @param userId userId
+   *
+   *  @returns
+   * - `''`: Success
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   *
+   * @category RemoteControl
+   */
+  function approveRemoteControl(userId: number): ExecutedResult;
+  /**
+   * The controlled user declines the remote control request
+   * @param userId userId
+   *
+   * @returns
+   * - `''`: Success
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   *
+   * @category RemoteControl
+   */
+  function declineRemoteControl(userId: number): ExecutedResult;
+  /**
+   * The controlled user stops the controlling while someone is remotely controlling
+   *
+   * @returns
+   * - `''`: Success
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   *
+   * @category RemoteControl
+   */
+  function stopRemoteControl(): ExecutedResult;
+  /**
+   * The controlling user gives up remotely control.
+   *
+   * @returns
+   * - `''`: Success
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   *
+   * @category RemoteControl
+   */
+  function giveUpRemoteControl(): ExecutedResult;
+
+  /**
+   * The controlling user starts remotely control
+   *
+   * @param viewport The HTML element that wrapped the canvas element. Following is the recommended HTML structure:
+   *
+   * ```html
+   * <div class="shared-content">
+   *  <canvas id="received-canvas"></canvas>
+   * </div>
+   * ```
+   *
+   * ```css
+   * #received-canvas{
+   *  width:100%;
+   *  height:100%;
+   * }
+   * ```
+   *
+   * ```JavaScript
+   * const viewport = document.querySelector(".shared-content");
+   * stream.startRemoteControl(viewport);
+   * ```
+   * @returns
+   * - `''`: Success
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   *
+   * @category RemoteControl
+   */
+  function startRemoteControl(viewport: HTMLElement): ExecutedResult;
+  /**
+   * The controlling user grabs the access of remotely control
+   *
+   * The controlled user can regain the access to screen control, but the controlling user can use this method to grab the control.
+   *
+   * ```JavaScript
+   * client.on("remote-control-in-control-change", (payload) => {
+   *  if (payload.isControlling) {
+   *    console.log("You are controlling the shared content");
+   *  } else {
+   *    console.log("You lost the control");
+   *  }
+   *});
+   * ```
+   *
+   * Recommended event handler
+   * ```javascript
+   * viewportElement.addEventListener("click", (event) => {
+   *   event.preventDefault();
+   *   if (!stream.isControllingUserRemotely()) {
+   *     stream.grabRemotoControl();
+   *   }
+   * });
+   * ```
+   *
+   * @returns
+   * - `''`: Success
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   *
+   * @category RemoteControl
+   */
+  function grabRemotoControl(): ExecutedResult;
+  /**
+   * The controlled user launches the Remote Control App manually.
+   *@param isAutoDeleteApp boolean
+   * @returns
+   * - `''`: Success
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   *
+   * @category RemoteControl
+   */
+  function launchRemoteControlApp(isAutoDeleteApp?: boolean): ExecutedResult;
+
+  /**
+   * Determines whether the controlled user approves the remote control,it's available on the controlling user
+   *
+   * @returns boolean
+   *
+   * @category RemoteControl
+   */
+  function isRemotelyControlApproved(): boolean;
+  /**
+   * Determines whether the controlling user is controlling the user.
+   * @returns boolean
+   *
+   * @category RemoteControl
+   */
+  function isControllingUserRemotely(): boolean;
+  /**
+   * Determines whether the target user is supported remotely control.
+   * @param userId
+   *
+   * @returns boolean
+   *
+   * @category RemoteControl
+   */
+  function isTargetShareSupportRemoteControl(userId: number): boolean;
+  /**
+   * Get the download URL of Remote Control App.
+   * @returns string
+   *
+   * @category RemoteControl
+   */
+  function getRemoteControlAppDownloadUrl(): string;
+  /**
+   * Get the user who is remotely controlling me
+   *
+   * @returns Participant
+   *
+   * @category RemoteControl
+   */
+  function getRemotelyControllingUser(): Participant | null;
+  /**
+   * Determines whether remote control is enabled.
+   * @returns boolean
+   * @category RemoteControl
+   */
+  function isRemoteControlEnabled(): boolean;
 }

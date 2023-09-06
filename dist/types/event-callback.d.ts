@@ -229,6 +229,57 @@ interface MediaSDKEncDecPayload {
    */
   result: 'success' | 'fail';
 }
+/**
+ * Remote control approved state
+ */
+export enum ApprovedState {
+  /**
+   * Approved
+   */
+  Approved = 'Approved',
+  /**
+   * Rejected
+   */
+  Rejected = 'Rejected',
+}
+/**
+ * Remote Control App status
+ */
+export enum RemoteControlAppStatus {
+  /**
+   * Unknown
+   */
+  Unknown = 'unknown',
+  /**
+   * Uninstalled
+   */
+  Uninstalled = 'uninstalled',
+  /**
+   * Installed
+   */
+  Installed = 'installed',
+  /**
+   * Unlaunched
+   */
+  Unlaunched = 'unlaunched',
+  /**
+   * Launched
+   */
+  Launched = 'launched',
+}
+/**
+ * Remote control session status
+ */
+export enum RemoteControlSessionStatus {
+  /**
+   * Started
+   */
+  Started = 'started',
+  /**
+   * Ended
+   */
+  Ended = 'ended',
+}
 
 /**
  *
@@ -1340,6 +1391,129 @@ export declare function event_share_statistic_data_change(payload: {
  * @category Live Transcription
  */
 export declare function event_caption_host_disable(payload: boolean): void;
+
+/**
+ * Occurs when the controlled user approved or rejected the remote control request
+ *
+ * ```JavaScript
+ * client.on("remote-control-approved-change", (payload) => {
+ *   if (payload.state === ApprovedState.Approved) {
+ *     stream.startRemoteControl(viewport);
+ *   }else{
+ *    // prompt a dialog to retry
+ *  }
+ * });
+ * ```
+ * @param payload
+ * @event
+ *
+ * @category RemoteControl
+ */
+export declare function event_remote_control_approved_change(payload: {
+  state: ApprovedState;
+}): void;
+
+/**
+ * Occurs when the remote sharing user can regain the control access
+ *
+ * ```JavaScript
+ * client.on("remote-control-in-control-change", (payload) => {
+ *   if (payload.isControlling) {
+ *     console.log("You are controlling the shared content");
+ *   } else {
+ *     console.log("You lost the control");
+ *   }
+ * });
+ * ```
+ * @param payload
+ * @event
+ * @category RemoteControl
+ */
+export declare function event_remote_control_in_control_change(payload: {
+  /**
+   * is controlling
+   */
+  isControlling: boolean;
+}): void;
+
+/**
+ * Occurs when the controlling user copies some text during the remotely control.
+ *
+ * ```JavaScript
+ * copyButtonElement.addEventListener("click", (event) => {
+ *   event.preventDefault();
+ *   // use copy-to-clipboard
+ *   copyToClipboard(copyButtonElement.dataset.dataContent);
+ * });
+ *
+ * client.on("remote-control-clipboard-change", (payload) => {
+ *   copyButtonElement.style.left = payload.x;
+ *   copyButtonElement.style.top = payload.x;
+ *   copyButtonElement.dataset.dataContent = payload.content;
+ * });
+ * ```
+ * @param payload
+ * @event
+ * @category RemoteControl
+ */
+export declare function event_remote_control_clipboard_change(payload: {
+  /**
+   * text content
+   *  */
+  content: string;
+  /**
+   * Position X where the copy action takes place
+   */
+  x: number;
+  /**
+   * Position y where the copy action takes place
+   */
+  y: number;
+  /**
+   * error
+   */
+  error?: string;
+}): void;
+
+/**
+ * Occurs when controlled user receive the remote control request
+ * @param payload
+ * @event
+ * @category RemoteControl
+ */
+export declare function event_remote_control_request_change(payload: {
+  /**
+   * userId
+   */
+  userId: number;
+  /**
+   * displayName
+   */
+  displayName: string;
+  /**
+   * Is sharing entire screen
+   */
+  isSharingEntireScreen: boolean;
+}): void;
+/**
+ *  Occurs when the Remote Control App status changes
+ * @param payload
+ * @event
+ * @category RemoteControl
+ */
+export declare function event_remote_control_app_status_change(
+  payload: RemoteControlAppStatus,
+): void;
+
+/**
+ * Occurs when the remote control session status changes
+ * @param payload
+ * @event
+ * @category RemoteControl
+ */
+export declare function event_remote_control_controlled_status_change(
+  payload: RemoteControlSessionStatus,
+): void;
 /**
  * Occurs when live stream status changes.
  * @param payload

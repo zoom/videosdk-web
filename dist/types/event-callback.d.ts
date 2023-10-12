@@ -243,7 +243,7 @@ export enum ApprovedState {
   Rejected = 'Rejected',
 }
 /**
- * Remote Control App status
+ * Remote control app status
  */
 export enum RemoteControlAppStatus {
   /**
@@ -1414,7 +1414,7 @@ export declare function event_remote_control_approved_change(payload: {
 }): void;
 
 /**
- * Occurs when the remote sharing user can regain the control access
+ * Occurs when the remote sharing user can regain access to control the screen.
  *
  * ```JavaScript
  * client.on("remote-control-in-control-change", (payload) => {
@@ -1431,13 +1431,13 @@ export declare function event_remote_control_approved_change(payload: {
  */
 export declare function event_remote_control_in_control_change(payload: {
   /**
-   * is controlling
+   * Whether the user is controlling the screen.
    */
   isControlling: boolean;
 }): void;
 
 /**
- * Occurs when the controlling user copies some text during the remotely control.
+ * Occurs when the controlling user copies some text during the remote control period.
  *
  * ```JavaScript
  * copyButtonElement.addEventListener("click", (event) => {
@@ -1458,7 +1458,7 @@ export declare function event_remote_control_in_control_change(payload: {
  */
 export declare function event_remote_control_clipboard_change(payload: {
   /**
-   * text content
+   * Clipboard text content
    *  */
   content: string;
   /**
@@ -1470,33 +1470,33 @@ export declare function event_remote_control_clipboard_change(payload: {
    */
   y: number;
   /**
-   * error
+   * Error
    */
   error?: string;
 }): void;
 
 /**
- * Occurs when controlled user receive the remote control request
+ * Occurs when the controlled user receives the remote control request
  * @param payload
  * @event
  * @category RemoteControl
  */
 export declare function event_remote_control_request_change(payload: {
   /**
-   * userId
+   * he user's ID.
    */
   userId: number;
   /**
-   * displayName
+   * The user's display name.
    */
   displayName: string;
   /**
-   * Is sharing entire screen
+   * Whether the user is sharing entire screen.
    */
   isSharingEntireScreen: boolean;
 }): void;
 /**
- *  Occurs when the Remote Control App status changes
+ *  Occurs when the remote control app status changes
  * @param payload
  * @event
  * @category RemoteControl
@@ -1523,3 +1523,33 @@ export declare function event_remote_control_controlled_status_change(
  * @category Live Stream
  */
 export declare function event_live_stream_status(status: LiveStreamStatus): void;
+
+/**
+ * Occurs when detect the rendered video aspect ratio is not the same as actual video aspect ratio
+ * To correct aspect ratio, use stream.adjustRenderedVideoPosition() to resize the video.
+ *
+ * ```javascript
+ * client.on("video-aspect-ratio-change", async (payload) => {
+ * const { userId, aspectRatio } = payload;
+ * const height = width / aspectRatio;
+ * // resize the video
+ * await stream.adjustRenderedVideoPosition(
+ *   canvasElm,
+ *   userId,
+ *   width,
+ *   height,
+ *   x,
+ *   y
+ * );
+ * });
+ * ```
+ *
+ * @param payload
+ *
+ * @event
+ * @category Video
+ */
+export declare function event_video_aspect_ratio_change(payload: {
+  userId: number;
+  aspectRatio: number;
+}): void;

@@ -1906,19 +1906,19 @@ export declare namespace Stream {
   function isBrowserSupportPTZ(): boolean;
   // -------------------------------------------------[remote control]-----------------------------------------------------------
   /**
-   * Request remotely control user who is sharing
+   * Request remote control from user who is sharing
    * There are two roles in this process.
    * - Controlling user: User who is remotely controlling other user
-   * - Controlled user: User who is sharing and being controlled by other user
+   * - Controlled user: User who is sharing and being controlled by other user (called the sharing user when they are not being controlled)
    *
    * A normal process is like this:
    * 1. Controlling user initiates a remote control request to the sharing user
    * 2. Sharing user receives the request, approves the request.
-   * 3. Due to the browser capability limitation, the controlled user is required to download and install a Remote Control App.
-   *   3.1 If the App is not installed, the controlled user needs to download and install the app manully.
-   *   3.2 If the App is installed, the App will be launched automatically.
-   * 4. Controlling user start remote control
-   * 5. Both controlling user and controlled user can stop the remotely controlling.
+   * 3. Due to the browser capability limitation, the controlled user is required to download and install a remote control app.
+   *   3.1 If the app is not installed, the controlled user needs to download and install the app manually.
+   *   3.2 If the app is installed, the app will be launched automatically.
+   * 4. The controlling user starts remote control.
+   * 5. Both the controlling user and the controlled user can stop the remote control process.
    *
    * ```JavaScript
    * // step 1, On controlling user side
@@ -1928,8 +1928,8 @@ export declare namespace Stream {
    * // step 2, On controlled user side
    * client.on("remote-control-request-change", (payload) => {
    *   const { userId, displayName, isSharingEntireScreen } = payload;
-   *   // Currently, we only support remote control over sharing entire screen,
-   *   // if not,the controlled user has to re-select the sharing content.
+   *   // Currently, we only support remote control when the controlled user is sharing the entire screen,
+   *   // if not, the controlled user must re-select the sharing content.
    *   if (isSharingEntireScreen) {
    *     stream.approveRemoteControl(userId);
    *   }
@@ -1970,9 +1970,9 @@ export declare namespace Stream {
    */
   function requestRemoteControl(): ExecutedResult;
   /**
-   * The controlled user approves the remote control request
-   * > ***Note***: Due to the browser capability limitation, we need to use an extra App to complete remote control, which requires the controlled user to download and install this App
-   * > If the App is installed, we will try to launch it automatically right after the controlled user approved the request.
+   * The controlled user approves the remote control request.
+   * > ***Note***: Due to browser capability limitations, the controlled user must download and install a remote control app to enable remote control.
+   * > If the app is installed, we will try to launch it automatically right after the controlled user approves the request for remote control.
    * @param userId userId
    *
    *  @returns
@@ -2004,7 +2004,7 @@ export declare namespace Stream {
    */
   function stopRemoteControl(): ExecutedResult;
   /**
-   * The controlling user gives up remotely control.
+   * The controlling user gives up remote control.
    *
    * @returns
    * - `''`: Success
@@ -2015,9 +2015,9 @@ export declare namespace Stream {
   function giveUpRemoteControl(): ExecutedResult;
 
   /**
-   * The controlling user starts remotely control
+   * The controlling user starts remote control.
    *
-   * @param viewport The HTML element that wrapped the canvas element. Following is the recommended HTML structure:
+   * @param viewport viewport The HTML element that wrapped the canvas element. We recommend the following HTML structure:
    *
    * ```html
    * <div class="shared-content">
@@ -2044,7 +2044,7 @@ export declare namespace Stream {
    */
   function startRemoteControl(viewport: HTMLElement): ExecutedResult;
   /**
-   * The controlling user grabs the access of remotely control
+   * The controlling user grabs access to remote control
    *
    * The controlled user can regain the access to screen control, but the controlling user can use this method to grab the control.
    *
@@ -2076,7 +2076,7 @@ export declare namespace Stream {
    */
   function grabRemotoControl(): ExecutedResult;
   /**
-   * The controlled user launches the Remote Control App manually.
+   * The controlled user launches the remote control app manually.
    *@param isAutoDeleteApp boolean
    * @returns
    * - `''`: Success
@@ -2087,7 +2087,7 @@ export declare namespace Stream {
   function launchRemoteControlApp(isAutoDeleteApp?: boolean): ExecutedResult;
 
   /**
-   * Determines whether the controlled user approves the remote control,it's available on the controlling user
+   * Determines whether the controlled user approves remote control and makes it available to the controlling user.
    *
    * @returns boolean
    *
@@ -2102,7 +2102,7 @@ export declare namespace Stream {
    */
   function isControllingUserRemotely(): boolean;
   /**
-   * Determines whether the target user is supported remotely control.
+   * Determines whether the target user supports remote control.
    * @param userId
    *
    * @returns boolean
@@ -2111,7 +2111,7 @@ export declare namespace Stream {
    */
   function isTargetShareSupportRemoteControl(userId: number): boolean;
   /**
-   * Get the download URL of Remote Control App.
+   * Get the download URL of the remote control app.
    * @returns string
    *
    * @category RemoteControl

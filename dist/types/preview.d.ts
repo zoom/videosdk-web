@@ -95,11 +95,28 @@ export interface LocalVideoTrack {
    *
    * @param videoDOMElement Video DOM element that will contain the video playback.
    */
-  start(videoDOMElement: HTMLVideoElement): Promise<void | Error>;
+  start(
+    videoDOMElement: HTMLVideoElement | HTMLCanvasElement,
+    virtualBackground?: { imageUrl: string; cropped?: boolean },
+  ): Promise<void | Error>;
   /**
    * Stops local video capture.
    */
   stop(): Promise<void | Error>;
+  /**
+   * Switch microphone
+   * @param deviceId
+   */
+  switchCamera(deviceId: string): Promise<void | Error>;
+  /**
+   * Update the preview virtual background image
+   * @param imageUrl
+   * @param cropped
+   */
+  updateVirtualBackground(
+    imageUrl?: string,
+    cropped?: boolean,
+  ): Promise<void | Error>;
 }
 /**
  * Interface for managing local audio capture.

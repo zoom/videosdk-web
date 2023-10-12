@@ -68,6 +68,7 @@ import {
   event_remote_control_app_status_change,
   event_remote_control_controlled_status_change,
   event_live_stream_status,
+  event_video_aspect_ratio_change,
 } from './event-callback';
 
 /**
@@ -174,6 +175,11 @@ interface InitOptions {
    * - Subsession: Users in a subsession need to be assigned again instead of having been assigned and auto-joining the subsession.
    */
   leaveOnPageUnload?: boolean;
+  /**
+   * Optional
+   * Apply the latest media dependency fix automatically
+   */
+  patchJsMedia?: boolean;
 }
 /**
  * The video client is the core of the Video SDK.
@@ -711,6 +717,15 @@ export declare namespace VideoClient {
   function on(
     event: 'live-stream-status',
     listener: typeof event_live_stream_status,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_video_aspect_ratio_change}
+   */
+  function on(
+    event: 'video-aspect-ratio-change',
+    listener: typeof event_video_aspect_ratio_change,
   ): void;
   /**
    * Removes the event handler.

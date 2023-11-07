@@ -69,6 +69,7 @@ import {
   event_remote_control_controlled_status_change,
   event_live_stream_status,
   event_video_aspect_ratio_change,
+  event_device_permission_change,
 } from './event-callback';
 
 /**
@@ -177,7 +178,7 @@ interface InitOptions {
   leaveOnPageUnload?: boolean;
   /**
    * Optional
-   * Apply the latest media dependency fix automatically
+   * Apply the latest media dependency fix automatically (`true` recommended). See [Dependent assets](https://developers.zoom.us/docs/video-sdk/web/get-started/#dependent-assets) for details.
    */
   patchJsMedia?: boolean;
 }
@@ -726,6 +727,15 @@ export declare namespace VideoClient {
   function on(
     event: 'video-aspect-ratio-change',
     listener: typeof event_video_aspect_ratio_change,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_device_permission_change}
+   */
+  function on(
+    event: 'device-permission-change',
+    listener: typeof event_device_permission_change,
   ): void;
   /**
    * Removes the event handler.

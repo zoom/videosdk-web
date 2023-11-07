@@ -11,8 +11,8 @@ export declare namespace LoggerClient {
   function reportToGlobalTracing(): Promise<void>;
   /**
    * Report subjective rating to Zoom.
-   * @param rating subjective rating scale  1-5, 1:bad, 5 good.
-   * @param feedback text-based feedback
+   * @param rating subjective rating scale from 1-5, 1:poor, 5:good.
+   * @param feedback Text-based feedback.
    *
    */
   function reportRating(rating: number, feedback?: string): Promise<void>;

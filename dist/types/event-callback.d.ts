@@ -1410,6 +1410,9 @@ export declare function event_caption_host_disable(payload: boolean): void;
  * @category RemoteControl
  */
 export declare function event_remote_control_approved_change(payload: {
+  /**
+   * Approved status
+   */
   state: ApprovedState;
 }): void;
 
@@ -1458,7 +1461,7 @@ export declare function event_remote_control_in_control_change(payload: {
  */
 export declare function event_remote_control_clipboard_change(payload: {
   /**
-   * Clipboard text content
+   * Clipboard text content.
    *  */
   content: string;
   /**
@@ -1483,7 +1486,7 @@ export declare function event_remote_control_clipboard_change(payload: {
  */
 export declare function event_remote_control_request_change(payload: {
   /**
-   * he user's ID.
+   * The user's ID.
    */
   userId: number;
   /**
@@ -1502,6 +1505,9 @@ export declare function event_remote_control_request_change(payload: {
  * @category RemoteControl
  */
 export declare function event_remote_control_app_status_change(
+  /**
+   * RemoteControlApp status
+   */
   payload: RemoteControlAppStatus,
 ): void;
 
@@ -1512,6 +1518,9 @@ export declare function event_remote_control_app_status_change(
  * @category RemoteControl
  */
 export declare function event_remote_control_controlled_status_change(
+  /**
+   * Remote control session status.
+   */
   payload: RemoteControlSessionStatus,
 ): void;
 /**
@@ -1525,8 +1534,8 @@ export declare function event_remote_control_controlled_status_change(
 export declare function event_live_stream_status(status: LiveStreamStatus): void;
 
 /**
- * Occurs when detect the rendered video aspect ratio is not the same as actual video aspect ratio
- * To correct aspect ratio, use stream.adjustRenderedVideoPosition() to resize the video.
+ * Occurs when the SDK detects that the rendered video aspect ratio is not the same as the actual video aspect ratio.
+ * To correct the aspect ratio, use `stream.adjustRenderedVideoPosition()` to resize the video.
  *
  * ```javascript
  * client.on("video-aspect-ratio-change", async (payload) => {
@@ -1550,6 +1559,30 @@ export declare function event_live_stream_status(status: LiveStreamStatus): void
  * @category Video
  */
 export declare function event_video_aspect_ratio_change(payload: {
+  /**
+   *  User ID.
+   */
   userId: number;
+  /**
+   * Aspect ratio.
+   */
   aspectRatio: number;
+}): void;
+
+/**
+ *  Occurs when the SDK detects that the device permission has changed.
+ * @param payload
+ *
+ * @event
+ * @category Media
+ */
+export declare function event_device_permission_change(payload: {
+  /**
+   * device type
+   */
+  name: 'microphone' | 'camera';
+  /**
+   * permission state
+   */
+  state: 'denied' | 'granted' | 'prompt';
 }): void;

@@ -361,6 +361,43 @@ export interface ScreenShareOption {
    * nw.js https://docs.nwjs.io/en/latest/References/Screen/#screenchoosedesktopmedia-sources-callback
    */
   sourceId?: string;
+  /**
+   * Privacy-preserving screen sharing controls
+   * See for details:
+   * https://developer.chrome.com/docs/web-platform/screen-sharing-controls
+   */
+  controls?: {
+    /**
+     * The `monitorTypeSurfaces` option
+     * See for details:
+     * https://developer.chrome.com/docs/web-platform/screen-sharing-controls/#monitorTypeSurfaces
+     */
+    monitorTypeSurfaces?: 'include' | 'exclude';
+    /**
+     * The `surfaceSwitching` option
+     * See for details:
+     * https://developer.chrome.com/docs/web-platform/screen-sharing-controls/#surfaceSwitching
+     */
+    surfaceSwitching?: 'include' | 'exclude';
+    /**
+     * The `selfBrowserSurface` option
+     * See for details:
+     * https://developer.chrome.com/docs/web-platform/screen-sharing-controls/#selfBrowserSurface
+     */
+    selfBrowserSurface?: 'include' | 'exclude';
+    /**
+     * The `systemAudio` option
+     * See for details:
+     * https://developer.chrome.com/docs/web-platform/screen-sharing-controls/#systemAudio
+     */
+    systemAudio?: 'include' | 'exclude';
+    /**
+     * The `preferCurrentTab` option
+     * See for details:
+     * https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getDisplayMedia#prefercurrenttab
+     */
+    preferCurrentTab?: boolean;
+  };
 }
 /**
  * Share audio status interface.
@@ -2017,7 +2054,7 @@ export declare namespace Stream {
   /**
    * The controlling user starts remote control.
    *
-   * @param viewport viewport The HTML element that wrapped the canvas element. We recommend the following HTML structure:
+   * @param viewport The HTML element that wrapped the canvas element. We recommend the following HTML structure:
    *
    * ```html
    * <div class="shared-content">

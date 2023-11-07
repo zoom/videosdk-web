@@ -93,25 +93,38 @@ export interface LocalVideoTrack {
   /**
    * Starts local video capture and plays it back in a video DOM element.
    *
-   * @param videoDOMElement Video DOM element that will contain the video playback.
+   * @param videoDOMElement Video DOM element that will contain the video playback. Canvas Element will contain the video with virtual background.
+   * @param virtualBackground virtual background setting
    */
   start(
     videoDOMElement: HTMLVideoElement | HTMLCanvasElement,
-    virtualBackground?: { imageUrl: string; cropped?: boolean },
+    virtualBackground?: {
+      /**
+       * Image URL for the virtual background.
+       * - If set to a specific image, the URL can be a regular HTTP or HTTPS URL, base64 format, or ObjectURL.
+       * - 'blur' : Blurs the background.
+       * - undefined : no virtual background.
+       */
+      imageUrl: string;
+      /**
+       * Determines whether to crop the background image to an appropriate aspect ratio (16/9), default is false.
+       */
+      cropped?: boolean;
+    },
   ): Promise<void | Error>;
   /**
    * Stops local video capture.
    */
   stop(): Promise<void | Error>;
   /**
-   * Switch microphone
-   * @param deviceId
+   * Switch microphone.
+   * @param deviceId The ID of the microphone to switch to.
    */
   switchCamera(deviceId: string): Promise<void | Error>;
   /**
-   * Update the preview virtual background image
-   * @param imageUrl
-   * @param cropped
+   * Update the preview virtual background image.
+   * @param imageUrl Image URL for the virtual background.
+   * @param cropped Determines whether to crop the background image to an appropriate aspect ratio (16/9), default is false.
    */
   updateVirtualBackground(
     imageUrl?: string,

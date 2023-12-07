@@ -1,5 +1,56 @@
-import { ExecutedResult } from './common';
+import {
+  ChatFileDownloadStatus,
+  ChatFileUploadStatus,
+  ExecutedResult,
+} from './common';
 
+/**
+ * File info
+ */
+interface FileInfo {
+  /**
+   * File name
+   */
+  name: string;
+  /**
+   * File size
+   */
+  size: number;
+  /**
+   * File type
+   */
+  type: string;
+  /**
+   * File URL
+   */
+  fileUrl?: string;
+  /**
+   * Upload status
+   */
+  upload?: {
+    /**
+     * Upload status
+     */
+    status: ChatFileUploadStatus;
+    /**
+     * Upload progress
+     */
+    progress: number;
+  };
+  /**
+   * Download status
+   */
+  download?: {
+    /**
+     * Download status
+     */
+    status: ChatFileDownloadStatus;
+    /**
+     * Download progress
+     */
+    progress: number;
+  };
+}
 /**
  * Message record.
  */
@@ -11,7 +62,11 @@ interface ChatMessage {
   /**
    * Message content.
    */
-  message: string;
+  message?: string;
+  /**
+   * File info
+   */
+  file?: FileInfo;
   /**
    * Sender information.
    */
@@ -24,6 +79,10 @@ interface ChatMessage {
      * Sender user ID.
      */
     userId: number;
+    /**
+     * Sender user unified ID.
+     */
+    userGuid?: string;
     /**
      * @ignore
      */
@@ -41,6 +100,10 @@ interface ChatMessage {
      * Receiver user ID.
      */
     userId: number;
+    /**
+     * Receiver user unified ID.
+     */
+    userGuid?: string;
   };
   /**
    * Message timestamp.
@@ -69,6 +132,24 @@ interface ChatUserItem {
    */
   isManager: boolean;
 }
+/**
+ * File transfer cancel function
+ */
+type FileTransferCancelFunction = () => undefined;
+/**
+ * File transfer setting
+ */
+interface FileTransferSetting {
+  /**
+   * Allowed file types in comma-separated suffix format; if empty, any file type is allowed for sending
+   */
+  typeLimit?: string;
+  /**
+   * Maximum allowed file size for sending; if empty, the default is 2GB
+   */
+  sizeLimit?: number;
+}
+
 /**
  * Chat privileges for users.
  */
@@ -144,6 +225,30 @@ export declare namespace ChatClient {
    * @return executedPromise
    */
   function setPrivilege(privilege: ChatPrivilege): ExecutedResult;
+  /**
+   * Send file
+   * The file will be securely encrypted and then uploaded to Zoom's file server.
+   * It may take some time to encrypt and upload the file. However, you have the option to cancel the upload process by invoking the returned method at any time.
+   * @param file file or retryToken
+   * @param userId
+   */
+  function sendFile(
+    file: File | string,
+    userId: number,
+  ): Promise<FileTransferCancelFunction | Error>;
+  /**
+   * Download the file
+   * The file cannot be downloaded directly from the file UL as it is encrypted. To download the file, please follow this method.
+   * It may take some time to decrypt and download the file. However, you have the option to cancel the download process by invoking the returned method at any time.
+   * @param id The msg id of the record containing file info.
+   * @param fileUrl file URL
+   * @param blob Optional default is false.  Determine whether to provide raw data in blob format instead of directly downloading the file. This is useful for displaying images in chat records.
+   */
+  function downloadFile(
+    id: string,
+    fileUrl: string,
+    blob?: boolean,
+  ): Promise<FileTransferCancelFunction | Error>;
 
   /**
    * Gets the current chat privilege.
@@ -167,4 +272,12 @@ export declare namespace ChatClient {
    * Gets the list of available chat receivers.
    */
   function getReceivers(): Array<ChatUserItem>;
+  /**
+   * Is file transfer in meeting chat enabled
+   */
+  function isFileTransferEnabled(): boolean;
+  /**
+   * Get file transfer setting
+   */
+  function getFileTransferSetting(): FileTransferSetting;
 }

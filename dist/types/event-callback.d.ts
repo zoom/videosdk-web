@@ -10,6 +10,8 @@ import {
   VideoQuality,
   FarEndCameraControlDeclinedReason,
   PTZCameraCapability,
+  ChatFileUploadStatus,
+  ChatFileDownloadStatus,
 } from './common';
 import { LiveTranscriptionMessage } from './live-transcription';
 import { LiveStreamStatus } from './live-stream';
@@ -1585,4 +1587,85 @@ export declare function event_device_permission_change(payload: {
    * permission state
    */
   state: 'denied' | 'granted' | 'prompt';
+}): void;
+
+/**
+ * Occurs when upload file progress change
+ * @param payload
+ * @event
+ * @category Chat
+ */
+export declare function event_chat_file_upload_progress(payload: {
+  /**
+   * File name
+   */
+  fileName: string;
+  /**
+   * File size
+   */
+  fileSize: number;
+  /**
+   * Receiver user ID
+   */
+  receiverId: number;
+  /**
+   * Receiver user unified ID.
+   */
+  receiverGuid?: string;
+  /**
+   * Upload progress
+   */
+  progress: number;
+  /**
+   * Upload status
+   */
+  status: ChatFileUploadStatus;
+  /**
+   * Retry token, can be used for re-sending file.
+   */
+  retryToken?: string;
+}): void;
+/**
+ * Occurs when download file progress change
+ * @param payload
+ * @event
+ * @category Chat
+ */
+export declare function event_chat_file_download_progress(payload: {
+  /**
+   * Message ID
+   */
+  id: string;
+  /**
+   * File name
+   */
+  fileName: string;
+  /**
+   * File size
+   */
+  fileSize: number;
+  /**
+   * File URL
+   */
+  fileUrl: string;
+  /**
+   * File Blob, only available when the `blob` is set to `true` in the `downloadFile` method.
+   */
+  fileBlob?: Blob;
+  /**
+   * Sender user ID
+   */
+  senderId: number;
+  /**
+   * Sender user unified ID.
+   */
+  senderGuid?: string;
+  /**
+   * Upload progress
+   */
+  progress: number;
+  /**
+   * Upload status
+   */
+  status: ChatFileDownloadStatus;
 }): void;

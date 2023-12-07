@@ -70,6 +70,8 @@ import {
   event_live_stream_status,
   event_video_aspect_ratio_change,
   event_device_permission_change,
+  event_chat_file_upload_progress,
+  event_chat_file_download_progress,
 } from './event-callback';
 
 /**
@@ -736,6 +738,24 @@ export declare namespace VideoClient {
   function on(
     event: 'device-permission-change',
     listener: typeof event_device_permission_change,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_chat_file_upload_progress}
+   */
+  function on(
+    event: 'chat-file-upload-progress',
+    listener: typeof event_chat_file_upload_progress,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_chat_file_download_progress}
+   */
+  function on(
+    event: 'chat-file-download-progress',
+    listener: typeof event_chat_file_download_progress,
   ): void;
   /**
    * Removes the event handler.

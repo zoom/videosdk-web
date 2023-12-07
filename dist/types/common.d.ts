@@ -129,6 +129,10 @@ interface Participant {
    * For privacy concerns, only the calling user has this property.
    */
   phoneNumber?: string;
+  /**
+   * Whether the user is in a failover process.
+   */
+  isInFailover?: boolean;
 }
 /**
  * Subsession's status.
@@ -448,4 +452,55 @@ export interface MediaPlaybackFile {
    * Is loop
    */
   loop?: boolean;
+}
+
+/**
+ * File transfer upload status
+ */
+export enum ChatFileUploadStatus {
+  /**
+   * Init
+   */
+  Init = 0,
+  /**
+   * InProgress
+   */
+  InProgress = 1,
+  /**
+   * Success
+   */
+  Success = 2,
+  /**
+   * Fail
+   */
+  Fail = 3,
+  /**
+   * Cancel
+   */
+  Cancel = 4,
+  /**
+   * Complete
+   */
+  Complete = 5,
+}
+/**
+ * File transfer download status
+ */
+export enum ChatFileDownloadStatus {
+  /**
+   * InProgress
+   */
+  InProgress = 1,
+  /**
+   * Success
+   */
+  Success = 2,
+  /**
+   * Fail
+   */
+  Fail = 3,
+  /**
+   * Cancel
+   */
+  Cancel = 4,
 }

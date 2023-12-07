@@ -29,7 +29,7 @@ const client = ZoomVideo.createClient()
 Then init the SDK and declare the `stream` which we will define later:
 
 ```js
-client.init('en-US', `CDN`)
+client.init('en-US', 'Global', { patchJsMedia: true })
 
 let stream
 ```

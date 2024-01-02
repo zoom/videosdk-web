@@ -1,1 +1,1 @@
-The Changelog can be found [here](https://devsupport.zoom.us/hc/en-us/sections/9481948737421-web)
+The Changelog can be found [here](https://developers.zoom.us/changelog/video-sdk/web/)

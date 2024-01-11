@@ -72,7 +72,10 @@ import {
   event_device_permission_change,
   event_chat_file_upload_progress,
   event_chat_file_download_progress,
+  event_smart_summary_change,
+  event_meeting_query_change,
 } from './event-callback';
+import AIClient from '../src/summary';
 
 /**
  * Checks system requirements result interface.
@@ -180,7 +183,7 @@ interface InitOptions {
   leaveOnPageUnload?: boolean;
   /**
    * Optional
-   * Apply the latest media dependency fix automatically (`true` recommended). See [Dependent assets](https://developers.zoom.us/docs/video-sdk/web/get-started/#dependent-assets) for details.
+   * Automatically apply the latest media dependency fixes. Default is `false`, but as a best practice, we recommend that you set it to `true`.
    */
   patchJsMedia?: boolean;
 }
@@ -192,9 +195,9 @@ export declare namespace VideoClient {
    * Initializes the Zoom Video SDK before join a session.
    * The Zoom Video SDK uses an [SDK key & secret](https://developers.zoom.us/docs/video-sdk/auth/) for authentication.
    * @param language The language of the Video SDK. The default is `en-US`.
-   * @param dependentAssets In the Zoom Video SDK, web workers and web assembly are used to process the media stream.
-   * This part of the code is separated from the SDK, so it is necessary to specify the dependent assets path.
-   * When the SDK is released, the web worker and the web assembly will be also included (the `lib` folder).
+   * @param dependentAssets The Zoom Video SDK uses web workers and web assembly to process the media stream.
+   * This part of the code is separate from the SDK code, so you must specify the dependent assets path.
+   * Each SDK release includes the web worker and the web assembly assets in the `lib` folder.
    * You can either deploy these assets to your private servers or use the cloud assets provided by Zoom.
    * The property has following value:
    * - `Global`: The default value. The dependent assets path will be `https://source.zoom.us/videosdk/{version}/lib/`
@@ -757,6 +760,26 @@ export declare namespace VideoClient {
     event: 'chat-file-download-progress',
     listener: typeof event_chat_file_download_progress,
   ): void;
+
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_smart_summary_change}
+   */
+  function on(
+    event: 'summary-status-change',
+    listener: typeof event_smart_summary_change,
+  ): void;
+
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_meeting_query_change}
+   */
+  function on(
+    event: 'meeting-query-status-change',
+    listener: typeof event_meeting_query_change,
+  ): void;
   /**
    * Removes the event handler.
    * @param event Event name.
@@ -764,13 +787,12 @@ export declare namespace VideoClient {
    */
   function off(event: string, callback: (payload: any) => void): void;
   /**
-   * Joins the session
    * - Make sure to call the `init` method before joining.
-   * @param topic
-   * @param token A JWT, should be generated on server.
-   * @param userName User name.
-   * @param password If a password is required when joining the session, pass the password, otherwise omit it.
-   * @param sessionIdleTimeoutMins Idle timeout to end the session.
+   * @param topic Required. A session name of your choice or the name of the session you are joining (must match the SWK JWT `tpc` value).
+   * @param token Required. Your [Video SDK JWT](https://developers.zoom.us/docs/video-sdk/auth/), which you should generate on the server.
+   * @param userName Required. A name for the user.
+   * @param sessionPassword Optional, unless it was set with the host. A session password of your choice. If set with the host, all attendees must provide the same password value or they will fail to join the session.
+   * @param sessionIdleTimeoutMins Optional. The number of minutes your session can idle before ending, with one user present and without cloud recording. The default is 40 minutes.
    *
    * @returns an executed promise. Following are the possible error reasons:
    * - `duplicated operation`: Duplicated invoking of the `join` method.
@@ -783,7 +805,7 @@ export declare namespace VideoClient {
     topic: string,
     token: string,
     userName: string,
-    password?: string,
+    sessionPassword?: string,
     sessionIdleTimeoutMins?: number,
   ): ExecutedResult;
   /**
@@ -878,6 +900,12 @@ export declare namespace VideoClient {
    * @param options logger option
    */
   function getLoggerClient(options?: LoggerInitOption): typeof LoggerClient;
+
+  /**
+   * Gets the AI client.
+   * @param options AI option
+   */
+  function getAIClient(): typeof AIClient;
   /**
    * Gets the liveStream client.
    */

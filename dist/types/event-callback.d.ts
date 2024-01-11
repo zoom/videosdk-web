@@ -10,8 +10,11 @@ import {
   VideoQuality,
   FarEndCameraControlDeclinedReason,
   PTZCameraCapability,
+  SummaryStatus,
+  MeetingQueryStatus,
   ChatFileUploadStatus,
   ChatFileDownloadStatus,
+  LeaveAudioSource,
 } from './common';
 import { LiveTranscriptionMessage } from './live-transcription';
 import { LiveStreamStatus } from './live-stream';
@@ -518,7 +521,7 @@ export declare function event_current_audio_change(payload: {
   /**
    * If the action is muted, an extra field to show the muted source.
    */
-  source?: MutedSource;
+  source?: MutedSource | LeaveAudioSource;
 }): void;
 /**
  * Occurs when the SDK tried and failed to auto play audio. This may occur when invoking `stream.startAudio()` immediately after joining the session.
@@ -1590,7 +1593,7 @@ export declare function event_device_permission_change(payload: {
 }): void;
 
 /**
- * Occurs when upload file progress change
+ * Occurs when the upload file progress has changed
  * @param payload
  * @event
  * @category Chat
@@ -1626,7 +1629,7 @@ export declare function event_chat_file_upload_progress(payload: {
   retryToken?: string;
 }): void;
 /**
- * Occurs when download file progress change
+ * Occurs when the download file progress changes
  * @param payload
  * @event
  * @category Chat
@@ -1668,4 +1671,22 @@ export declare function event_chat_file_download_progress(payload: {
    * Upload status
    */
   status: ChatFileDownloadStatus;
+}): void;
+
+/**
+ * Occurs when smart summary status changes.
+ * @param payload
+ */
+export declare function event_smart_summary_change(payload: {
+  support?: boolean;
+  status?: SummaryStatus;
+}): void;
+
+/**
+ * Occurs when meeting query status changes.
+ * @param payload
+ */
+export declare function event_meeting_query_change(payload: {
+  support?: boolean;
+  status?: MeetingQueryStatus;
 }): void;

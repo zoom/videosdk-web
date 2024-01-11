@@ -14,7 +14,7 @@ $ npm install @zoom/videosdk --save
 
 ## Usage
 
-![Zoom Video SDK](https://github.com/zoom/videosdk-web-sample/raw/master/images/videosdk.gif)
+![Zoom Video SDK](https://raw.githubusercontent.com/zoom/videosdk-web-sample/master/public/images/videosdk.gif)
 
 > The Video SDK provides video, audio, screen sharing, chat, data streams, and more, as a service. You can build with all of these features, or pick and choose. The Video SDK also comes with a full set of server side [APIs](https://developers.zoom.us/docs/api/rest/reference/video-sdk/methods/#overview) and [Webhooks](https://developers.zoom.us/docs/api/rest/reference/video-sdk/events/#overview).
 

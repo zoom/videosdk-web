@@ -141,11 +141,11 @@ type FileTransferCancelFunction = () => undefined;
  */
 interface FileTransferSetting {
   /**
-   * Allowed file types in comma-separated suffix format; if empty, any file type is allowed for sending
+   * Allowed file types in comma-separated suffix format; if empty, the SDK allows you to send any file type
    */
   typeLimit?: string;
   /**
-   * Maximum allowed file size for sending; if empty, the default is 2GB
+   * Maximum allowed file size that you can send; if empty, the default is 2GB
    */
   sizeLimit?: number;
 }
@@ -238,7 +238,7 @@ export declare namespace ChatClient {
   ): Promise<FileTransferCancelFunction | Error>;
   /**
    * Download the file
-   * The file cannot be downloaded directly from the file UL as it is encrypted. To download the file, please follow this method.
+   * The file cannot be downloaded directly from the file URL as it is encrypted. To download the file, use this method.
    * It may take some time to decrypt and download the file. However, you have the option to cancel the download process by invoking the returned method at any time.
    * @param id The msg id of the record containing file info.
    * @param fileUrl file URL
@@ -273,7 +273,7 @@ export declare namespace ChatClient {
    */
   function getReceivers(): Array<ChatUserItem>;
   /**
-   * Is file transfer in meeting chat enabled
+   * Whether file transfer in meeting chat is enabled
    */
   function isFileTransferEnabled(): boolean;
   /**

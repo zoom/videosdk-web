@@ -233,6 +233,33 @@ export enum MutedSource {
 }
 
 /**
+ * Payload audio leave source type for current-audio-change event
+ * @enum
+ */
+export enum LeaveAudioSource {
+  /**
+   * User actively leave
+   */
+  Active = 'active',
+  /**
+   * Leave audio due to failover
+   */
+  Failover = 'failover',
+  /**
+   * Leave audio due to audio stream being ended by system
+   */
+  EndedBySystem = 'audio stream is ended by system',
+  /**
+   * Leave audio due to audio being connected via phone call
+   */
+  Pstn = 'pstn',
+  /**
+   * Leave audio due to microphone error
+   */
+  MicrophoneError = 'microphone error',
+}
+
+/**
  * Payload for action type of current audio change.
  */
 export enum AudioChangeAction {
@@ -296,6 +323,10 @@ export enum VideoQuality {
    * 720P
    */
   Video_720P = 3,
+  /**
+   * 1080P
+   */
+  Video_1080P = 4,
 }
 /**
  *  `facingMode` for mobile browser, see https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/facingMode.
@@ -503,4 +534,48 @@ export enum ChatFileDownloadStatus {
    * Cancel
    */
   Cancel = 4,
+}
+
+/**
+ * Summary Status
+ */
+export enum SummaryStatus {
+  /**
+   * Summary is start
+   */
+  Start = 'Start',
+  /**
+   * Summary is paused
+   */
+  Paused = 'Paused',
+  /**
+   * Summary is stopped
+   */
+  Stopped = 'Stopped',
+  /**
+   * default
+   */
+  Default = '',
+}
+
+/**
+ * Meeting Query Status
+ */
+export enum MeetingQueryStatus {
+  /**
+   * Meeting Query is start
+   */
+  Start = 'Start',
+  /**
+   * Meeting Query is paused
+   */
+  Paused = 'Paused',
+  /**
+   * Meeting Query is stopped
+   */
+  Stopped = 'Stopped',
+  /**
+   * default
+   */
+  Default = '',
 }

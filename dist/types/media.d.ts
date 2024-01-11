@@ -192,6 +192,26 @@ interface AudioOption {
    *  - If you need to use a video file (mp4) for both video and audio input, make sure the URL is exactly the same and start video first.
    */
   mediaFile?: MediaPlaybackFile;
+  /**
+   * Support original sound
+   * > ***Note***: `originalsound` and `backgroundNoiseSuppression` conflict with each other. If `originalSound` is enabled, `backgroundNoiseSuppression` will be disabled.
+   *
+   * You can set the original sound in more detail:
+   * - hifi: high fidelity audio
+   * - stereo: stereo audio
+   */
+  originalSound?:
+    | boolean
+    | {
+        /**
+         * high fidelity audio
+         */
+        hifi?: boolean;
+        /**
+         * stereo audio
+         */
+        stereo?: boolean;
+      };
 }
 
 /**
@@ -239,6 +259,10 @@ export interface CaptureVideoOption {
    * Determines whether capture 720p video enabled.
    */
   hd?: boolean;
+  /**
+   * Determines whether capture 1080p video enabled.
+   */
+  fullHd?: boolean;
   /**
    * Virtual background options.
    */
@@ -962,6 +986,25 @@ export declare namespace Stream {
    */
   function unmuteAllUserAudioLocally(): ExecutedResult;
   /**
+   * Enable/disable original sound
+   * @param enable enabled
+   * @category Audio
+   */
+  function enableOriginalSound(
+    enable:
+      | boolean
+      | {
+          /**
+           * high fidelity audio
+           */
+          hifi?: boolean;
+          /**
+           * stereo audio
+           */
+          stereo?: boolean;
+        },
+  ): ExecutedResult;
+  /**
    * Determines whether the user is muted.
    * - If the user ID is not specified, gets the muted status of the current user.
    * @param userId Default `undefined`
@@ -1150,7 +1193,7 @@ export declare namespace Stream {
    * }
    * ```
    *
-   * @param canvas Required. The canvas to render the video.
+   * @param canvas Required. The canvas or video to render the video. If `userId` is  current user and `stream.isRenderSelfViewWithVideoElement()` returns `true`, you need to use a video tag for rendering.
    * @param userId Required. The user ID which to render the video.
    * @param width Required. Video width.
    * @param height Required. Video height.
@@ -1170,7 +1213,7 @@ export declare namespace Stream {
    * @category Video
    */
   function renderVideo(
-    canvas: HTMLCanvasElement,
+    canvas: HTMLCanvasElement | HTMLVideoElement,
     userId: number,
     width: number,
     height: number,
@@ -1192,7 +1235,7 @@ export declare namespace Stream {
    *   console.log(error);
    * }
    * ```
-   * @param canvas Required. The canvas to render the video.
+   * @param canvas Required. The canvas or video to render the video. If `userId` is  current user and `stream.isRenderSelfViewWithVideoElement()` returns `true`, you need to use a video tag for stopping rendering.
    * @param userId Required. The user ID which to render the video.
    * @param additionalUserKey Optional. Must be paired with `renderVideo`.
    * @param underlyingColor Optional. Underlying color when video is stopped. Default is transparent.
@@ -1204,7 +1247,7 @@ export declare namespace Stream {
    * @category Video
    */
   function stopRenderVideo(
-    canvas: HTMLCanvasElement,
+    canvas: HTMLCanvasElement | HTMLVideoElement,
     userId: number,
     additionalUserKey?: string,
     underlyingColor?: UnderlyingColor | string,
@@ -1247,7 +1290,7 @@ export declare namespace Stream {
    * @category Video
    */
   function adjustRenderedVideoPosition(
-    canvas: HTMLCanvasElement,
+    canvas: HTMLCanvasElement | HTMLVideoElement,
     userId: number,
     width: number,
     height: number,

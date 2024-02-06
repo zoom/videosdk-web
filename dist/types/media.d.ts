@@ -7,6 +7,8 @@ import {
   CameraControlCmd,
   PTZCameraCapability,
   MediaPlaybackFile,
+  VideoPlayer,
+  ExecutedFailure,
 } from './common';
 
 /**
@@ -212,6 +214,14 @@ interface AudioOption {
          */
         stereo?: boolean;
       };
+  /**
+   * Microphone ID for the microphone capturing the audio, if not specified, use system default.
+   */
+  microphoneId?: string;
+  /**
+   * Audio speaker ID for the audio play, if not specified, use system default.
+   */
+  speakerId?: string;
 }
 
 /**
@@ -1195,15 +1205,15 @@ export declare namespace Stream {
    *
    * @param canvas Required. The canvas or video to render the video. If `userId` is  current user and `stream.isRenderSelfViewWithVideoElement()` returns `true`, you need to use a video tag for rendering.
    * @param userId Required. The user ID which to render the video.
-   * @param width Required. Video width.
-   * @param height Required. Video height.
+   * @param width Required. Video width. `undefined` if the canvas parameter is a video tag
+   * @param height Required. Video height. `undefined` if the canvas parameter is a video tag
    *
    * ** Note **
    *
    * The origin of the coordinates is in the lower left corner of the canvas.
    *
-   * @param x Required. Coordinate x of video.
-   * @param y Required. Coordinate y of video.
+   * @param x Required. Coordinate x of video. `undefined` if the canvas parameter is a video tag
+   * @param y Required. Coordinate y of video. `undefined` if the canvas parameter is a video tag
    * @param videoQuality Required. Video quality: 90p, 180p, 360p, 720p. Currently supports up to 720p.
    * @param additionalUserKey Optional. Used to render the same video on different coordinates of the canvas.
    *
@@ -1215,10 +1225,10 @@ export declare namespace Stream {
   function renderVideo(
     canvas: HTMLCanvasElement | HTMLVideoElement,
     userId: number,
-    width: number,
-    height: number,
-    x: number,
-    y: number,
+    width: number | undefined,
+    height: number | undefined,
+    x: number | undefined,
+    y: number | undefined,
     videoQuality: VideoQuality,
     additionalUserKey?: string,
   ): Promise<'' | Error>;
@@ -1278,10 +1288,10 @@ export declare namespace Stream {
    *
    * @param canvas Required. The canvas to render the video.
    * @param userId Required. The user ID which to render the video.
-   * @param width Required. Video width.
-   * @param height Required. Video height.
-   * @param x Required. Coordinate x of video.
-   * @param y Required. Coordinate y of video.
+   * @param width Optional. Video width. `undefined` if the canvas parameter is a video tag
+   * @param height Optional. Video height. `undefined` if the canvas parameter is a video tag
+   * @param x Optional. Coordinate x of video. `undefined` if the canvas parameter is a video tag
+   * @param y Optional. Coordinate y of video. `undefined` if the canvas parameter is a video tag
    * @param additionalUserKey Optional. Must be paired with `renderVideo`.
    *
    * @returns
@@ -1292,10 +1302,10 @@ export declare namespace Stream {
   function adjustRenderedVideoPosition(
     canvas: HTMLCanvasElement | HTMLVideoElement,
     userId: number,
-    width: number,
-    height: number,
-    x: number,
-    y: number,
+    width?: number,
+    height?: number,
+    x?: number,
+    y?: number,
     additionalUserKey?: string,
   ): ExecutedResult;
   /**
@@ -1466,6 +1476,54 @@ export declare namespace Stream {
   function unsubscribeVideoStatisticData(
     type?: VideoStatisticOption,
   ): ExecutedResult;
+
+  /**
+   * Create an VideoPlayer or  reuse existing VideoPlayer and attach the video stream to it.
+   * > **Note** the returned video-player{@link VideoPlayer} element must be a child node of the video-player-container {@link VideoPlayerContainer}.
+   *
+   * ```html
+   * <video-player-container>
+   *  <div class="video-tile"></div>
+   * </video-player-container>
+   * ```
+   *
+   * ```javascript
+   * const element = stream.attachVideo(userId,VideoQuality.Video_720P);
+   * document.querySelector('.video-tile').appendChild(element);
+   * ```
+   * @param userId Required. The user id which to render the video.
+   * @param videoQuality  Required. Quality of the video. 90P/180P/360P/720P/1080P.
+   * @param element Optional. Empty value: create a new element; String value: VideoPlayer element selector specified by document.querySelector; VideoPlayer Element value: Specified element
+   *
+   * @category Video
+   */
+  function attachVideo(
+    userId: number,
+    videoQuality: VideoQuality,
+    element?: string | VideoPlayer,
+  ): Promise<VideoPlayer | ExecutedFailure>;
+  /**
+   *
+   * Detach the video stream from all previously attached VideoPlayer element or specific element.
+   *
+   * ```javascript
+   * const elements = stream.detachVideo(userId);
+   * if (Array.isArray(elements)) {
+   *  elements.forEach((e) => e.remove());
+   * } else {
+   *  elements.remove();
+   * }`
+   * ```
+   *
+   * @param userId Required. The user id which to render the video.
+   * @param element Optional. Empty value: detach all video stream. String value:VideoPlayer element selector specified by document.querySelector; VideoPlayer Element value: Specified element
+   *
+   * @category Video
+   */
+  function detachVideo(
+    userId: number,
+    element?: string | VideoPlayer,
+  ): Promise<VideoPlayer | Array<VideoPlayer>>;
   /**
    *
    * Gets the `isCapturingVideo` flag status.

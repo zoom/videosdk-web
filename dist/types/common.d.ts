@@ -133,6 +133,11 @@ interface Participant {
    * Whether the user is in a failover process.
    */
   isInFailover?: boolean;
+  /**
+   * Subsession ID.
+   * Available if the user is in a subsession.
+   */
+  subsessionId?: string;
 }
 /**
  * Subsession's status.
@@ -233,28 +238,28 @@ export enum MutedSource {
 }
 
 /**
- * Payload audio leave source type for current-audio-change event
+ * The reason for leaving audio for the current-audio-change event.
  * @enum
  */
 export enum LeaveAudioSource {
   /**
-   * User actively leave
+   * User actively left audio.
    */
   Active = 'active',
   /**
-   * Leave audio due to failover
+   * Left audio due to failover.
    */
   Failover = 'failover',
   /**
-   * Leave audio due to audio stream being ended by system
+   * Left audio due to system ending audio stream.
    */
   EndedBySystem = 'audio stream is ended by system',
   /**
-   * Leave audio due to audio being connected via phone call
+   * Left audio as audio was connected to a phone call.
    */
   Pstn = 'pstn',
   /**
-   * Leave audio due to microphone error
+   * Left audio due to microphone error.
    */
   MicrophoneError = 'microphone error',
 }
@@ -537,19 +542,19 @@ export enum ChatFileDownloadStatus {
 }
 
 /**
- * Summary Status
+ * Summary status.
  */
 export enum SummaryStatus {
   /**
-   * Summary is start
+   * Summary started.
    */
   Start = 'Start',
   /**
-   * Summary is paused
+   * Summary paused.
    */
   Paused = 'Paused',
   /**
-   * Summary is stopped
+   * Summary stopped.
    */
   Stopped = 'Stopped',
   /**
@@ -559,19 +564,19 @@ export enum SummaryStatus {
 }
 
 /**
- * Meeting Query Status
+ * Meeting query status.
  */
 export enum MeetingQueryStatus {
   /**
-   * Meeting Query is start
+   * Meeting query started.
    */
   Start = 'Start',
   /**
-   * Meeting Query is paused
+   * Meeting query paused.
    */
   Paused = 'Paused',
   /**
-   * Meeting Query is stopped
+   * Meeting query stopped.
    */
   Stopped = 'Stopped',
   /**
@@ -580,13 +585,55 @@ export enum MeetingQueryStatus {
   Default = '',
 }
 /**
- * Customer Web component for video render
+ * Custom web component for video render
  */
 export declare class VideoPlayer extends HTMLElement {
   ['node-id']: string;
   ['video-quality']: string;
 }
 /**
- * Customer Web component for video render container
+ * Custom web component for video render container
  */
 export declare class VideoPlayerContainer extends HTMLElement {}
+/**
+ * CRC device call out return code
+ */
+export enum CRCReturnCode {
+  /**
+   * Success
+   */
+  Success = 0,
+  /**
+   * Ringing
+   */
+  Ringing = 1,
+  /**
+   * Timeout
+   */
+  Timeout = 2,
+  /**
+   * Busy
+   */
+  Busy = 101,
+  /**
+   * Fail
+   */
+  Fail = 104,
+  /**
+   * Unreachable
+   */
+  Unreachable = 111,
+}
+/**
+ * CRC device protocol
+ */
+export enum CRCProtocol {
+  /**
+   * H323
+   */
+  H323 = 1,
+  /**
+   * SIP
+   */
+  SIP = 2,
+}

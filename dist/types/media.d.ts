@@ -9,6 +9,7 @@ import {
   MediaPlaybackFile,
   VideoPlayer,
   ExecutedFailure,
+  CRCProtocol,
 } from './common';
 
 /**
@@ -198,7 +199,7 @@ interface AudioOption {
    * Support original sound
    * > ***Note***: `originalsound` and `backgroundNoiseSuppression` conflict with each other. If `originalSound` is enabled, `backgroundNoiseSuppression` will be disabled.
    *
-   * You can set the original sound in more detail:
+   * You can set the original sound for hifi, stereo, or both:
    * - hifi: high fidelity audio
    * - stereo: stereo audio
    */
@@ -219,9 +220,13 @@ interface AudioOption {
    */
   microphoneId?: string;
   /**
-   * Audio speaker ID for the audio play, if not specified, use system default.
+   * Audio speaker ID to play audio, if not specified, use system default.
    */
   speakerId?: string;
+  /**
+   * 128 kbps bitrate
+   */
+  highBitrate?: boolean;
 }
 
 /**
@@ -266,11 +271,11 @@ export interface CaptureVideoOption {
    */
   videoElement?: HTMLVideoElement;
   /**
-   * Determines whether capture 720p video enabled.
+   * Determines whether capture 720p video is enabled.
    */
   hd?: boolean;
   /**
-   * Determines whether capture 1080p video enabled.
+   * Determines whether capture 1080p video is enabled.
    */
   fullHd?: boolean;
   /**
@@ -335,6 +340,14 @@ export interface AudioQosData {
    * Audio maximum loss.
    */
   max_loss: number;
+  /**
+   * Bandwidth, measured in bits per second (bps)
+   */
+  bandwidth: number;
+  /**
+   * Bit rate, measured in bits per second (bps)
+   */
+  bitrate: number;
 }
 /**
  * Statistic option interface.
@@ -508,6 +521,14 @@ export interface VideoQosData {
    * Video frame rate, in frames per second (fps).
    */
   fps: number;
+  /**
+   * Bandwidth, measured in bits per second (bps)
+   */
+  bandwidth: number;
+  /**
+   * Bit rate, measured in bits per second (bps)
+   */
+  bitrate: number;
 }
 /**
  * Video statistic option interface.
@@ -960,7 +981,7 @@ export declare namespace Stream {
   /**
    * Adjusts someone's audio locally. This operation doesn't affect other participants' audio.
    * @param userId User ID.
-   * @param volume Number for volume.
+   * @param volume Its range is an integer between 0-100.
    *
    * @category Audio
    */
@@ -996,7 +1017,7 @@ export declare namespace Stream {
    */
   function unmuteAllUserAudioLocally(): ExecutedResult;
   /**
-   * Enable/disable original sound
+   * Enable or disable original sound.
    * @param enable enabled
    * @category Audio
    */
@@ -1014,6 +1035,56 @@ export declare namespace Stream {
           stereo?: boolean;
         },
   ): ExecutedResult;
+
+  /**
+   * Call out CRC(Cloud Room Connector) device
+   *
+   * ```javascript
+   * client.on('crc-call-out-state-change',(payload)=>{
+   *  console.log('crc device call out status:',payload.code)
+   * })
+   * ```
+   * @param ipAddress IP Address
+   * @param protocol Protocol H323|SIP
+   * @category CRC
+   *
+   */
+  function callCRCDevice(
+    ipAddress: string,
+    protocol: CRCProtocol,
+  ): ExecutedResult | Promise<string>;
+  /**
+   *
+   * Cancel the CRC(Cloud Room Connector) call out request before it is complete.
+   *
+   * @param ipAddress  IP Address
+   * @param protocol Protocol H323|SIP
+   * @category CRC
+   */
+  function cancelCallCRCDevice(
+    ipAddress: string,
+    protocol: CRCProtocol,
+  ): ExecutedResult;
+  /**
+   * Start audio with the secondary microphone.
+   * This is typically used when a user needs to share additional audio input after joining the audio.
+   * Please note that simultaneous screen sharing is not supported in this scenario.
+   * @param deviceId
+   * @param constraints audio track contraints
+   * @category Audio
+   */
+  function startSecondaryAudio(
+    deviceId: string,
+    constraints?: Pick<
+      MediaTrackConstraints,
+      'autoGainControl' | 'noiseSuppression' | 'sampleRate' | 'echoCancellation'
+    >,
+  ): ExecutedResult;
+  /**
+   * Stop secondary audio
+   * @category Audio
+   */
+  function stopSecondaryAudio(): ExecutedResult;
   /**
    * Determines whether the user is muted.
    * - If the user ID is not specified, gets the muted status of the current user.
@@ -1203,7 +1274,7 @@ export declare namespace Stream {
    * }
    * ```
    *
-   * @param canvas Required. The canvas or video to render the video. If `userId` is  current user and `stream.isRenderSelfViewWithVideoElement()` returns `true`, you need to use a video tag for rendering.
+   * @param canvas Required. The canvas or video to render the video. If `userId` is the current user and `stream.isRenderSelfViewWithVideoElement()` returns `true`, you need to use a video tag for rendering.
    * @param userId Required. The user ID which to render the video.
    * @param width Required. Video width. `undefined` if the canvas parameter is a video tag
    * @param height Required. Video height. `undefined` if the canvas parameter is a video tag
@@ -1245,7 +1316,7 @@ export declare namespace Stream {
    *   console.log(error);
    * }
    * ```
-   * @param canvas Required. The canvas or video to render the video. If `userId` is  current user and `stream.isRenderSelfViewWithVideoElement()` returns `true`, you need to use a video tag for stopping rendering.
+   * @param canvas Required. The canvas or video to render the video. If `userId` is the current user and `stream.isRenderSelfViewWithVideoElement()` returns `true`, you need to use a video tag for stopping rendering.
    * @param userId Required. The user ID which to render the video.
    * @param additionalUserKey Optional. Must be paired with `renderVideo`.
    * @param underlyingColor Optional. Underlying color when video is stopped. Default is transparent.
@@ -1351,7 +1422,7 @@ export declare namespace Stream {
    * @param canvas
    * @param imageUrl Virtual background image.
    * @param cropped Cropped to 16/9 aspect ratio. Default is false.
-   *
+   * @param cameraId cameraId, default is active camera
    * @returns
    * - `''`: Success.
    * - `Error`: Failure. Details in {@link ErrorTypes}.
@@ -1362,6 +1433,7 @@ export declare namespace Stream {
     canvas: HTMLCanvasElement,
     imageUrl: string | 'blur' | undefined,
     cropped?: boolean,
+    cameraId?: string,
   ): ExecutedResult;
   /**
    * Updates the virtual background image.
@@ -1478,7 +1550,7 @@ export declare namespace Stream {
   ): ExecutedResult;
 
   /**
-   * Create an VideoPlayer or  reuse existing VideoPlayer and attach the video stream to it.
+   * Create a VideoPlayer or reuse the existing VideoPlayer and attach the video stream to it.
    * > **Note** the returned video-player{@link VideoPlayer} element must be a child node of the video-player-container {@link VideoPlayerContainer}.
    *
    * ```html
@@ -1491,8 +1563,8 @@ export declare namespace Stream {
    * const element = stream.attachVideo(userId,VideoQuality.Video_720P);
    * document.querySelector('.video-tile').appendChild(element);
    * ```
-   * @param userId Required. The user id which to render the video.
-   * @param videoQuality  Required. Quality of the video. 90P/180P/360P/720P/1080P.
+   * @param userId Required. The user ID which to render the video.
+   * @param videoQuality  Required. Quality of the video. One of the following: 90P/180P/360P/720P/1080P.
    * @param element Optional. Empty value: create a new element; String value: VideoPlayer element selector specified by document.querySelector; VideoPlayer Element value: Specified element
    *
    * @category Video
@@ -1504,7 +1576,7 @@ export declare namespace Stream {
   ): Promise<VideoPlayer | ExecutedFailure>;
   /**
    *
-   * Detach the video stream from all previously attached VideoPlayer element or specific element.
+   * Detach the video stream from all previously attached VideoPlayer elements or specific elements.
    *
    * ```javascript
    * const elements = stream.detachVideo(userId);
@@ -1515,8 +1587,8 @@ export declare namespace Stream {
    * }`
    * ```
    *
-   * @param userId Required. The user id which to render the video.
-   * @param element Optional. Empty value: detach all video stream. String value:VideoPlayer element selector specified by document.querySelector; VideoPlayer Element value: Specified element
+   * @param userId Required. The user ID which to render the video.
+   * @param element Optional. Empty value: detach all video streams. String value:VideoPlayer element selector specified by document.querySelector; VideoPlayer Element value: Specified element
    *
    * @category Video
    */

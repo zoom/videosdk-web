@@ -1747,7 +1747,7 @@ export declare function event_subsession_invite_to_back_to_main_session(payload:
    * Inviter name
    */
   inviterName: string;
-});
+}): void;
 /**
  * Occurs when there is a change in the status of users in the subsession.
  * @param payload
@@ -1794,7 +1794,7 @@ export declare function event_subsession_user_update(payload: {
    * Whether the user is talking.
    */
   isTalking?: boolean;
-});
+}): void;
 /**
  * Occurs when the broadcasted voice's status changes.
  * @param payload
@@ -1805,7 +1805,7 @@ export declare function event_subsession_broadcast_voice(payload: {
    * Whether the user is receiving the broadcasted voice.
    */
   status: boolean;
-});
+}): void;
 
 /**
  * Occurs when the CRC(Cloud Room Connector) device call state changes.

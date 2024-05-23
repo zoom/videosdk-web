@@ -1808,7 +1808,7 @@ export declare function event_subsession_broadcast_voice(payload: {
 });
 
 /**
- * Occurs when the CRC(Cloud Room Connector) device call state changes.
+ * Occurs when the CRC (Cloud Room Connector) device call state changes.
  *
  * ```javascript
  * client.on('crc-call-out-state-change', (payload) => {
@@ -1835,4 +1835,15 @@ export declare function event_crc_device_call_state_change(payload: {
    *  Unique ID for the call
    */
   uuid: string;
+}): void;
+/**
+ * Occurs when the current audio volume changes.
+ * @param payload
+ * @category Audio
+ */
+export declare function event_current_audio_level_change(payload: {
+  /**
+   * Volume level,range from 0 to 9.
+   */
+  level: number;
 }): void;

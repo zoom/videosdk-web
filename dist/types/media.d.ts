@@ -255,11 +255,15 @@ export interface CaptureVideoOption {
    */
   cameraId?: typeof MobileVideoFacingMode | string;
   /**
-   * Customized width of capture, default is 640p.
+   * Customized width of capture.
+   * > ***Note***: Only applicable for specifying the custom width for cameras with resolutions that are not in the standard 16:9 or 4:3 aspect ratios.
+   * > If you need HD (720P) or full HD (1080P) resolution, use the `hd` or `fullHd` options.
    */
   captureWidth?: number;
   /**
-   * Customized height of capture, default is 360p.
+   * Customized height of capture.
+   * > ***Note***: Only applicable for specifying the custom height for cameras with resolutions that are not in the standard 16:9 or 4:3 aspect ratios.
+   * > If you need HD (720P) or full HD (1080P) resolution, use the `hd` or `fullHd` options.
    */
   captureHeight?: number;
   /**
@@ -981,7 +985,7 @@ export declare namespace Stream {
   /**
    * Adjusts someone's audio locally. This operation doesn't affect other participants' audio.
    * @param userId User ID.
-   * @param volume Its range is an integer between 0-100.
+   * @param volume The volume, an integer between 0-100.
    *
    * @category Audio
    */
@@ -1037,7 +1041,7 @@ export declare namespace Stream {
   ): ExecutedResult;
 
   /**
-   * Call out CRC(Cloud Room Connector) device
+   * Call out CRC (Cloud Room Connector) device
    *
    * ```javascript
    * client.on('crc-call-out-state-change',(payload)=>{
@@ -1055,7 +1059,7 @@ export declare namespace Stream {
   ): ExecutedResult | Promise<string>;
   /**
    *
-   * Cancel the CRC(Cloud Room Connector) call out request before it is complete.
+   * Cancel the CRC (Cloud Room Connector) call out request before it is complete.
    *
    * @param ipAddress  IP Address
    * @param protocol Protocol H323|SIP
@@ -1745,6 +1749,10 @@ export declare namespace Stream {
    * @category Video
    */
   function getVideoMaskStatus(): MaskOption;
+  /**
+   * Whether the self video is mirrored
+   */
+  function isVideoMirrored(): boolean;
 
   // -------------------------------------------------[share]-----------------------------------------------------------
 

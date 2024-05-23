@@ -78,6 +78,7 @@ import {
   event_crc_device_call_state_change,
   event_subsession_broadcast_voice,
   event_subsession_invite_to_back_to_main_session,
+  event_current_audio_level_change,
 } from './event-callback';
 // import AIClient from '../src/summary';
 
@@ -838,6 +839,15 @@ export declare namespace VideoClient {
   function on(
     event: 'crc-call-out-state-change',
     listener: typeof event_crc_device_call_state_change,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_current_audio_level_change}
+   */
+  function on(
+    event: 'current-audio-level-change',
+    listener: typeof event_current_audio_level_change,
   ): void;
   /**
    * Removes the event handler.

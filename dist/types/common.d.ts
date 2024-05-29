@@ -579,3 +579,14 @@ export enum MeetingQueryStatus {
    */
   Default = '',
 }
+/**
+ * Customer Web component for video render
+ */
+export declare class VideoPlayer extends HTMLElement {
+  ['node-id']: string;
+  ['video-quality']: string;
+}
+/**
+ * Customer Web component for video render container
+ */
+export declare class VideoPlayerContainer extends HTMLElement {}

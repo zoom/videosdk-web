@@ -75,7 +75,7 @@ import {
   event_smart_summary_change,
   event_meeting_query_change,
 } from './event-callback';
-import AIClient from '../src/summary';
+// import AIClient from '../src/summary';
 
 /**
  * Checks system requirements result interface.
@@ -186,6 +186,10 @@ interface InitOptions {
    * Automatically apply the latest media dependency fixes. Default is `false`, but as a best practice, we recommend that you set it to `true`.
    */
   patchJsMedia?: boolean;
+  /**
+   * Alternative name for Zoom Video Player to avoid name conflict with existing web component.
+   */
+  alternativeNameForVideoPlayer?: string;
 }
 /**
  * The video client is the core of the Video SDK.
@@ -905,7 +909,7 @@ export declare namespace VideoClient {
    * Gets the AI client.
    * @param options AI option
    */
-  function getAIClient(): typeof AIClient;
+  // function getAIClient(): typeof AIClient;
   /**
    * Gets the liveStream client.
    */

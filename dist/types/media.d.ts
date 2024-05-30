@@ -175,6 +175,8 @@ interface AudioOption {
    * In the Safari browser, when calling `startAudio` automatically or programmatically without any gesture
    * (such as a click or touch on the document), the value of `autoStartAudioInSafari` should be `true`.
    * Other than that, the value should always be `false` or unset.
+   *
+   * > ***Note***: Use this option only if you are auto starting audio without a user click for Desktop Safari running macOS 15.2 to 16.0.
    */
   autoStartAudioInSafari?: boolean;
   /**
@@ -1751,6 +1753,7 @@ export declare namespace Stream {
   function getVideoMaskStatus(): MaskOption;
   /**
    * Whether the self video is mirrored
+   * @category Video
    */
   function isVideoMirrored(): boolean;
 

@@ -74,11 +74,6 @@ import {
   event_chat_file_download_progress,
   event_smart_summary_change,
   event_meeting_query_change,
-  event_subsession_user_update,
-  event_crc_device_call_state_change,
-  event_subsession_broadcast_voice,
-  event_subsession_invite_to_back_to_main_session,
-  event_current_audio_level_change,
 } from './event-callback';
 // import AIClient from '../src/summary';
 
@@ -120,9 +115,6 @@ export interface SupportFeatures {
   unSupportFeatures: Array<string>;
 }
 
-/**
- * Session info
- */
 interface SessionInfo {
   /**
    * The session topic.
@@ -162,32 +154,20 @@ interface InitOptions {
   /**
    * Optional
    * Enforces multiple videos (up to 3 videos of others and 1 video of self) on platform without SharedArrayBuffer.
-   * See [browser support](https://developers.zoom.us/docs/video-sdk/web/browser-support/) for details.
    * Note that this may result in high CPU and memory usage.
    */
-  enforceMultipleVideos?:
-    | boolean
-    | {
-        /**
-         * Remove the maximum video render limit, default is to limit to 4.
-         * For best performance when rendering multiple videos, use SharedArrayBuffer.
-         * If you cannot enable SharedArrayBuffer and need to render multiple videos,
-         * set enforceMultipleVideos to true. To render more than 4 without SharedArrayBuffer,
-         * for advanced use cases, set disableRenderLimits: true
-         */
-        disableRenderLimits?: boolean;
-      };
+  enforceMultipleVideos?: boolean;
   /**
    * Optional
-   * Enforces virtual background on browser without SharedArrayBuffer.
-   * This may result in high CPU and memory usage. Use CanvasElement to render the self video.
-   * See [browser support](https://developers.zoom.us/docs/video-sdk/web/browser-support/) for details.
-   *
+   * Enforces virtual background on Chromium-like browser without SharedArrayBuffer.
+   * Note
+   * - This may result in high CPU and memory usage.
+   * - Use CanvasElement to render the self video.
    */
   enforceVirtualBackground?: boolean;
   /**
    * Optional
-   * Do not load dependent assets. Used to address specific edge-cases. Do not use for almost all use-cases.
+   * Do not load dependent assets. Used to address specific edge-cases, please do not use for almost all use-cases.
    */
   skipJsMedia?: boolean;
   /**
@@ -803,51 +783,6 @@ export declare namespace VideoClient {
   function on(
     event: 'meeting-query-status-change',
     listener: typeof event_meeting_query_change,
-  ): void;
-  /**
-   *
-   * @param event
-   * @param listener Details in {@link event_subsession_invite_to_back_to_main_session}
-   */
-  function on(
-    event: 'subsession-invite-back-to-main-session',
-    listener: typeof event_subsession_invite_to_back_to_main_session,
-  ): void;
-  /**
-   *
-   * @param event
-   * @param listener Details in {@link event_subsession_user_update}
-   */
-  function on(
-    event: 'subsession-user-update',
-    listener: typeof event_subsession_user_update,
-  ): void;
-  /**
-   *
-   * @param event
-   * @param listener Details in {@link event_subsession_broadcast_voice}
-   */
-  function on(
-    event: 'subsession-broadcast-voice',
-    listener: typeof event_subsession_broadcast_voice,
-  ): void;
-  /**
-   *
-   * @param event
-   * @param listener Details in {@link event_crc_device_call_state_change}
-   */
-  function on(
-    event: 'crc-call-out-state-change',
-    listener: typeof event_crc_device_call_state_change,
-  ): void;
-  /**
-   *
-   * @param event
-   * @param listener Details in {@link event_current_audio_level_change}
-   */
-  function on(
-    event: 'current-audio-level-change',
-    listener: typeof event_current_audio_level_change,
   ): void;
   /**
    * Removes the event handler.

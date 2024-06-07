@@ -64,16 +64,6 @@ export interface SubsessionOption {
    * When the subsession is closing, the buffer time to leave the subsession.
    */
   waitSeconds?: number;
-  /**
-   * Whether a participant should automatically move back to the main session when the host moves them back.
-   * If true, the participant returns to the main session without needing to agree to return.
-   * If false, the participant receives a `subsession-invite-back-to-main-session` event.
-   */
-  isAutoMoveBackToMainSession?: boolean;
-  /**
-   * Whether allow to the participant to select a subsession to join
-   */
-  isSubsessionSelectionEnabled?: boolean;
 }
 /**
  * Allocation pattern of the subsession.
@@ -246,25 +236,6 @@ export declare namespace SubsessionClient {
    * @returns Executed promise
    */
   function closeAllSubsessions(): ExecutedResult;
-  /**
-   * Move a participant back to the main session
-   *
-   * @param userId User ID.
-   * @returns Executed promise
-   */
-  function moveBackToMainSession(userId: number): ExecutedResult;
-  /**
-   * Starts broadcast voice to subsessions
-   *
-   * @returns Executed promise
-   */
-  function startBroadcastVoice(): ExecutedResult;
-  /**
-   * Stops broadcast voice to subsessions
-   *
-   * @returns Executed promise
-   */
-  function stopBroadcastVoice(): ExecutedResult;
 
   /**
    * Assigns participants to certain subsessions in advance. Available to the host when scheduling a session.

@@ -117,8 +117,8 @@ export interface LocalVideoTrack {
    */
   stop(): Promise<void | Error>;
   /**
-   * Switch microphone.
-   * @param deviceId The ID of the microphone to switch to.
+   * Switch camera.
+   * @param deviceId The ID of the camera to switch to.
    */
   switchCamera(deviceId: string): Promise<void | Error>;
   /**

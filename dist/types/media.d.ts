@@ -185,7 +185,7 @@ interface AudioOption {
   mute?: boolean;
   /**
    * Suppress some kinds of background noise (e.g. dog barking,lawn mower,clapping, fans, pen tapping).
-   * > ***Note***: Enabling this option may increase CPU utilization. It's only supported on Chromium-like browsers with SharedArrayBuffer enabled.
+   * > ***Note***: Enabling this option may increase CPU utilization.
    */
   backgroundNoiseSuppression?: boolean;
   /**
@@ -997,7 +997,7 @@ export declare namespace Stream {
   ): ExecutedResult;
   /**
    * Enables or disables background suppression.
-   * > ***Note***: Enabling this option may increase CPU utilization. It's only supported on Chromium-like browsers with SharedArrayBuffer enabled.
+   * > ***Note***: Enabling this option may increase CPU utilization.
    * @param enabled enabled
    *
    * @category Audio
@@ -1091,6 +1091,34 @@ export declare namespace Stream {
    * @category Audio
    */
   function stopSecondaryAudio(): ExecutedResult;
+
+  /**
+   * Mute all users' audio
+   * - Only the **host** or **manager** has the permission.
+   *
+   * ```javascript
+   * // host side
+   * await stream.muteAllAudio();
+   * // other user side
+   * client.on('current-audio-change',payload=>{
+   *  if(payload.action==='muted' && payload.source==='passive(mute all)'){
+   *    console.log('host muted all');
+   *  }
+   * })
+   * ```
+   * @returns executed promise.
+   * @category Audio
+   */
+  function muteAllAudio(): ExecutedResult;
+  /**
+   * Unmute all users' audio
+   * - Only the **host** or **manager** has the permission.
+   * - For privacy and security concerns, the host can not unmute the participant's audio directly, instead, the participant will receive an unmute audio consent message.
+   *
+   * @returns executed promise.
+   * @category Audio
+   */
+  function unmuteAllAudio(): ExecutedResult;
   /**
    * Determines whether the user is muted.
    * - If the user ID is not specified, gets the muted status of the current user.

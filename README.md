@@ -41,7 +41,7 @@ Now we will start or join the session.  Here are the required parameters for the
 | topic  | Required, a session name of your choice or the name of the session you are joining. |
 | token  | Required, your [Video SDK JWT](https://developers.zoom.us/docs/video-sdk/auth/). |
 | userName | Required, a name for the participant. |
-| password | Required, a session passcode of your choice or the passcode of the session you are joining. |
+| password | Optional, a session passcode of your choice or the passcode of the session you are joining. |
 
 Then start or join the session and define the stream, which will be used for [core features](#core-features).
 
@@ -80,3 +80,5 @@ For the full list of features and event listeners, as well as additional guides,
 ## Need help?
 
 If you're looking for help, try [Developer Support](https://devsupport.zoom.us) or our [Developer Forum](https://devforum.zoom.us). Priority support is also available with [Premier Developer Support](https://zoom.us/docs/en-us/developer-support-plans.html) plans.
+
+[Open Source Software attribution](https://github.com/zoom/videosdk-web/blob/main/oss_attribution.txt)

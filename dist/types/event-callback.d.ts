@@ -15,6 +15,8 @@ import {
   ChatFileUploadStatus,
   ChatFileDownloadStatus,
   LeaveAudioSource,
+  CRCReturnCode,
+  CRCProtocol,
 } from './common';
 import { LiveTranscriptionMessage } from './live-transcription';
 import { LiveStreamStatus } from './live-stream';
@@ -806,6 +808,18 @@ export declare function event_dial_out_change(payload: {
    * The state code of the phone call.
    */
   code: DialoutState;
+  /**
+   * Phone number
+   */
+  phoneNumber: string;
+  /**
+   * Unique ID for the call
+   */
+  uuid: string;
+  /**
+   * Phone user ID
+   */
+  userId?: number;
 }): void;
 /**
  * Occurs when the share audio state changes. Usually used to cooperatively change the state of computer audio.
@@ -882,6 +896,14 @@ export declare function event_audio_statistic_data_change(payload: {
      * Audio's sample rate.
      */
     sample_rate: number;
+    /**
+     * Bandwidth, measured in bits per second (bps)
+     */
+    bandwidth: number;
+    /**
+     * Bit rate, measured in bits per second (bps)
+     */
+    bitrate: number;
   };
   /**
    * Type.
@@ -954,6 +976,14 @@ export declare function event_video_statistic_data_change(payload: {
      * Video's frame rate in frames per second (FPS).
      */
     fps: number;
+    /**
+     * Bandwidth, measured in bits per second (bps)
+     */
+    bandwidth: number;
+    /**
+     * Bit rate, measured in bits per second (bps)
+     */
+    bitrate: number;
   };
   /**
    * Type.
@@ -1384,6 +1414,14 @@ export declare function event_share_statistic_data_change(payload: {
      * Share's frame rate in frames per second (FPS).
      */
     fps: number;
+    /**
+     * Bandwidth, measured in bits per second (bps)
+     */
+    bandwidth: number;
+    /**
+     * Bit rate, measured in bits per second (bps)
+     */
+    bitrate: number;
   };
   type: 'VIDEOSHARE_QOS_DATA';
 }): void;
@@ -1674,7 +1712,7 @@ export declare function event_chat_file_download_progress(payload: {
 }): void;
 
 /**
- * Occurs when smart summary status changes.
+ * Occurs when the smart summary status changes.
  * @param payload
  */
 export declare function event_smart_summary_change(payload: {
@@ -1683,10 +1721,118 @@ export declare function event_smart_summary_change(payload: {
 }): void;
 
 /**
- * Occurs when meeting query status changes.
+ * Occurs when the meeting query status changes.
  * @param payload
  */
 export declare function event_meeting_query_change(payload: {
   support?: boolean;
   status?: MeetingQueryStatus;
+}): void;
+
+/**
+ * Occurs when the user is invited to back to the main session.
+ * @param payload
+ * @category Subsession
+ */
+export declare function event_subsession_invite_to_back_to_main_session(payload: {
+  /**
+   * Inviter user ID
+   */
+  inviterId: number;
+  /**
+   * Inviter user GUID
+   */
+  inviterGuid: string;
+  /**
+   * Inviter name
+   */
+  inviterName: string;
+});
+/**
+ * Occurs when there is a change in the status of users in the subsession.
+ * @param payload
+ * @category Subsession
+ */
+export declare function event_subsession_user_update(payload: {
+  /**
+   * User ID
+   */
+  userId: number;
+  /**
+   * User GUID
+   */
+  userGuid: string;
+  /**
+   * Subsession ID
+   */
+  subsessionId: string;
+  /**
+   * Subsession name
+   */
+  subsessionName: string;
+  /**
+   * User's audio state.
+   */
+  audio: string;
+  /**
+   * Whether audio is muted.
+   */
+  muted: boolean;
+  /**
+   *  Whether the user started video.
+   */
+  bVideoOn: boolean;
+  /**
+   * Whether the user started sharing.
+   */
+  sharerOn: boolean;
+  /**
+   * Whether the sharer is also sharing the tab audio.
+   */
+  bShareAudioOn: boolean;
+  /**
+   * Whether the user is talking.
+   */
+  isTalking?: boolean;
+});
+/**
+ * Occurs when the broadcasted voice's status changes.
+ * @param payload
+ * @category Subsession
+ */
+export declare function event_subsession_broadcast_voice(payload: {
+  /**
+   * Whether the user is receiving the broadcasted voice.
+   */
+  status: boolean;
+});
+
+/**
+ * Occurs when the CRC(Cloud Room Connector) device call state changes.
+ *
+ * ```javascript
+ * client.on('crc-call-out-state-change', (payload) => {
+ *    console.log(payload.code);
+ * });
+ * ```
+ * @param payload
+ * @category CRC
+ */
+export declare function event_crc_device_call_state_change(payload: {
+  /**
+   * CRC call return code
+   */
+  code: CRCReturnCode;
+  /**
+   * IP address
+   */
+  ip: string;
+  /**
+   * Protocol
+   */
+  protocol: CRCProtocol;
+  /**
+   *  Unique ID for the call
+   */
+  uuid: string;
 }): void;

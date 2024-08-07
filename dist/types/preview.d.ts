@@ -1,3 +1,5 @@
+import { MobileVideoFacingMode } from './common';
+
 /**
  * Interface for test speaker options.
  */
@@ -117,10 +119,10 @@ export interface LocalVideoTrack {
    */
   stop(): Promise<void | Error>;
   /**
-   * Switch microphone.
-   * @param deviceId The ID of the microphone to switch to.
+   * Switch camera.
+   * @param deviceId The ID of the camera to switch to or on mobile platform, using facingMode instead.
    */
-  switchCamera(deviceId: string): Promise<void | Error>;
+  switchCamera(deviceId: string | MobileVideoFacingMode): Promise<void | Error>;
   /**
    * Update the preview virtual background image.
    * @param imageUrl Image URL for the virtual background.

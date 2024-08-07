@@ -1094,7 +1094,7 @@ export declare namespace Stream {
 
   /**
    * Mute all users' audio
-   * - Only the **host** or **manager** has the permission.
+   *  - Only the **host** or **manager** can do this.
    *
    * ```javascript
    * // host side
@@ -1112,7 +1112,7 @@ export declare namespace Stream {
   function muteAllAudio(): ExecutedResult;
   /**
    * Unmute all users' audio
-   * - Only the **host** or **manager** has the permission.
+   * - Only the **host** or **manager** can do this.
    * - For privacy and security concerns, the host can not unmute the participant's audio directly, instead, the participant will receive an unmute audio consent message.
    *
    * @returns executed promise.
@@ -1725,7 +1725,7 @@ export declare namespace Stream {
   function getReceivedVideoDimension(): { height: number; width: number };
 
   /**
-   * Determines whether the browser can support multiple videos.
+   * Determines whether the browser can support multiple videos. If this returns false, we recommend that you render self-view in a separate video-player-container.
    * @returns Whether the current platform supports multiple videos.
    * @category Video
    */
@@ -2223,14 +2223,17 @@ export declare namespace Stream {
    * > ***Note***: Due to browser capability limitations, the controlled user must download and install a remote control app to enable remote control.
    * > If the app is installed, we will try to launch it automatically right after the controlled user approves the request for remote control.
    * @param userId userId
-   *
+   * @param runAsAdmin  runAsAdmin optional.  For Windows only: If set, enable the Remote Control App control of all applications.
    *  @returns
    * - `''`: Success
    * - `Error`: Failure. Details in {@link ErrorTypes}.
    *
    * @category RemoteControl
    */
-  function approveRemoteControl(userId: number): ExecutedResult;
+  function approveRemoteControl(
+    userId: number,
+    runAsAdmin?: boolean,
+  ): ExecutedResult;
   /**
    * The controlled user declines the remote control request
    * @param userId userId

@@ -86,10 +86,6 @@ export enum LiveTranscriptionLanguageCode {
    */
   Arabic = 14,
   /**
-   * Bengali
-   */
-  Bengali = 15,
-  /**
    * Chinese (Traditional)'
    */
   'Chinese (Traditional)' = 16,
@@ -105,10 +101,6 @@ export enum LiveTranscriptionLanguageCode {
    * Finnish
    */
   Finnish = 19,
-  /**
-   * Greek
-   */
-  Greek = 20,
   /**
    * Hebrew
    */
@@ -161,6 +153,22 @@ export enum LiveTranscriptionLanguageCode {
    * Turkish
    */
   Turkish = 33,
+  /**
+   * French (Canada)
+   */
+  'French (Canada)' = 34,
+  /**
+   * Danish
+   */
+  Danish = 35,
+  /**
+   * Thai
+   */
+  Thai = 37,
+  /**
+   * Cantonese
+   */
+  Cantonese = 44,
   /**
    * No translation.
    */
@@ -236,10 +244,6 @@ export enum LiveTranscriptionLanguage {
    */
   Arabic = 'ar',
   /**
-   * Bengali
-   */
-  Bengali = 'bn',
-  /**
    * Chinese (Traditional)
    */
   'Chinese (Traditional)' = 'zh-hant',
@@ -255,10 +259,6 @@ export enum LiveTranscriptionLanguage {
    * Finnish
    */
   Finnish = 'fi',
-  /**
-   * Greek
-   */
-  Greek = 'el',
   /**
    * Hebrew
    */
@@ -311,6 +311,22 @@ export enum LiveTranscriptionLanguage {
    * Turkish
    */
   Turkish = 'tr',
+  /**
+   * French (Canada)
+   */
+  'French (Canada)' = 'fr-ca',
+  /**
+   * Danish
+   */
+  Danish = 'da',
+  /**
+   * Thai
+   */
+  Thai = 'th',
+  /**
+   * Cantonese
+   */
+  Cantonese = 'zh-yue',
 }
 /**
  *  Live transcription message.

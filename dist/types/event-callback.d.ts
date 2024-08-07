@@ -667,6 +667,7 @@ export declare function event_individual_recording_change(payload: {
 
 /**
  * Occurs when adding or removing the microphone, speaker, or camera.
+ * Chrome browser on Android devices does not trigger the `device-change` event when the headset is plugged in or unplugged. See browser compatibility: https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/devicechange_event#browser_compatibility.
  * @event
  * @category Media
  */
@@ -1847,3 +1848,12 @@ export declare function event_current_audio_level_change(payload: {
    */
   level: number;
 }): void;
+
+/**
+ * Occurs when there is a media internal error, such as an unexpected interruption in media capture or insufficient memory.
+ * When receiving this event, we recommend refreshing the page or restarting the browser to resolve the issue.
+ * Since the user must do this, we recommend that you provide a popup to guide the user, such as 'We detected an issue with the media stream that we cannot resolve. Please refresh the page to try to fix it.' With two buttons: 'Refresh' and 'Cancel'.
+ *
+ * @category Media
+ */
+export declare function event_media_internal_error(): void;

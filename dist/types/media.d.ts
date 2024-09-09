@@ -1630,6 +1630,45 @@ export declare namespace Stream {
     userId: number,
     element?: string | VideoPlayer,
   ): Promise<VideoPlayer | Array<VideoPlayer>>;
+
+  /**
+   * Spotlight specific user's video. Available to host or manager.
+   *
+   * > ***Note***:Spotlighting a video affects the behavior of the `video-active-change` event. The spotlighted user remains the active user, regardless of whether they are speaking.
+   * > This also impacts the behavior in the recording file; when the 'Record active speaker' option is selected, the recording will always show the spotlighted user's video.
+   *
+   * @param userId Required. Id of user to spotlight.
+   * @param isReplaced Optional. Host can spotlight multiple users, if true, replace all spotlighted users, otherwise, add as a new spotlighted user.
+   *
+   * @returns
+   * - `''`: Success.
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   * @category Video
+   */
+  function spotlightVideo(userId: number, isReplaced?: boolean): ExecutedResult;
+
+  /**
+   * Remove a user's video from being spotlighted.
+   *
+   *
+   * @param userId Optional.
+   * - If it is empty, remove the spotlighted tag from the current user's video.
+   * - Otherwise, remove the spotlighted tag from the specific user's video. Available to host or manager.
+   *
+   * @returns
+   * - `''`: Success.
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   * @category Video
+   */
+  function removeSpotlightedVideo(userId?: number): ExecutedResult;
+  /**
+   * Remove all spotlighted videos. Available to host.
+   * @returns
+   * - `''`: Success.
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   * @category Video
+   */
+  function removeAllSpotlightedVideos(): ExecutedResult;
   /**
    *
    * Gets the `isCapturingVideo` flag status.
@@ -1784,6 +1823,12 @@ export declare namespace Stream {
    * @category Video
    */
   function isVideoMirrored(): boolean;
+  /**
+   * Get a list of spotlighted users.
+   *
+   * @category Video
+   */
+  function getSpotlightedUserList(): Array<Participant>;
 
   // -------------------------------------------------[share]-----------------------------------------------------------
 
@@ -2223,7 +2268,7 @@ export declare namespace Stream {
    * > ***Note***: Due to browser capability limitations, the controlled user must download and install a remote control app to enable remote control.
    * > If the app is installed, we will try to launch it automatically right after the controlled user approves the request for remote control.
    * @param userId userId
-   * @param runAsAdmin  runAsAdmin optional.  For Windows only: If set, enable the Remote Control App control of all applications.
+   * @param runAsAdmin runAsAdmin optional. For Windows only: If set, enable the Remote Control App control of all applications.
    *  @returns
    * - `''`: Success
    * - `Error`: Failure. Details in {@link ErrorTypes}.

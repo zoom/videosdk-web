@@ -79,6 +79,8 @@ import {
   event_subsession_broadcast_voice,
   event_subsession_invite_to_back_to_main_session,
   event_current_audio_level_change,
+  event_media_internal_error,
+  event_video_spotlight_change,
 } from './event-callback';
 // import AIClient from '../src/summary';
 
@@ -161,9 +163,13 @@ interface InitOptions {
   webEndpoint?: string;
   /**
    * Optional
-   * Enforces multiple videos (up to 3 videos of others and 1 video of self) on platform without SharedArrayBuffer.
+   * Enforces multiple videos if true (up to 3 videos of others and 1 video of self) on platform without SharedArrayBuffer.
+   * If false, limits the view to one video.
+   * This may result in high CPU and memory usage.
+   * To increase the limit to up to 25 videos, set `disableRenderLimits` to `true`:
+   * `enforceMultipleVideos({ disableRenderLimits: true })`
+   * Note that the video quality may be poor and unreliable.
    * See [browser support](https://developers.zoom.us/docs/video-sdk/web/browser-support/) for details.
-   * Note that this may result in high CPU and memory usage.
    */
   enforceMultipleVideos?:
     | boolean
@@ -848,6 +854,24 @@ export declare namespace VideoClient {
   function on(
     event: 'current-audio-level-change',
     listener: typeof event_current_audio_level_change,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_media_internal_error}
+   */
+  function on(
+    event: 'active-media-failed',
+    listener: typeof event_media_internal_error,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_video_spotlight_change}
+   */
+  function on(
+    event: 'video-spotlight-change',
+    listener: typeof event_video_spotlight_change,
   ): void;
   /**
    * Removes the event handler.

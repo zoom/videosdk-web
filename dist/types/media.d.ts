@@ -185,7 +185,7 @@ interface AudioOption {
   mute?: boolean;
   /**
    * Suppress some kinds of background noise (e.g. dog barking,lawn mower,clapping, fans, pen tapping).
-   * > ***Note***: Enabling this option may increase CPU utilization. It's only supported on Chromium-like browsers with SharedArrayBuffer enabled.
+   * > ***Note***: Enabling this option may increase CPU utilization.
    */
   backgroundNoiseSuppression?: boolean;
   /**
@@ -997,7 +997,7 @@ export declare namespace Stream {
   ): ExecutedResult;
   /**
    * Enables or disables background suppression.
-   * > ***Note***: Enabling this option may increase CPU utilization. It's only supported on Chromium-like browsers with SharedArrayBuffer enabled.
+   * > ***Note***: Enabling this option may increase CPU utilization.
    * @param enabled enabled
    *
    * @category Audio
@@ -1091,6 +1091,34 @@ export declare namespace Stream {
    * @category Audio
    */
   function stopSecondaryAudio(): ExecutedResult;
+
+  /**
+   * Mute all users' audio
+   *  - Only the **host** or **manager** can do this.
+   *
+   * ```javascript
+   * // host side
+   * await stream.muteAllAudio();
+   * // other user side
+   * client.on('current-audio-change',payload=>{
+   *  if(payload.action==='muted' && payload.source==='passive(mute all)'){
+   *    console.log('host muted all');
+   *  }
+   * })
+   * ```
+   * @returns executed promise.
+   * @category Audio
+   */
+  function muteAllAudio(): ExecutedResult;
+  /**
+   * Unmute all users' audio
+   * - Only the **host** or **manager** can do this.
+   * - For privacy and security concerns, the host can not unmute the participant's audio directly, instead, the participant will receive an unmute audio consent message.
+   *
+   * @returns executed promise.
+   * @category Audio
+   */
+  function unmuteAllAudio(): ExecutedResult;
   /**
    * Determines whether the user is muted.
    * - If the user ID is not specified, gets the muted status of the current user.
@@ -1602,6 +1630,45 @@ export declare namespace Stream {
     userId: number,
     element?: string | VideoPlayer,
   ): Promise<VideoPlayer | Array<VideoPlayer>>;
+
+  /**
+   * Spotlight specific user's video. Available to host or manager.
+   *
+   * > ***Note***:Spotlighting a video affects the behavior of the `video-active-change` event. The spotlighted user remains the active user, regardless of whether they are speaking.
+   * > This also impacts the behavior in the recording file; when the 'Record active speaker' option is selected, the recording will always show the spotlighted user's video.
+   *
+   * @param userId Required. Id of user to spotlight.
+   * @param isReplaced Optional. Host can spotlight multiple users, if true, replace all spotlighted users, otherwise, add as a new spotlighted user.
+   *
+   * @returns
+   * - `''`: Success.
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   * @category Video
+   */
+  function spotlightVideo(userId: number, isReplaced?: boolean): ExecutedResult;
+
+  /**
+   * Remove a user's video from being spotlighted.
+   *
+   *
+   * @param userId Optional.
+   * - If it is empty, remove the spotlighted tag from the current user's video.
+   * - Otherwise, remove the spotlighted tag from the specific user's video. Available to host or manager.
+   *
+   * @returns
+   * - `''`: Success.
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   * @category Video
+   */
+  function removeSpotlightedVideo(userId?: number): ExecutedResult;
+  /**
+   * Remove all spotlighted videos. Available to host.
+   * @returns
+   * - `''`: Success.
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   * @category Video
+   */
+  function removeAllSpotlightedVideos(): ExecutedResult;
   /**
    *
    * Gets the `isCapturingVideo` flag status.
@@ -1697,7 +1764,7 @@ export declare namespace Stream {
   function getReceivedVideoDimension(): { height: number; width: number };
 
   /**
-   * Determines whether the browser can support multiple videos.
+   * Determines whether the browser can support multiple videos. If this returns false, we recommend that you render self-view in a separate video-player-container.
    * @returns Whether the current platform supports multiple videos.
    * @category Video
    */
@@ -1756,6 +1823,12 @@ export declare namespace Stream {
    * @category Video
    */
   function isVideoMirrored(): boolean;
+  /**
+   * Get a list of spotlighted users.
+   *
+   * @category Video
+   */
+  function getSpotlightedUserList(): Array<Participant>;
 
   // -------------------------------------------------[share]-----------------------------------------------------------
 
@@ -2195,14 +2268,17 @@ export declare namespace Stream {
    * > ***Note***: Due to browser capability limitations, the controlled user must download and install a remote control app to enable remote control.
    * > If the app is installed, we will try to launch it automatically right after the controlled user approves the request for remote control.
    * @param userId userId
-   *
+   * @param runAsAdmin runAsAdmin optional. For Windows only: If set, enable the Remote Control App control of all applications.
    *  @returns
    * - `''`: Success
    * - `Error`: Failure. Details in {@link ErrorTypes}.
    *
    * @category RemoteControl
    */
-  function approveRemoteControl(userId: number): ExecutedResult;
+  function approveRemoteControl(
+    userId: number,
+    runAsAdmin?: boolean,
+  ): ExecutedResult;
   /**
    * The controlled user declines the remote control request
    * @param userId userId

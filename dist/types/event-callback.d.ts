@@ -667,6 +667,7 @@ export declare function event_individual_recording_change(payload: {
 
 /**
  * Occurs when adding or removing the microphone, speaker, or camera.
+ * Chrome browser on Android devices does not trigger the `device-change` event when the headset is plugged in or unplugged. See browser compatibility: https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/devicechange_event#browser_compatibility.
  * @event
  * @category Media
  */
@@ -1732,6 +1733,7 @@ export declare function event_meeting_query_change(payload: {
 /**
  * Occurs when the user is invited to back to the main session.
  * @param payload
+ * @event
  * @category Subsession
  */
 export declare function event_subsession_invite_to_back_to_main_session(payload: {
@@ -1751,6 +1753,7 @@ export declare function event_subsession_invite_to_back_to_main_session(payload:
 /**
  * Occurs when there is a change in the status of users in the subsession.
  * @param payload
+ * @event
  * @category Subsession
  */
 export declare function event_subsession_user_update(payload: {
@@ -1798,6 +1801,7 @@ export declare function event_subsession_user_update(payload: {
 /**
  * Occurs when the broadcasted voice's status changes.
  * @param payload
+ * @event
  * @category Subsession
  */
 export declare function event_subsession_broadcast_voice(payload: {
@@ -1816,6 +1820,7 @@ export declare function event_subsession_broadcast_voice(payload: {
  * });
  * ```
  * @param payload
+ * @event
  * @category CRC
  */
 export declare function event_crc_device_call_state_change(payload: {
@@ -1839,6 +1844,7 @@ export declare function event_crc_device_call_state_change(payload: {
 /**
  * Occurs when the current audio volume changes.
  * @param payload
+ * @event
  * @category Audio
  */
 export declare function event_current_audio_level_change(payload: {
@@ -1846,4 +1852,30 @@ export declare function event_current_audio_level_change(payload: {
    * Volume level,range from 0 to 9.
    */
   level: number;
+}): void;
+
+/**
+ * Occurs when there is a media internal error, such as an unexpected interruption in media capture or insufficient memory.
+ * When receiving this event, we recommend refreshing the page or restarting the browser to resolve the issue.
+ * Since the user must do this, we recommend that you provide a popup to guide the user, such as 'We detected an issue with the media stream that we cannot resolve. Please refresh the page to try to fix it.' With two buttons: 'Refresh' and 'Cancel'.
+ * @event
+ * @category Media
+ */
+export declare function event_media_internal_error(): void;
+/**
+ * Occurs when the host or manager spotlights a user.
+ * ```javascript
+ * client.on('video-spotlight-change', (payload) => {
+ *  console.log(payload.spotlightList);
+ * });
+ * ```
+ * @param payload
+ * @category Video
+ * @event
+ */
+export declare function event_video_spotlight_change(payload: {
+  /**
+   * spotlighted user list
+   */
+  spotlightList: Array<{ userId: number }>;
 }): void;

@@ -273,6 +273,8 @@ export interface CaptureVideoOption {
    */
   mirrored?: boolean;
   /**
+   * @deprecated
+   * > **Note** will be removed in 2.x version, please use `stream.attachVideo` to render self-view directly.
    * Video element. Only used in Android platform or non-SharedArrayBuffer Chromium-like browsers.
    */
   videoElement?: HTMLVideoElement;
@@ -719,41 +721,6 @@ export declare namespace Stream {
    * await stream.startAudio();
    * ```
    *
-   * Safari browser is different:
-   * ```javascript
-   * let audioDecode, audioEncode;
-   * // wait until the encoding and decoding process is ready for the audio
-   * client.on("media-sdk-change", (payload) => {
-   *    const { action, type, result } = payload;
-   *    if (type === "audio" && result === "success") {
-   *      if (action === "encode") {
-   *        audioEncode = true;
-   *      } else if (action === "decode") {
-   *        audioDecode = true;
-   *      }
-   *      if (audioDecode && audioEncode) {
-   *        try {
-   *          // start audio automatically in Safari
-   *          stream.startAudio({ autoStartAudioInSafari: true });
-   *        } catch (err) {
-   *          console.warn(err);
-   *        }
-   *      }
-   *    }
-   *  });
-   *
-   *  // Start audio in 'click' callback in Safari
-   *  joinAudioButton.addEventListener("click", () => {
-   *    if (audioDecode && audioDecode) {
-   *      try {
-   *        stream.startAudio();
-   *      } catch (err) {
-   *         console.warn(err);
-   *      }
-   *    }
-   *  });
-   *
-   * ```
    * @returns Executed promise. Possible error reasons:
    * - type=`USER_FORBIDDEN_MICROPHONE`: The user has blocked accesses to the microphone from the SDK. Try to grant the privilege and rejoin the session.
    * @category Audio
@@ -1120,6 +1087,16 @@ export declare namespace Stream {
    */
   function unmuteAllAudio(): ExecutedResult;
   /**
+   * The host can set when the users to be muted when they start the audio.
+   * - Only the **host** or **manager** can do this.
+   *
+   * @param enable boolean default `true`
+   *
+   * @return executed promise.
+   * @category Audio
+   */
+  function muteAudioUponStartAudio(enable?: boolean): ExecutedResult;
+  /**
    * Determines whether the user is muted.
    * - If the user ID is not specified, gets the muted status of the current user.
    * @param userId Default `undefined`
@@ -1212,6 +1189,23 @@ export declare namespace Stream {
    * @category Audio
    */
   function isSupportMicrophoneAndShareAudioSimultaneously(): boolean;
+
+  /**
+   * Get the audio media file playback controller,
+   * It's only available when use media file as audio source, otherwise, it will return null
+   * @category Audio
+   */
+  function getAudioMediaPlaybackController():
+    | (Pick<
+        HTMLAudioElement,
+        'play' | 'pause' | 'paused' | 'muted' | 'currentTime' | 'loop'
+      > & {
+        /**
+         * playback
+         */
+        playback: boolean;
+      })
+    | null;
 
   // -------------------------------------------------[video]-----------------------------------------------------------
 
@@ -1594,7 +1588,7 @@ export declare namespace Stream {
    * ```
    *
    * ```javascript
-   * const element = stream.attachVideo(userId,VideoQuality.Video_720P);
+   * const element = await stream.attachVideo(userId,VideoQuality.Video_720P);
    * document.querySelector('.video-tile').appendChild(element);
    * ```
    * @param userId Required. The user ID which to render the video.
@@ -1613,7 +1607,7 @@ export declare namespace Stream {
    * Detach the video stream from all previously attached VideoPlayer elements or specific elements.
    *
    * ```javascript
-   * const elements = stream.detachVideo(userId);
+   * const elements = await stream.detachVideo(userId);
    * if (Array.isArray(elements)) {
    *  elements.forEach((e) => e.remove());
    * } else {
@@ -1829,6 +1823,15 @@ export declare namespace Stream {
    * @category Video
    */
   function getSpotlightedUserList(): Array<Participant>;
+  /**
+   * Get the video media file playback controller,
+   * It's only available when use media file as video source, otherwise, it will return null
+   * @category Video
+   */
+  function getVideoMediaPlaybackController(): Pick<
+    HTMLAudioElement,
+    'play' | 'pause' | 'paused' | 'muted' | 'currentTime' | 'loop'
+  > | null;
 
   // -------------------------------------------------[share]-----------------------------------------------------------
 
@@ -2261,6 +2264,7 @@ export declare namespace Stream {
    * - `Error`: Failure. Details in {@link ErrorTypes}.
    *
    * @category RemoteControl
+   * @ignore
    */
   function requestRemoteControl(): ExecutedResult;
   /**
@@ -2274,6 +2278,7 @@ export declare namespace Stream {
    * - `Error`: Failure. Details in {@link ErrorTypes}.
    *
    * @category RemoteControl
+   * @ignore
    */
   function approveRemoteControl(
     userId: number,
@@ -2288,6 +2293,7 @@ export declare namespace Stream {
    * - `Error`: Failure. Details in {@link ErrorTypes}.
    *
    * @category RemoteControl
+   * @ignore
    */
   function declineRemoteControl(userId: number): ExecutedResult;
   /**
@@ -2298,6 +2304,7 @@ export declare namespace Stream {
    * - `Error`: Failure. Details in {@link ErrorTypes}.
    *
    * @category RemoteControl
+   * @ignore
    */
   function stopRemoteControl(): ExecutedResult;
   /**
@@ -2308,6 +2315,7 @@ export declare namespace Stream {
    * - `Error`: Failure. Details in {@link ErrorTypes}.
    *
    * @category RemoteControl
+   * @ignore
    */
   function giveUpRemoteControl(): ExecutedResult;
 
@@ -2338,6 +2346,7 @@ export declare namespace Stream {
    * - `Error`: Failure. Details in {@link ErrorTypes}.
    *
    * @category RemoteControl
+   * @ignore
    */
   function startRemoteControl(viewport: HTMLElement): ExecutedResult;
   /**
@@ -2360,7 +2369,7 @@ export declare namespace Stream {
    * viewportElement.addEventListener("click", (event) => {
    *   event.preventDefault();
    *   if (!stream.isControllingUserRemotely()) {
-   *     stream.grabRemotoControl();
+   *     stream.grabRemoteControl();
    *   }
    * });
    * ```
@@ -2370,8 +2379,9 @@ export declare namespace Stream {
    * - `Error`: Failure. Details in {@link ErrorTypes}.
    *
    * @category RemoteControl
+   * @ignore
    */
-  function grabRemotoControl(): ExecutedResult;
+  function grabRemoteControl(): ExecutedResult;
   /**
    * The controlled user launches the remote control app manually.
    *@param isAutoDeleteApp boolean
@@ -2380,6 +2390,7 @@ export declare namespace Stream {
    * - `Error`: Failure. Details in {@link ErrorTypes}.
    *
    * @category RemoteControl
+   * @ignore
    */
   function launchRemoteControlApp(isAutoDeleteApp?: boolean): ExecutedResult;
 
@@ -2389,6 +2400,7 @@ export declare namespace Stream {
    * @returns boolean
    *
    * @category RemoteControl
+   * @ignore
    */
   function isRemotelyControlApproved(): boolean;
   /**
@@ -2396,6 +2408,7 @@ export declare namespace Stream {
    * @returns boolean
    *
    * @category RemoteControl
+   * @ignore
    */
   function isControllingUserRemotely(): boolean;
   /**
@@ -2405,6 +2418,7 @@ export declare namespace Stream {
    * @returns boolean
    *
    * @category RemoteControl
+   * @ignore
    */
   function isTargetShareSupportRemoteControl(userId: number): boolean;
   /**
@@ -2412,6 +2426,7 @@ export declare namespace Stream {
    * @returns string
    *
    * @category RemoteControl
+   * @ignore
    */
   function getRemoteControlAppDownloadUrl(): string;
   /**
@@ -2420,12 +2435,14 @@ export declare namespace Stream {
    * @returns Participant
    *
    * @category RemoteControl
+   * @ignore
    */
   function getRemotelyControllingUser(): Participant | null;
   /**
    * Determines whether remote control is enabled.
    * @returns boolean
    * @category RemoteControl
+   * @ignore
    */
   function isRemoteControlEnabled(): boolean;
 }

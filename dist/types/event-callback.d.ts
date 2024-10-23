@@ -339,16 +339,22 @@ export declare function event_user_remove(
  * Occurs when the remote video stream changes.
  *
  * ```javascript
- * client.on('video-active-change', async(payload) => {
- *   try {
- *     if (payload.state === 'Active') {
- *       await stream.renderVideo(canvas,userId,1280,720,0,0,3);
- *     } else {
- *       await stream.stopRenderVideo(canvas,userId);
- *     }
- *   } catch (error) {
- *     console.log(error);
- *   }
+ * client.on("video-active-change", async (payload) => {
+ *  try {
+ *    if (payload.state === "Active") {
+ *      const element = await stream.attachVideo(userId, VideoQuality.Video_720P);
+ *      container.appendChild(element);
+ *    } else {
+ *      const elements = await stream.detachVideo(userId);
+ *      if (Array.isArray(elements)) {
+ *        elements.forEach((e) => e.remove());
+ *      } else {
+ *        elements.remove();
+ *      }
+ *    }
+ *  } catch (error) {
+ *    console.log(error);
+ *  }
  * });
  * ```
  * @param payload The event detail.
@@ -424,13 +430,19 @@ export declare function event_video_dimension_change(payload: {
  * Occurs when other participants start or stop video.
  *
  * ```javascript
- * client.on('peer-video-state-change', (payload) => {
- * if (payload.action === 'Start') {
- *  stream.renderVideo(document.querySelector('#participants-canvas'), payload.userId, 960, 540, X_CORD, Y_CORD, 3)
- * } else if (payload.action === 'Stop') {
- *  stream.stopRenderVideo(document.querySelector('#participants-canvas'), payload.userId)
- * }
- * })
+ * client.on("peer-video-state-change", async (payload) => {
+ *  if (payload.action === "Start") {
+ *    const element = await stream.attachVideo(userId, VideoQuality.Video_720P);
+ *    container.appendChild(element);
+ *  } else if (payload.action === "Stop") {
+ *    const elements = await stream.detachVideo(userId);
+ *    if (Array.isArray(elements)) {
+ *      elements.forEach((e) => e.remove());
+ *    } else {
+ *      elements.remove();
+ *    }
+ *  }
+ * });
  * ```
  * @param payload
  * @event
@@ -1579,21 +1591,13 @@ export declare function event_live_stream_status(status: LiveStreamStatus): void
 
 /**
  * Occurs when the SDK detects that the rendered video aspect ratio is not the same as the actual video aspect ratio.
- * To correct the aspect ratio, use `stream.adjustRenderedVideoPosition()` to resize the video.
+ * To correct the aspect ratio, update `aspect-ratio` CSS style to correct the ratio.
  *
  * ```javascript
- * client.on("video-aspect-ratio-change", async (payload) => {
- * const { userId, aspectRatio } = payload;
- * const height = width / aspectRatio;
- * // resize the video
- * await stream.adjustRenderedVideoPosition(
- *   canvasElm,
- *   userId,
- *   width,
- *   height,
- *   x,
- *   y
- * );
+ * client.on("video-aspect-ratio-change", (payload) => {
+ *  const { userId, aspectRatio } = payload;
+ *  const videoPlayerElement = // look up the video-player element by userId
+ *  videoPlayerElement.style.aspectRatio = aspectRatio;
  * });
  * ```
  *

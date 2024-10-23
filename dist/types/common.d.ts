@@ -488,6 +488,10 @@ export interface MediaPlaybackFile {
    * Is loop
    */
   loop?: boolean;
+  /**
+   * Whether to play the audio file locally
+   */
+  playback?: boolean;
 }
 
 /**

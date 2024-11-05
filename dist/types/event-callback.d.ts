@@ -251,6 +251,7 @@ export enum ApprovedState {
 }
 /**
  * Remote control app status
+ * @ignore
  */
 export enum RemoteControlAppStatus {
   /**
@@ -276,6 +277,7 @@ export enum RemoteControlAppStatus {
 }
 /**
  * Remote control session status
+ * @ignore
  */
 export enum RemoteControlSessionStatus {
   /**
@@ -1460,8 +1462,9 @@ export declare function event_caption_host_disable(payload: boolean): void;
  *  }
  * });
  * ```
+ * @ignore
  * @param payload
- * @event
+ *
  *
  * @category RemoteControl
  */
@@ -1484,8 +1487,9 @@ export declare function event_remote_control_approved_change(payload: {
  *   }
  * });
  * ```
+ * @ignore
  * @param payload
- * @event
+ *
  * @category RemoteControl
  */
 export declare function event_remote_control_in_control_change(payload: {
@@ -1511,8 +1515,9 @@ export declare function event_remote_control_in_control_change(payload: {
  *   copyButtonElement.dataset.dataContent = payload.content;
  * });
  * ```
+ * @ignore
  * @param payload
- * @event
+ *
  * @category RemoteControl
  */
 export declare function event_remote_control_clipboard_change(payload: {
@@ -1536,8 +1541,9 @@ export declare function event_remote_control_clipboard_change(payload: {
 
 /**
  * Occurs when the controlled user receives the remote control request
+ * @ignore
  * @param payload
- * @event
+ *
  * @category RemoteControl
  */
 export declare function event_remote_control_request_change(payload: {
@@ -1556,8 +1562,9 @@ export declare function event_remote_control_request_change(payload: {
 }): void;
 /**
  *  Occurs when the remote control app status changes
+ * @ignore
  * @param payload
- * @event
+ *
  * @category RemoteControl
  */
 export declare function event_remote_control_app_status_change(
@@ -1569,8 +1576,9 @@ export declare function event_remote_control_app_status_change(
 
 /**
  * Occurs when the remote control session status changes
+ * @ignore
  * @param payload
- * @event
+ *
  * @category RemoteControl
  */
 export declare function event_remote_control_controlled_status_change(

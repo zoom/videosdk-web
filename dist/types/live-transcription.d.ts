@@ -379,6 +379,10 @@ interface LiveTranscriptionStatus {
    */
   isLiveTranslationEnabled: boolean;
   /**
+   * Is host disable the captions?
+   */
+  isHostDisableCaptions: boolean;
+  /**
    * Is manual caption enabled?
    */
   isManualCaptionerEnabled: boolean;

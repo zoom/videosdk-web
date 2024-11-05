@@ -1087,7 +1087,7 @@ export declare namespace Stream {
    */
   function unmuteAllAudio(): ExecutedResult;
   /**
-   * The host can set when the users to be muted when they start the audio.
+   * The host can set to mute users when they start audio.
    * - Only the **host** or **manager** can do this.
    *
    * @param enable boolean default `true`
@@ -1191,8 +1191,8 @@ export declare namespace Stream {
   function isSupportMicrophoneAndShareAudioSimultaneously(): boolean;
 
   /**
-   * Get the audio media file playback controller,
-   * It's only available when use media file as audio source, otherwise, it will return null
+   * Get the audio media file playback controller.
+   * Only available when using the media file as an audio source, otherwise, it returns null.
    * @category Audio
    */
   function getAudioMediaPlaybackController():
@@ -1824,8 +1824,8 @@ export declare namespace Stream {
    */
   function getSpotlightedUserList(): Array<Participant>;
   /**
-   * Get the video media file playback controller,
-   * It's only available when use media file as video source, otherwise, it will return null
+   * Get the video media file playback controller.
+   * Only available when using a media file as a video source, otherwise, it returns null.
    * @category Video
    */
   function getVideoMediaPlaybackController(): Pick<

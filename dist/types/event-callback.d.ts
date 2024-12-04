@@ -1380,7 +1380,7 @@ export declare function event_network_quality_change(payload: {
  * - `type` : string "VIDEOSHARE_QOS_DATA"
  *
  * ```javascript
- * client.on('share_statistic_data_change', (payload) => {
+ * client.on('share-statistic-data-change', (payload) => {
  *   console.log('emit', payload);
  *  });
  * ```
@@ -1873,7 +1873,7 @@ export declare function event_current_audio_level_change(payload: {
  * @event
  * @category Media
  */
-export declare function event_media_internal_error(): void;
+export declare function event_active_media_failed(): void;
 /**
  * Occurs when the host or manager spotlights a user.
  * ```javascript

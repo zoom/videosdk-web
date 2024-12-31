@@ -79,8 +79,8 @@ import {
   event_subsession_broadcast_voice,
   event_subsession_invite_to_back_to_main_session,
   event_current_audio_level_change,
-  event_media_internal_error,
   event_video_spotlight_change,
+  event_active_media_failed,
 } from './event-callback';
 // import AIClient from '../src/summary';
 
@@ -858,11 +858,11 @@ export declare namespace VideoClient {
   /**
    *
    * @param event
-   * @param listener Details in {@link event_media_internal_error}
+   * @param listener Details in {@link event_active_media_failed}
    */
   function on(
     event: 'active-media-failed',
-    listener: typeof event_media_internal_error,
+    listener: typeof event_active_media_failed,
   ): void;
   /**
    *

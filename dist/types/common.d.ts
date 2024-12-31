@@ -641,3 +641,65 @@ export enum CRCProtocol {
    */
   SIP = 2,
 }
+
+/**
+ * Active media failed error code
+ */
+export enum ActiveMediaFailedCode {
+  /**
+   * Failed to establish the audio data channel.
+   */
+  AudioConnectionFailed = 101,
+  /**
+   * Audio track ended.
+   */
+  AudioStreamEnded = 102,
+  /**
+   * Microphone permission denied.
+   */
+  MicrophonePermissionReset = 103,
+  /**
+   * Failed to get audio data from the stream.
+   */
+  AudioStreamFailed = 104,
+  /**
+   * Microphone muted in the system.
+   */
+  MicrophoneMuted = 105,
+  /**
+   * Sent audio playback was interrupted.
+   */
+  AudioStreamMuted = 106,
+  /**
+   * Remote audio playback was interrupted.
+   */
+  AudioPlaybackInterrupted = 107,
+  /**
+   * Failed to establish the video data channel.
+   */
+  VideoConnectionFailed = 201,
+  /**
+   * Video track ended.
+   */
+  VideoStreamEnded = 202,
+  /**
+   * Camera permission denied.
+   */
+  CameraPermissionReset = 203,
+  /**
+   * Web GL context invalid.
+   */
+  WebGlContextInvalid = 204,
+  /**
+   * Out of memory
+   */
+  WasmOutOfMemory = 205,
+  /**
+   * Failed to get video data from the stream.
+   */
+  VideoStreamFailed = 206,
+  /**
+   * Failed to get sharing data from the stream.
+   */
+  SharingStreamFailed = 301,
+}

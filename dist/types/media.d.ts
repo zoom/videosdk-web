@@ -273,7 +273,7 @@ export interface CaptureVideoOption {
    */
   mirrored?: boolean;
   /**
-   * @deprecated
+   * @deprecated 2.0.0
    * > **Note** will be removed in 2.x version, please use `stream.attachVideo` to render self-view directly.
    * Video element. Only used in Android platform or non-SharedArrayBuffer Chromium-like browsers.
    */
@@ -1288,6 +1288,7 @@ export declare namespace Stream {
   ): ExecutedResult;
 
   /**
+   * @deprecated Use the {@link attachVideo} method instead.
    *
    * Starts rendering video.
    *
@@ -1333,6 +1334,8 @@ export declare namespace Stream {
   ): Promise<'' | Error>;
 
   /**
+   * @deprecated Use the {@link detachVideo} method instead.
+   *
    * Stops rendering the video.
    *
    *
@@ -1447,7 +1450,7 @@ export declare namespace Stream {
   ): Promise<boolean>;
   /**
    * Previews the virtual background. If the video is on, preview virtual background applies to the current video.
-   * @param canvas
+   * @param previewDOMElement
    * @param imageUrl Virtual background image.
    * @param cropped Cropped to 16/9 aspect ratio. Default is false.
    * @param cameraId cameraId, default is active camera
@@ -1458,7 +1461,7 @@ export declare namespace Stream {
    * @category Video
    */
   function previewVirtualBackground(
-    canvas: HTMLCanvasElement,
+    previewDOMElement: VideoPlayer | HTMLCanvasElement,
     imageUrl: string | 'blur' | undefined,
     cropped?: boolean,
     cameraId?: string,

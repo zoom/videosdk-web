@@ -1,4 +1,4 @@
-import { MobileVideoFacingMode } from './common';
+import { MobileVideoFacingMode, VideoPlayer } from './common';
 
 /**
  * Interface for test speaker options.
@@ -93,13 +93,13 @@ interface TestMicrophoneReturn {
  */
 export interface LocalVideoTrack {
   /**
-   * Starts local video capture and plays it back in a video DOM element.
+   * Starts local video capture and plays it back.
    *
-   * @param videoDOMElement Video DOM element that will contain the video playback. Canvas Element will contain the video with virtual background.
+   * @param previewDOMElement Video DOM element that will contain the video playback. Canvas and VideoPlayer Element will contain the video with virtual background. we recommend you use the VideoPlayer Element.
    * @param virtualBackground virtual background setting
    */
   start(
-    videoDOMElement: HTMLVideoElement | HTMLCanvasElement,
+    previewDOMElement: VideoPlayer | HTMLVideoElement | HTMLCanvasElement,
     virtualBackground?: {
       /**
        * Image URL for the virtual background.

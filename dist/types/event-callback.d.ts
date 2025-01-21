@@ -1726,6 +1726,7 @@ export declare function event_chat_file_download_progress(payload: {
 }): void;
 
 /**
+ * @ignore
  * Occurs when the smart summary status changes.
  * @param payload
  */
@@ -1735,8 +1736,10 @@ export declare function event_smart_summary_change(payload: {
 }): void;
 
 /**
+ * @ignore
  * Occurs when the meeting query status changes.
  * @param payload
+ *
  */
 export declare function event_meeting_query_change(payload: {
   support?: boolean;

@@ -10,6 +10,8 @@ import {
   VideoPlayer,
   ExecutedFailure,
   CRCProtocol,
+  ProcessorParams,
+  Processor,
 } from './common';
 
 /**
@@ -703,6 +705,7 @@ export interface CallInInfo {
    */
   tollNumbers: Array<DialInNumber>;
 }
+
 /**
  * The stream interface provides methods that define the behaviors of a stream object, such as mute audio or capture video.
  *
@@ -1097,6 +1100,15 @@ export declare namespace Stream {
    */
   function muteAudioUponStartAudio(enable?: boolean): ExecutedResult;
   /**
+   * The host can set to allow users to unmute themselves.
+   * - Only the **host** or **manager** can do this.
+   * @param enable
+   *
+   * @return executed promise.
+   * @category Audio
+   */
+  function allowAudioUnmutedBySelf(enable: boolean): ExecutedResult;
+  /**
    * Determines whether the user is muted.
    * - If the user ID is not specified, gets the muted status of the current user.
    * @param userId Default `undefined`
@@ -1206,6 +1218,12 @@ export declare namespace Stream {
         playback: boolean;
       })
     | null;
+  /**
+   * Determines whether users are allowed to unmute their audio themselves.
+   * @returns Boolean.
+   * @category Audio
+   */
+  function isAllowAudioUnmutedBySelf(): boolean;
 
   // -------------------------------------------------[video]-----------------------------------------------------------
 
@@ -2448,4 +2466,41 @@ export declare namespace Stream {
    * @ignore
    */
   function isRemoteControlEnabled(): boolean;
+  /**
+   * Create a processor.
+   *
+   * @param param Required. Processor parameters.
+   *
+   * @returns
+   * - `Processor`: Processor instance.
+   * @category Processor
+   */
+  function createProcessor(param: ProcessorParams): Promise<Processor>;
+  /**
+   * Add the processor to the current media stream.
+   *
+   * @param processor required. The processor instance you want to add.
+   *
+   * @returns
+   * - `''`: Success
+   * @category Processor
+   */
+  function addProcessor(processor: Processor): Promise<''>;
+  /**
+   * Remove the current media stream processor.
+   *
+   * @param processor required. The processor instance you want to remove.
+   *
+   * @returns
+   * - `''`: Success
+   * @category Processor
+   */
+  function removeProcessor(processor: Processor): Promise<''>;
+  /**
+   * Determines whether the current platform supports the video processor.
+   *
+   * @returns Whether the current platform supports the video processor.
+   * @category Processor
+   */
+  function isSupportVideoProcessor(): boolean;
 }

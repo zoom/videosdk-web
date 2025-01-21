@@ -589,7 +589,64 @@ export enum MeetingQueryStatus {
   Default = '',
 }
 /**
+ * The parent class of all source video stream processors.
+ * > ***Note***: It is only available in the video processor worker.
+ *
+ * @category Global
+ */
+export abstract class VideoProcessor {
+  /**
+   * constructor
+   * @param port message port
+   * @param options customised options
+   */
+  public constructor(port: MessagePort, options?: any);
+  /**
+   * The communication port used for messaging between the processor and the main thread.
+   */
+  protected port: MessagePort;
+  /**
+   * Function to retrieve an OffscreenCanvas that renders the current output frame or processed result.
+   */
+  public getOutput(): OffscreenCanvas | null;
+  /**
+   * Callback triggered during the initialization of the processor.
+   */
+  public onInit(): void;
+  /**
+   * Callback triggered during the uninitialization of the processor.
+   */
+  public onUninit(): void;
+  /**
+   * Processes a video frame and optionally applies effects or modifications.
+   */
+  public abstract processFrame(
+    /**
+     * The input video frame to be processed.
+     */
+    input: VideoFrame,
+    /**
+     * The canvas where the processed frame is rendered.
+     */
+    output: OffscreenCanvas,
+  ): boolean | Promise<boolean>;
+}
+/**
+ * Registers a custom video processor class.
+ *> ***Note***: It is only available in the processor worker.
+ * @param name The name of the processor
+ * @param processor The processor class
+ *
+ * @category Global
+ */
+export function registerProcessor(
+  name: string,
+  processor: typeof VideoProcessor,
+): void;
+/**
  * Custom web component for video render
+ *
+ * @category Global
  */
 export declare class VideoPlayer extends HTMLElement {
   ['node-id']: string;
@@ -597,8 +654,11 @@ export declare class VideoPlayer extends HTMLElement {
 }
 /**
  * Custom web component for video render container
+ *
+ * @category Global
  */
 export declare class VideoPlayerContainer extends HTMLElement {}
+
 /**
  * CRC device call out return code
  */
@@ -702,4 +762,49 @@ export enum ActiveMediaFailedCode {
    * Failed to get sharing data from the stream.
    */
   SharingStreamFailed = 301,
+}
+
+/**
+ * Processor type
+ */
+type MediaType = 'audio' | 'video' | 'share';
+
+/**
+ * Processor instance
+ */
+export interface Processor {
+  /**
+   * Processor name
+   */
+  name: string;
+  /**
+   * Processor type, currently only supports video
+   */
+  type: MediaType;
+  /**
+   * Communication interface with processor
+   */
+  port: MessagePort;
+}
+
+/**
+ * Processor construction parameters
+ */
+export interface ProcessorParams {
+  /**
+   * Load the processor script from the absolute URL (the processor script must be from the same origin or CORS must be enabled).
+   */
+  url: string;
+  /**
+   * Processor name
+   */
+  name: string;
+  /**
+   * Processor type, currently only supports video
+   */
+  type: MediaType;
+  /**
+   * Parameters to pass into the processor constructor
+   */
+  options?: any;
 }

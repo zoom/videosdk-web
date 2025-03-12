@@ -188,6 +188,7 @@ interface AudioOption {
   /**
    * Suppress some kinds of background noise (e.g. dog barking,lawn mower,clapping, fans, pen tapping).
    * > ***Note***: Enabling this option may increase CPU utilization.
+   * > It requires SharedArrayBuffer for WebAssembly audio, but not for WebRTC audio.
    */
   backgroundNoiseSuppression?: boolean;
   /**
@@ -725,7 +726,7 @@ export declare namespace Stream {
    * ```
    *
    * @returns Executed promise. Possible error reasons:
-   * - type=`USER_FORBIDDEN_MICROPHONE`: The user has blocked accesses to the microphone from the SDK. Try to grant the privilege and rejoin the session.
+   * - type = `INSUFFICIENT_PRIVILEGES`,reason = `AUDIO_CAPTURE_FAILED`: The user has blocked accesses to the microphone from the SDK. Try to grant the privilege and rejoin the session.
    * @category Audio
    */
   function startAudio(options?: AudioOption): ExecutedResult;
@@ -1685,6 +1686,16 @@ export declare namespace Stream {
    */
   function removeAllSpotlightedVideos(): ExecutedResult;
   /**
+   * Take a screenshot of the specified user's video stream.
+   *
+   * @param userId Required. The user ID which to screenshot the video.
+   * @returns
+   * - Blob.
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   * @category Video
+   */
+  function screenshotVideo(userId: number): Promise<Blob | ExecutedFailure>;
+  /**
    *
    * Gets the `isCapturingVideo` flag status.
    *
@@ -1784,6 +1795,12 @@ export declare namespace Stream {
    * @category Video
    */
   function isSupportMultipleVideos(): boolean;
+  /**
+   * Get maximum concurrent video renders supported by current device.
+   * @returns The number of simultaneous video renders, typically affected by GPU/CPU/ShareArrayBuffer capabilities.
+   * @category Video
+   */
+  function getMaxRenderableVideos(): number;
   /**
    * Determines whether HD video is supported.
    * @returns Whether the current account supports sending 720p video.
@@ -2047,6 +2064,15 @@ export declare namespace Stream {
    */
   function unsubscribeShareStatisticData(type?: StatisticOption): ExecutedResult;
   /**
+   * Take a screenshot of the share view.
+   * @returns
+   * - Blob.
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   *
+   * @category Screen Share
+   */
+  function screenshotShareView(): Promise<Blob | ExecutedFailure>;
+  /**
    * Determines whether the host locked the share.
    * @returns Whether screen share is locked.
    * @category Screen Share
@@ -2100,8 +2126,25 @@ export declare namespace Stream {
    * @category Screen Share
    */
   function getShareStatisticData(): {
+    /**
+     * Sending share statistic data.
+     */
     encode?: VideoQosData;
+    /**
+     * Receiving share statistic data.
+     */
     decode?: VideoQosData;
+  };
+  /**
+   * Get the active share stream settings
+   * @returns {@link [MediaTrackSettings](https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackSettings)}
+   * @category Screen Share
+   */
+  function getShareStreamSettings(): {
+    width?: number;
+    height?: number;
+    deviceId?: string;
+    displaySurface?: string;
   };
 
   // -------------------------------------------------[camera]-----------------------------------------------------------

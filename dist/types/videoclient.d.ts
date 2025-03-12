@@ -81,6 +81,8 @@ import {
   event_current_audio_level_change,
   event_video_spotlight_change,
   event_active_media_failed,
+  event_video_screenshot_taken,
+  event_share_content_screenshot_taken,
 } from './event-callback';
 // import AIClient from '../src/summary';
 
@@ -581,9 +583,11 @@ export declare namespace VideoClient {
     listener: typeof event_video_vb_preload_change,
   ): void;
   /**
-   *
+   * @deprecated
+   * > ***Note:*** This event is deprecated and will always return success so that it does not break legacy integrations.
    * @param event
    * @param listener Details in {@link event_media_sdk_change}
+   *
    */
   function on(
     event: 'media-sdk-change',
@@ -872,6 +876,24 @@ export declare namespace VideoClient {
   function on(
     event: 'video-spotlight-change',
     listener: typeof event_video_spotlight_change,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener  Details in {@link event_video_screenshot_taken}
+   */
+  function on(
+    event: 'video-screenshot-taken',
+    listener: typeof event_video_screenshot_taken,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener  Details in {@link event_share_content_screenshot_taken}
+   */
+  function on(
+    event: 'share-content-screenshot-taken',
+    listener: typeof event_share_content_screenshot_taken,
   ): void;
   /**
    * Removes the event handler.

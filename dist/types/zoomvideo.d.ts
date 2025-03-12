@@ -85,7 +85,7 @@ export declare namespace ZoomVideo {
   /**
    * Destroys the client.
    */
-  function destroyClient(): void;
+  function destroyClient(): Promise<void>;
   /**
    * Preloads dependent assets to optimize performance.
    */

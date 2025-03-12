@@ -31,6 +31,10 @@ interface ExecutedFailure {
    * Error reason.
    */
   reason: string;
+  /**
+   * Error code.
+   */
+  errorCode: number;
 }
 /**
  * The result of an asynchronous operation. It is a promise object.
@@ -590,7 +594,7 @@ export enum MeetingQueryStatus {
 }
 /**
  * The parent class of all source video stream processors.
- * > ***Note***: It is only available in the video processor worker.
+ * > ***Note***: Only available in the video processor worker.
  *
  * @category Global
  */
@@ -633,7 +637,7 @@ export abstract class VideoProcessor {
 }
 /**
  * Registers a custom video processor class.
- *> ***Note***: It is only available in the processor worker.
+ *> ***Note***: Only available in the processor worker.
  * @param name The name of the processor
  * @param processor The processor class
  *
@@ -747,7 +751,7 @@ export enum ActiveMediaFailedCode {
    */
   CameraPermissionReset = 203,
   /**
-   * Web GL context invalid.
+   * WebGL context invalid.
    */
   WebGlContextInvalid = 204,
   /**

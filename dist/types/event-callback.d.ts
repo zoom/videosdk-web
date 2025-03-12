@@ -688,6 +688,8 @@ export declare function event_individual_recording_change(payload: {
  */
 export declare function event_device_change(): void;
 /**
+ * @deprecated 2.1.10
+ * > *** Note: *** This event is deprecated and will always return success so that it does not break legacy integrations.
  * Occurs when the encode or decode state of the media SDK changes.
  * @param payload
  * @event
@@ -1907,4 +1909,35 @@ export declare function event_video_spotlight_change(payload: {
    * spotlighted user list
    */
   spotlightList: Array<{ userId: number }>;
+}): void;
+
+/**
+ * Occurs when someone in the meeting takes a screenshot of the video
+ * @category Video
+ * @param payload
+ */
+export declare function event_video_screenshot_taken(payload: {
+  /**
+   * The user ID of the user who took the screenshot
+   */
+  userId: number;
+  /**
+   * The display name of the user who took the screenshot
+   */
+  displayName: string;
+}): void;
+/**
+ * Occurs when someone in the meeting takes a screenshot of the screen share
+ * @param payload
+ * @category Screen share
+ */
+export declare function event_share_content_screenshot_taken(payload: {
+  /**
+   * The user ID of the user who took the screenshot
+   */
+  userId: number;
+  /**
+   * The display name of the user who took the screenshot
+   */
+  displayName: string;
 }): void;

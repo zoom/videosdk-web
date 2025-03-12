@@ -314,4 +314,8 @@ export declare namespace SubsessionClient {
    * Get subsession options
    */
   function getSubsessionOptions(): SubsessionOption;
+  /**
+   * Determines whether the subsession is enabled.
+   */
+  function isSubsessionEnabled(): boolean;
 }

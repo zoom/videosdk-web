@@ -17,6 +17,7 @@ import {
   LeaveAudioSource,
   CRCReturnCode,
   CRCProtocol,
+  ActiveMediaFailedCode,
 } from './common';
 import { LiveTranscriptionMessage } from './live-transcription';
 import { LiveStreamStatus } from './live-stream';
@@ -1873,7 +1874,21 @@ export declare function event_current_audio_level_change(payload: {
  * @event
  * @category Media
  */
-export declare function event_active_media_failed(): void;
+export declare function event_active_media_failed(payload: {
+  /**
+   * Code
+   */
+  code: ActiveMediaFailedCode;
+  /**
+   * Message
+   */
+  message: string;
+  /**
+   * Type
+   */
+  type: 'audio' | 'video' | 'sharing';
+}): void;
+
 /**
  * Occurs when the host or manager spotlights a user.
  * ```javascript

@@ -170,6 +170,10 @@ export enum LiveTranscriptionLanguageCode {
    */
   Cantonese = 44,
   /**
+   * Catalan
+   */
+  Catalan = 48,
+  /**
    * No translation.
    */
   NoTranslation = 400,
@@ -327,6 +331,10 @@ export enum LiveTranscriptionLanguage {
    * Cantonese
    */
   Cantonese = 'zh-yue',
+  /**
+   * Catalan
+   */
+  Catalan = 'ca',
 }
 /**
  *  Live transcription message.

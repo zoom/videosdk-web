@@ -1,6 +1,6 @@
 {
   "name": "@zoom/videosdk",
-  "version": "1.12.16",
+  "version": "1.12.17",
   "description": "Zoom Web Video SDK",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",

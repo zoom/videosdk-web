@@ -682,7 +682,6 @@ export declare function event_individual_recording_change(payload: {
 
 /**
  * Occurs when adding or removing the microphone, speaker, or camera.
- * Chrome browser on Android devices does not trigger the `device-change` event when the headset is plugged in or unplugged. See browser compatibility: https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/devicechange_event#browser_compatibility.
  * @event
  * @category Media
  */
@@ -1940,4 +1939,56 @@ export declare function event_share_content_screenshot_taken(payload: {
    * The display name of the user who took the screenshot
    */
   displayName: string;
+}): void;
+/**
+ * Occurs when the sharer changes the annotation privilege of his share session.
+ * @param payload
+ */
+export declare function event_annotation_privilege_change(payload: {
+  /**
+   * The userId for who changed the viewer's annotation privilege.
+   */
+  userId: number;
+  /**
+   * Whether the annotation is enabled.
+   */
+  isAnnotationEnabled: boolean;
+}): void;
+/**
+ * Occurs when the availability status of the redo option changes.
+ * @param payload
+ */
+export declare function event_annotation_redo_status(payload: {
+  /**
+   * Whether the redo option is available.
+   */
+  status: boolean;
+  /**
+   * The annotation presenter's userId.
+   */
+  presenterId: number;
+}): void;
+/**
+ * Occurs when the availability status of the undo option changes.
+ * @param payload
+ */
+export declare function event_annotation_undo_status(payload: {
+  /**
+   * Whether the undo option is available.
+   */
+  status: boolean;
+  /**
+   * The annotation presenter's userId.
+   */
+  presenterId: number;
+}): void;
+/**
+ * Occurs for the presenter when the viewer calls the startAnnotation() function to draw on sharing content.
+ * @param payload
+ */
+export declare function event_annotation_viewer_draw_request(payload: {
+  /**
+   * The userId of the viewer who invoked the startAnnotation() function.
+   */
+  userId: number;
 }): void;

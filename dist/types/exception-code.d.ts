@@ -326,6 +326,21 @@ export enum ExceptionCode {
    */
   AUDIO_ALLOW_TALK_MISMATCH_USER = 6025,
   /**
+   * Occurs in the `stream.createProcessor` method due to the platform not supporting the audio processor.
+   * @category Audio processor
+   */
+  AUDIO_PROCESSOR_UNSUPPORTED = 6026,
+  /**
+   * Occurs in the `stream.createProcessor` method due to the creation of a duplicate audio processor.
+   * @category Audio processor
+   */
+  AUDIO_PROCESSOR_DUPLICATE_CREATE = 6027,
+  /**
+   * Occurs in the `stream.addProcessor` and `stream.removeProcessor` methods when unable to find the target processor.
+   * @category Audio processor
+   */
+  AUDIO_PROCESSOR_MISMATCH_PROCESSOR = 6028,
+  /**
    * Occurs in `stream.startVideo` method due to the user denied camera permission.
    * @category Video
    */
@@ -439,7 +454,7 @@ export enum ExceptionCode {
    */
   VIDEO_PROCESSOR_DUPLICATE_CREATE = 6121,
   /**
-   * Occurs in `stream.addProcessor` method because unable to find the target processor.
+   * Occurs in the `stream.addProcessor` and `stream.removeProcessor` methods when unable to find the target processor.
    * @category Video processor
    */
   VIDEO_PROCESSOR_MISMATCH_PROCESSOR = 6122,
@@ -521,6 +536,48 @@ export enum ExceptionCode {
    * @category Screen share
    */
   SCREEN_SHARE_IB_DENIED = 6209,
+  /**
+   * Share annotation exception
+   */
+  /**
+   * Occurs in the `stream.startAnnotation` method when the account doesn't support annotation.
+   * @category Share annotation
+   */
+  SCREEN_SHARE_ANNOTATION_ACCOUNT_DISABLE = 6210,
+  /**
+   * Occurs in the `stream.startAnnotation` method when there is no active sharing session.
+   */
+  SCREEN_SHARE_ANNOTATION_NO_ACTIVE_SHARE = 6211,
+  /**
+   * Occurs in the `stream.startAnnotation` method when the share presenter disables the annotation by using the `stream.changeAnnotationPrivilege` method.
+   * @category Share annotation
+   */
+  SCREEN_SHARE_ANNOTATION_PRESENTER_DISABLED = 6212,
+  /**
+   * Occurs in the `stream.startAnnotation` method when annotation has already been started.
+   * @category Share annotation
+   */
+  SCREEN_SHARE_ANNOTATION_DUPLICATE_START = 6213,
+  /**
+   * Occurs in the `stream.startAnnotation` method when failing to start annotation.
+   * @category Share annotation
+   */
+  SCREEN_SHARE_ANNOTATION_START_ERROR = 6214,
+  /**
+   * Occurs in the `stream.getAnnotationController().clear` or `stream.getAnnotationController().setToolType` method when the method parameter is invalid.
+   * @category Share annotation
+   */
+  SCREEN_SHARE_ANNOTATION_INCORRECT_PARAMETER = 6215,
+  /**
+   * Occurs in the `stream.startAnnotation` method when the current configuration doesn't support the annotation feature.
+   * @category Share annotation
+   */
+  SCREEN_SHARE_ANNOTATION_NOT_SUPPORT = 6216,
+  /**
+   * Occurs in the `stream.stopAnnotation` method when the annotation hasn't been started.
+   * @category Share annotation
+   */
+  SCREEN_SHARE_ANNOTATION_NOT_START = 6217,
   /**
    * Remote control exception
    */

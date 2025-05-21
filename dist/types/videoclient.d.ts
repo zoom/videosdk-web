@@ -83,6 +83,10 @@ import {
   event_active_media_failed,
   event_video_screenshot_taken,
   event_share_content_screenshot_taken,
+  event_annotation_privilege_change,
+  event_annotation_redo_status,
+  event_annotation_undo_status,
+  event_annotation_viewer_draw_request,
 } from './event-callback';
 // import AIClient from '../src/summary';
 
@@ -204,6 +208,9 @@ interface InitOptions {
   stayAwake?: boolean;
   /**
    * Quickly leave the session when refreshing or closing the page, instead of experiencing session failover.
+   *
+   * > ***Note**: Due to limitations in Firefox support, this feature is not available on the Firefox browser.
+   *
    * Caveat for two scenarios:
    * - PSTN: Phone user who is bound to the current user. The phone will hang up instead of staying connected.
    * - Subsession: Users in a subsession need to be assigned again instead of having been assigned and auto-joining the subsession.
@@ -218,6 +225,13 @@ interface InitOptions {
    * Alternative name for Zoom Video Player to avoid name conflict with existing web component.
    */
   alternativeNameForVideoPlayer?: string;
+  /**
+   * Whether to enable the detailed log report.
+   * > ***Note**: Default is true.
+   *
+   * If enabled, the detailed log will be reported to the Zoom server when the session ends or the user leaves the session.
+   */
+  isLogDetailed?: boolean;
 }
 /**
  * The video client is the core of the Video SDK.
@@ -894,6 +908,42 @@ export declare namespace VideoClient {
   function on(
     event: 'share-content-screenshot-taken',
     listener: typeof event_share_content_screenshot_taken,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener  Details in {@link event_annotation_privilege_change}
+   */
+  function on(
+    event: 'annotation-privilege-change',
+    listener: typeof event_annotation_privilege_change,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener  Details in {@link event_annotation_redo_status}
+   */
+  function on(
+    event: 'annotation-redo-status',
+    listener: typeof event_annotation_redo_status,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener  Details in {@link event_annotation_undo_status}
+   */
+  function on(
+    event: 'annotation-undo-status',
+    listener: typeof event_annotation_undo_status,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener  Details in {@link event_annotation_viewer_draw_request}
+   */
+  function on(
+    event: 'annotation-viewer-draw-request',
+    listener: typeof event_annotation_viewer_draw_request,
   ): void;
   /**
    * Removes the event handler.

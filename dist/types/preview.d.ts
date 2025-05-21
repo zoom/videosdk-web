@@ -95,7 +95,7 @@ export interface LocalVideoTrack {
   /**
    * Starts local video capture and plays it back.
    *
-   * @param previewDOMElement Video DOM element that will contain the video playback. Canvas and VideoPlayer Element will contain the video with virtual background. we recommend you use the VideoPlayer Element.
+   * @param previewDOMElement Video DOM element that will contain the video playback. Canvas and VideoPlayer Element will contain the video with virtual background. We recommend you use the VideoPlayer Element.
    * @param virtualBackground virtual background setting
    */
   start(

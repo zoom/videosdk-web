@@ -636,7 +636,33 @@ export abstract class VideoProcessor {
   ): boolean | Promise<boolean>;
 }
 /**
- * Registers a custom video processor class.
+ * The parent class of all source audio stream processors.
+ * > ***Note***: AudioProcessor inherits from AudioWorkletProcessor and only available in audio worklet processors.
+ *
+ * @category Global
+ */
+export abstract class AudioProcessor extends AudioWorkletProcessor {
+  /**
+   * constructor
+   * @param port message port
+   * @param options customised options
+   */
+  public constructor(port: MessagePort, options?: any);
+  /**
+   * The communication port used for messaging between the processor and the main thread.
+   */
+  public port: MessagePort;
+  /**
+   * Callback triggered during the initialization of the processor.
+   */
+  public onInit(): void;
+  /**
+   * Callback triggered during the uninitialization of the processor.
+   */
+  public onUninit(): void;
+}
+/**
+ * Registers a custom processor class.
  *> ***Note***: Only available in the processor worker.
  * @param name The name of the processor
  * @param processor The processor class
@@ -645,7 +671,7 @@ export abstract class VideoProcessor {
  */
 export function registerProcessor(
   name: string,
-  processor: typeof VideoProcessor,
+  processor: typeof VideoProcessor | typeof AudioProcessor,
 ): void;
 /**
  * Custom web component for video render
@@ -762,6 +788,10 @@ export enum ActiveMediaFailedCode {
    * Failed to get video data from the stream.
    */
   VideoStreamFailed = 206,
+  /**
+   * Video stream was interrupted.
+   */
+  VideoStreamMuted = 207,
   /**
    * Failed to get sharing data from the stream.
    */

@@ -617,6 +617,93 @@ interface CameraControlOption {
   reset?: boolean;
 }
 /**
+ * Annotation tool type
+ */
+export enum AnnotationToolType {
+  None = 0,
+  Pen = 1,
+  Highlighter = 2,
+  Arrow = 4,
+  Eraser = 7,
+  Line = 11,
+  Arrow1 = 12,
+  Rectangle = 14,
+  RectangleSemiFill = 15,
+  Ellipse = 18,
+  EllipseSemiFill = 19,
+  DoubleArrow = 20,
+  RectangleFill = 21,
+  EllipseFill = 23,
+  Diamond = 24,
+  StampArrow = 25,
+  StampCheck = 26,
+  StampX = 27,
+  StampStar = 31,
+  StampHeart = 32,
+  StampQuestionMark = 33,
+  FadePen = 36,
+  DiamondSemiFill = 37,
+  DiamondFill = 38,
+}
+/**
+ * Annotation clear type
+ */
+export enum AnnotationClearType {
+  Mine = 0,
+  Viewer = 1,
+  All = 2,
+}
+/**
+ * Annotation controller type
+ */
+export interface AnnotationControllerType {
+  /**
+   * Set the annotation tool type. Default is None = 0.
+   * @param toolType AnnotationToolType
+   */
+  setToolType: (toolType: AnnotationToolType) => ExecutedResult;
+  /**
+   * Set the annotation tool color. Default is black (0xff000000).
+   * @param color number, RGBA color in 8-digit hexadecimal format. Example: white: 0xffffffff.
+   */
+  setToolColor: (color: number) => ExecutedResult;
+  /**
+   * Set the annotation tool width. Default is 8px.
+   * @param width number
+   */
+  setToolWidth: (width: number) => ExecutedResult;
+  /**
+   * Get the annotation tool type.
+   */
+  getToolType: () => AnnotationToolType;
+  /**
+   * Get the annotation tool color.
+   */
+  getToolColor: () => number;
+  /**
+   * Get the annotation tool width.
+   */
+  getToolWidth: () => number;
+  /**
+   * Redo the annotation operation.
+   * Listen to the 'annotation-redo-status' event to check if the redo operation is available.
+   */
+  redo: () => ExecutedResult;
+  /**
+   * Undo the annotation operation.
+   * Listen to the 'annotation-undo-status' event to check if the undo operation is available.
+   */
+  undo: () => ExecutedResult;
+  /**
+   * Clear the annotation on the shared content.
+   * The viewer can clear their content with Mine = 0.
+   * The host can clear their content with Mine = 0, or all content with All = 2.
+   * The presenter can clear their content with Mine = 0, viewer content with Viewer = 1, or all content with All = 2.
+   * @param clearType AnnotationClearType
+   */
+  clear: (clearType: AnnotationClearType) => ExecutedResult;
+}
+/**
  * Far end camera control command.
  */
 interface FarEndCameraControlOption {
@@ -873,6 +960,8 @@ export declare namespace Stream {
   ): ExecutedResult;
   /**
    * Switches the audio speaker.
+   *
+   * > ***Note**: Due to Safari browser limitations, this method will fail if you are using WASM audio on Safari 18.4.
    *
    * @param speakerId Device ID of the speaker.
    * @returns Executed promise.
@@ -1225,6 +1314,13 @@ export declare namespace Stream {
    * @category Audio
    */
   function isAllowAudioUnmutedBySelf(): boolean;
+
+  /**
+   * Get the sip address of the session
+   * @returns sip address
+   * @category CRC
+   */
+  function getSessionSIPAddress(): string;
 
   // -------------------------------------------------[video]-----------------------------------------------------------
 
@@ -1687,6 +1783,7 @@ export declare namespace Stream {
   function removeAllSpotlightedVideos(): ExecutedResult;
   /**
    * Take a screenshot of the specified user's video stream.
+   * Once the screenshot is taken, triggers a `video-screenshot-taken` event on the target user of the screenshot.
    *
    * @param userId Required. The user ID which to screenshot the video.
    * @returns
@@ -1796,7 +1893,7 @@ export declare namespace Stream {
    */
   function isSupportMultipleVideos(): boolean;
   /**
-   * Get maximum concurrent video renders supported by current device.
+   * Get the maximum concurrent remote video renders supported by the current device.
    * @returns The number of simultaneous video renders, typically affected by GPU/CPU/ShareArrayBuffer capabilities.
    * @category Video
    */
@@ -2065,6 +2162,7 @@ export declare namespace Stream {
   function unsubscribeShareStatisticData(type?: StatisticOption): ExecutedResult;
   /**
    * Take a screenshot of the share view.
+   * Once the screenshot is taken, triggers a `share-content-screenshot-taken` event on the target user of the screenshot.
    * @returns
    * - Blob.
    * - `Error`: Failure. Details in {@link ErrorTypes}.
@@ -2146,6 +2244,81 @@ export declare namespace Stream {
     deviceId?: string;
     displaySurface?: string;
   };
+
+  /**
+   * Start the annotation feature on shared content.
+   * To use the annotation feature, follow these steps:
+   * 1. Wrap the ```<canvas>``` or ```<video>``` to startShareScreen() or startShareView() by a relative positioned container. Don't add any border or padding to the ```<canvas>``` and ```<video>```.
+   * ```html
+   * <div id="share-container" style="position:relative">
+   *  <video id="sending-share-content"></video>
+   *  <canvas id="receiving-share-content"></canvas>
+   * </div>
+   * ```
+   * 2. The ```<canvas>``` or ```<video>``` style size should have the same aspect ratio as its displayed content. To get the content size, refer to the 'share-content-dimension-change' event.
+   * ```javascript
+   * client.on("share-content-dimension-change", (payload) => {
+   *  const { type, height, width } = payload;
+   * const receivingShareCanvas = document.getElementById('receiving-share-content');
+   * const container = document.getElementById('share-container');
+   * const containerWidth = container.clientWidth;
+   * const containerHeight = container.clientHeight;
+   * const containerAspectRatio = containerWidth / containerWidth;
+   *  switch (type) {
+   *   case "received":
+   *    const contentAspectRatio = receivingShareCanvas.clientWidth / receivingShareCanvas.clientHeight;
+   *     if (containerAspectRatio > contentAspectRatio) {
+   *     // Container is wider than content — fit by height
+   *       receivingShareCanvas.style.width = `${containerHeight * contentAspectRatio}px`;
+   *       receivingShareCanvas.style.height = `${containerHeight}px`;
+   *     } else {
+   *      // Container is taller than content — fit by width
+   *       receivingShareCanvas.style.width = `${containerWidth}px`;
+   *       receivingShareCanvas.style.height = `${containerWidth / contentAspectRatio}px`;
+   *     }
+   *     break;
+   *   case: "sended":
+   *     // Similar like the "received" part
+   *     break;
+   *   default:
+   *    // No default operations
+   *  }
+   * })
+   * ```
+   * 3. If the share receiver calls startAnnotation(), the share presenter will receive the 'annotation-viewer-draw-request' event and the presenter also must call startAnnotation() to allow the receiver to draw.
+   * ```javascript
+   * client.on('annotation-viewer-draw-request', (payload) => {
+   *  stream.startAnnotation();
+   * })
+   * ```
+   * @category Share Annotation
+   */
+
+  function startAnnotation(): ExecutedResult;
+  /**
+   * Enable or disable the viewer's ability to annotate during your screen-sharing session as the sender.
+   * In addition to the normal use case to stop the annotation after startAnnotation(), use stopAnnotation() for the following case:
+   * 1. Current screen share is paused.
+   * 2. Current screen share session annotation is disabled by presenter via changeAnnotationPrivilege()
+   * @category Share Annotation
+   */
+  function stopAnnotation(): ExecutedResult;
+  /**
+   * Enable or disable the viewer's ability to annotate during your screen-sharing session as the sender.
+   * @param enable boolean
+   * @category Share Annotation
+   */
+  function changeAnnotationPrivilege(enable: boolean): ExecutedResult;
+  /**
+   * Whether you can annotate on the shared content. Use this method after sending share or receiving share started.
+   * @category Share Annotation
+   */
+  function canDoAnnotation(): boolean;
+  /**
+   * Get the annotation control methods.
+   * @category Share Annotation
+   */
+  function getAnnotationController(): AnnotationControllerType;
 
   // -------------------------------------------------[camera]-----------------------------------------------------------
 
@@ -2546,4 +2719,11 @@ export declare namespace Stream {
    * @category Processor
    */
   function isSupportVideoProcessor(): boolean;
+  /**
+   * Determines whether the current platform supports the audio processor.
+   *
+   * @returns Whether the current platform supports the audio processor.
+   * @category Processor
+   */
+  function isSupportAudioProcessor(): boolean;
 }

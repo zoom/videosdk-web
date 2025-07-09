@@ -87,7 +87,9 @@ import {
   event_annotation_redo_status,
   event_annotation_undo_status,
   event_annotation_viewer_draw_request,
+  event_broadcast_streaming_status,
 } from './event-callback';
+import { BroadcastStreamingClient } from './broadcast-streaming';
 // import AIClient from '../src/summary';
 
 /**
@@ -267,7 +269,7 @@ export declare namespace VideoClient {
   /**
    * Listens for events and handles them.
    * @param event Event name.
-   * @param callback Ehe event handler.
+   * @param callback The event handler.
    */
   function on(event: string, callback: (payload: any) => void): void;
   /**
@@ -946,6 +948,15 @@ export declare namespace VideoClient {
     listener: typeof event_annotation_viewer_draw_request,
   ): void;
   /**
+   *
+   * @param event
+   * @param listener Details in {@link event_broadcast_streaming_status}
+   */
+  function on(
+    event: 'broadcast-streaming-status',
+    listener: typeof event_broadcast_streaming_status,
+  ): void;
+  /**
    * Removes the event handler.
    * @param event Event name.
    * @param callback The event handler.
@@ -1075,6 +1086,10 @@ export declare namespace VideoClient {
    * Gets the liveStream client.
    */
   function getLiveStreamClient(): typeof LiveStreamClient;
+  /**
+   *  Gets the broadcast streaming client.
+   */
+  function getBroadcastStreamingClient(): typeof BroadcastStreamingClient;
   /**
    * Gets the current session’s information.
    */

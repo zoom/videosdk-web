@@ -1,3 +1,6 @@
+/**
+ * @module ZoomVideo
+ */
 import { ZoomVideo } from './zoomvideo';
 export * from './common';
 export * from './event-callback';
@@ -12,5 +15,6 @@ export * from './live-transcription';
 export * from './logger';
 export * from './live-stream';
 export * from './exception-code';
+export * from './broadcast-streaming';
 // export * from './summary';
 export default ZoomVideo;

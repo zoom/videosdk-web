@@ -21,6 +21,7 @@ import {
 } from './common';
 import { LiveTranscriptionMessage } from './live-transcription';
 import { LiveStreamStatus } from './live-stream';
+import { BroadcastStreamingStatus } from './broadcast-streaming';
 /**
  * Interface of a ParticipantPropertiesPayload.
  */
@@ -114,6 +115,10 @@ export interface ParticipantPropertiesPayload {
    * It's available if the user is in a subsession.
    */
   subsessionId?: string;
+  /**
+   * Whether the user is in a failover process.
+   */
+  isInFailover?: boolean;
 }
 /**
  * The session's connection state.
@@ -1943,6 +1948,7 @@ export declare function event_share_content_screenshot_taken(payload: {
 /**
  * Occurs when the sharer changes the annotation privilege of his share session.
  * @param payload
+ * @category Annotation
  */
 export declare function event_annotation_privilege_change(payload: {
   /**
@@ -1957,6 +1963,7 @@ export declare function event_annotation_privilege_change(payload: {
 /**
  * Occurs when the availability status of the redo option changes.
  * @param payload
+ * @category Annotation
  */
 export declare function event_annotation_redo_status(payload: {
   /**
@@ -1971,6 +1978,7 @@ export declare function event_annotation_redo_status(payload: {
 /**
  * Occurs when the availability status of the undo option changes.
  * @param payload
+ * @category Annotation
  */
 export declare function event_annotation_undo_status(payload: {
   /**
@@ -1985,6 +1993,7 @@ export declare function event_annotation_undo_status(payload: {
 /**
  * Occurs for the presenter when the viewer calls the startAnnotation() function to draw on sharing content.
  * @param payload
+ * @category Annotation
  */
 export declare function event_annotation_viewer_draw_request(payload: {
   /**
@@ -1992,3 +2001,14 @@ export declare function event_annotation_viewer_draw_request(payload: {
    */
   userId: number;
 }): void;
+/**
+ * Occurs when the status of the broadcast streaming changes.
+ * @param payload
+ * @category Broadcast Streaming
+ */
+export declare function event_broadcast_streaming_status(payload: {
+  /**
+   * The broadcast streaming status
+   */
+  status: BroadcastStreamingStatus;
+});

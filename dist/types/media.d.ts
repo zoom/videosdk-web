@@ -420,6 +420,11 @@ export interface ScreenShareOption {
    */
   sourceId?: string;
   /**
+   * Support the ability to receive others' screen shares while sharing your own.
+   * ***Note**: This may result in a Hall of Mirrors effect, depending on the screen you choose to share.
+   */
+  simultaneousShareView?: boolean;
+  /**
    * Privacy-preserving screen sharing controls
    * See for details:
    * https://developer.chrome.com/docs/web-platform/screen-sharing-controls
@@ -2309,6 +2314,12 @@ export declare namespace Stream {
    * @category Share Annotation
    */
   function changeAnnotationPrivilege(enable: boolean): ExecutedResult;
+  /**
+   * Presenter can enable or disable the viewer's name next to viewer's annotation on presenter's sharing content.
+   * @param enable boolean
+   * @category Share Annotation
+   */
+  function showAnnotatorName(enable: boolean): ExecutedResult;
   /**
    * Whether you can annotate on the shared content. Use this method after sending share or receiving share started.
    * @category Share Annotation

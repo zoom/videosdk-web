@@ -221,6 +221,10 @@ export enum DialoutState {
    * Failed to cancel the call.
    */
   CancelFailed = 12,
+  /**
+   * Phone rang but no one answered, a missed call
+   */
+  NoAnswer = 13,
 }
 
 /**
@@ -636,8 +640,26 @@ export abstract class VideoProcessor {
   ): boolean | Promise<boolean>;
 }
 /**
+ * Native AudioWorkletProcessor type definition from browser，see https://developer.mozilla.org/en-US/docs/Web/API/AudioWorkletProcessor https://developer.mozilla.org/en-US/docs/Web/API/AudioWorkletProcessor for details.
+ */
+declare abstract class AudioWorkletProcessor {
+  constructor(options?: any);
+  abstract process(
+    inputs: Array<Array<Float32Array>>,
+    outputs: Array<Array<Float32Array>>,
+    parameters: Record<string, Float32Array>,
+  ): boolean;
+  static parameterDescriptors?: Array<{
+    name: string;
+    defaultValue?: number;
+    minValue?: number;
+    maxValue?: number;
+    automationRate?: 'a-rate' | 'k-rate';
+  }>;
+}
+/**
  * The parent class of all source audio stream processors.
- * > ***Note***: AudioProcessor inherits from AudioWorkletProcessor and only available in audio worklet processors.
+ * > ***Note***: AudioProcessor inherits from AudioWorkletProcessor and is only available in audio worklet processors.
  *
  * @category Global
  */

@@ -948,4 +948,19 @@ export enum ExceptionCode {
    * @category QA
    */
   QA_INSUFFICIENT_PRIVILEGE = 7801,
+  /**
+   * Broadcast streaming exception
+   */
+  /**
+   * Occurs in `broadcastStreamingClient.startBroadcast()` method because the feature is disabled in the account setting.
+   */
+  BROADCAST_STREAMING_ACCOUNT_DISABLE = 7900,
+  /**
+   * Occurs in `broadcastStreamingClient.startBroadcast()` method because the status is incorrect.
+   */
+  BROADCAST_STREAMING_MISMATCH_STATE = 7901,
+  /**
+   * Occurs in `broadcastStreamingClient.stopBroadcast()` method because the channel ID in current case is required.
+   */
+  BROADCAST_STREAMING_INVALID_CHANNEL_ID = 7902,
 }

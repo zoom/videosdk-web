@@ -341,6 +341,11 @@ export enum ExceptionCode {
    */
   AUDIO_PROCESSOR_MISMATCH_PROCESSOR = 6028,
   /**
+   * Error that occurs when calling `stream.addProcessor` with a processor that has already been added.
+   * @category Audio processor
+   */
+  AUDIO_PROCESSOR_LIMIT_EXCEED = 6029,
+  /**
    * Occurs in `stream.startVideo` method due to the user denied camera permission.
    * @category Video
    */
@@ -578,6 +583,31 @@ export enum ExceptionCode {
    * @category Share annotation
    */
   SCREEN_SHARE_ANNOTATION_NOT_START = 6217,
+  /**
+   * Error that occurs when calling `stream.attachShareView` and  the number of rendered share views exceeds the limit.
+   * @category Screen share
+   */
+  SCREEN_SHARE_LIMIT_EXCEED = 6218,
+  /**
+   * Error that occurs when calling `stream.createProcessor` and the platform does not support share processors.
+   * @category Share processor
+   */
+  SHARED_PROCESSOR_UNSUPPORTED = 6223,
+  /**
+   * Error that occurs when calling `stream.createProcessor` with a share processor that has already been created.
+   * @category Share processor
+   */
+  SHARED_PROCESSOR_DUPLICATE_CREATE = 6224,
+  /**
+   * Error that occurs when calling `stream.addProcessor` or `stream.removeProcessor` and the target processor cannot be found.
+   * @category Share processor
+   */
+  SHARED_PROCESSOR_MISMATCH_PROCESSOR = 6225,
+  /**
+   * Error that occurs when calling `stream.addProcessor` with more than one share processor at the same time.
+   * @category Share processor
+   */
+  SHARED_PROCESSOR_LIMIT_EXCEED = 6226,
   /**
    * Remote control exception
    */
@@ -836,6 +866,10 @@ export enum ExceptionCode {
    * @category Transcription
    */
   MANUAL_CAPTION_INSUFFICIENT_PRIVILEGE = 7309,
+  /**
+   * Error that occurs when calling `liveTranscription.lockTranscriptionLanguage` while the transcription language is already locked by the host.
+   */
+  TRANSCRIPTION_LANGUAGE_LOCKED = 7310,
 
   /**
    * Occurs in `liveStream.startLiveStream` method because the live stream is disabled in the account.

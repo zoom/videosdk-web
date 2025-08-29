@@ -1,6 +1,6 @@
 {
   "name": "@zoom/videosdk",
-  "version": "2.2.5",
+  "version": "2.2.10",
   "description": "Zoom Web Video SDK",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -16,7 +16,7 @@
     "sdk",
     "web"
   ],
-  "author": "Zoom Video Communications",
+  "author": "Zoom Communications",
   "license": "SEE LICENSE IN LICENSE.md",
   "files": [
     "/docs",
@@ -36,5 +36,17 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.esm.js",
+      "types": "./dist/types/index.d.ts"
+    },
+    "./broadcast-streaming": {
+      "require": "./dist/broadcast-streaming.js",
+      "import": "./dist/broadcast-streaming.esm.js",
+      "types": "./dist/types/zoomstreaming.d.ts"
+    }
   }
 }

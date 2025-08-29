@@ -326,6 +326,15 @@ export interface CaptureVideoOption {
    * Specify the maximum frames per second (FPS) limitation. This is limited to between 10-30 FPS (inclusive). The default is 24 FPS.
    */
   fps?: number;
+  /**
+   * Specifies custom video constraints for the camera.
+   * - When set, these constraints override other options such as `cameraId`, `captureWidth`, `captureHeight`, `fps`, etc.
+   * - **Use this option only in specific scenarios.** Normally, the SDK automatically optimizes the constraints.
+   * - **This applies only to the current camera.** Switching cameras using `stream.switchCamera` will not carry over `customVideoConstraints`, as different cameras may have different capabilities.
+   *
+   * @since 2.2.10
+   */
+  customVideoConstraints?: MediaTrackConstraints;
 }
 /**
  * Audio QoS data interface.
@@ -420,8 +429,9 @@ export interface ScreenShareOption {
    */
   sourceId?: string;
   /**
-   * Support the ability to receive others' screen shares while sharing your own.
-   * ***Note**: This may result in a Hall of Mirrors effect, depending on the screen you choose to share.
+   * Enables the ability to view other users' screen shares while sharing your own.
+   * > **Note:** If you share a screen that includes the session window itself (showing both your screen and the other person's share), you may encounter a "Hall of Mirrors" effect, a repeating visual loop where the shared content reflects itself recursively.
+   * @since 2.2.5
    */
   simultaneousShareView?: boolean;
   /**
@@ -628,6 +638,11 @@ export enum AnnotationToolType {
   None = 0,
   Pen = 1,
   Highlighter = 2,
+  /**
+   * Only the share presenter can apply a spotlight.
+   * Changing the spotlight color won't affect other tool colors.
+   * */
+  Spotlight = 3,
   Arrow = 4,
   Eraser = 7,
   Line = 11,
@@ -1197,6 +1212,8 @@ export declare namespace Stream {
   /**
    * The host can set to allow users to unmute themselves.
    * - Only the **host** or **manager** can do this.
+   *
+   * @since 2.1.5
    * @param enable
    *
    * @return executed promise.
@@ -1322,6 +1339,8 @@ export declare namespace Stream {
 
   /**
    * Get the sip address of the session
+   *
+   * @since 2.2.0
    * @returns sip address
    * @category CRC
    */
@@ -1790,6 +1809,7 @@ export declare namespace Stream {
    * Take a screenshot of the specified user's video stream.
    * Once the screenshot is taken, triggers a `video-screenshot-taken` event on the target user of the screenshot.
    *
+   * @since 2.1.10
    * @param userId Required. The user ID which to screenshot the video.
    * @returns
    * - Blob.
@@ -1899,6 +1919,8 @@ export declare namespace Stream {
   function isSupportMultipleVideos(): boolean;
   /**
    * Get the maximum concurrent remote video renders supported by the current device.
+   *
+   * @since 2.1.10
    * @returns The number of simultaneous video renders, typically affected by GPU/CPU/ShareArrayBuffer capabilities.
    * @category Video
    */
@@ -2005,6 +2027,59 @@ export declare namespace Stream {
    * @category Screen Share
    */
   function stopShareView(): ExecutedResult;
+  /**
+   * Attaches the share view to a specified element.
+   * > The returned {@link VideoPlayer} element must be a child node of a {@link VideoPlayerContainer}.
+   * > The container used for share view cannot be the as the one used for `attachVideo`; the two must not be mixed.
+   * ```html
+   * <video-player-container class="share-container">
+   *  <div class="share-tile"></div>
+   * </video-player-container>
+   * ```
+   *
+   * ```javascript
+   * const element = stream.attachShareView(userId);
+   * document.querySelector('.share-tile').appendChild(element);
+   * ```
+   *
+   * @param userId - The ID of the user whose share view will be attached.
+   * @param element - Optional. Specifies the target element for the share view:
+   * - `undefined` (default): The SDK creates a new `VideoPlayer` element automatically.
+   * - `string`: A CSS selector passed to `document.querySelector` to find the container element.
+   * - `VideoPlayer`: A pre-created `VideoPlayer` element to use directly.
+   * @returns A `Promise` resolving to the attached `VideoPlayer` or an `ExecutedFailure`.
+   * @category Screen Share
+   * @since 2.2.10
+   */
+  function attachShareView(
+    userId: number,
+    element?: string | VideoPlayer,
+  ): Promise<VideoPlayer | ExecutedFailure>;
+  /**
+   * Detaches the share view from all previously attached `VideoPlayer` elements or specific element.
+   *
+   * ```javascript
+   * const elements = stream.detachShareView(userId);
+   * if (Array.isArray(elements)) {
+   *  elements.forEach((e) => e.remove());
+   * } else {
+   *  elements.remove();
+   * }
+   * ```
+   *
+   * @param userId  Required. The ID of the user whose share view will be detached.
+   * @param element - Optional. Specifies which element(s) to detach:
+   * - `undefined` (default): Detach all share views for the user.
+   * - `string`: A CSS selector passed to `document.querySelector` to find the element to detach.
+   * - `VideoPlayer`: A specific `VideoPlayer` element to detach.
+   *
+   * @category Screen Share
+   * @since 2.2.10
+   */
+  function detachShareView(
+    userId: number,
+    element?: string | VideoPlayer,
+  ): Promise<VideoPlayer | ExecutedFailure>;
 
   /**
    * Switch to another share content.
@@ -2168,13 +2243,17 @@ export declare namespace Stream {
   /**
    * Take a screenshot of the share view.
    * Once the screenshot is taken, triggers a `share-content-screenshot-taken` event on the target user of the screenshot.
+   *
+   * @param userId Optional. The user ID to screenshot. Default - screenshots the active share view.
+   *
+   * @since 2.1.10
    * @returns
    * - Blob.
    * - `Error`: Failure. Details in {@link ErrorTypes}.
    *
    * @category Screen Share
    */
-  function screenshotShareView(): Promise<Blob | ExecutedFailure>;
+  function screenshotShareView(userId?: number): Promise<Blob | ExecutedFailure>;
   /**
    * Determines whether the host locked the share.
    * @returns Whether screen share is locked.
@@ -2240,6 +2319,8 @@ export declare namespace Stream {
   };
   /**
    * Get the active share stream settings
+   *
+   * @since 2.1.10
    * @returns {@link [MediaTrackSettings](https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackSettings)}
    * @category Screen Share
    */
@@ -2249,6 +2330,14 @@ export declare namespace Stream {
     deviceId?: string;
     displaySurface?: string;
   };
+
+  /**
+   * Returns the maximum number of concurrent share views supported by the current device.
+   *
+   * @returns The maximum number of simultaneous share views, typically limited by GPU or CPU capabilities.
+   * @since 2.2.10
+   */
+  function getMaxRenderableShareViews(): number;
 
   /**
    * Start the annotation feature on shared content.
@@ -2296,37 +2385,48 @@ export declare namespace Stream {
    *  stream.startAnnotation();
    * })
    * ```
+   * @since 2.2.0
    * @category Share Annotation
    */
 
   function startAnnotation(): ExecutedResult;
   /**
-   * Enable or disable the viewer's ability to annotate during your screen-sharing session as the sender.
+   * Stop the annotation on sharing content.
    * In addition to the normal use case to stop the annotation after startAnnotation(), use stopAnnotation() for the following case:
    * 1. Current screen share is paused.
    * 2. Current screen share session annotation is disabled by presenter via changeAnnotationPrivilege()
+   *
+   * @since 2.2.0
    * @category Share Annotation
    */
   function stopAnnotation(): ExecutedResult;
   /**
    * Enable or disable the viewer's ability to annotate during your screen-sharing session as the sender.
+   *
+   * @since 2.2.0
    * @param enable boolean
    * @category Share Annotation
    */
   function changeAnnotationPrivilege(enable: boolean): ExecutedResult;
   /**
-   * Presenter can enable or disable the viewer's name next to viewer's annotation on presenter's sharing content.
+   * Enable or disable the viewer's name next to the viewer's annotation on the presenter's shared content.
+   *
+   * @since 2.2.5
    * @param enable boolean
    * @category Share Annotation
    */
   function showAnnotatorName(enable: boolean): ExecutedResult;
   /**
    * Whether you can annotate on the shared content. Use this method after sending share or receiving share started.
+   *
+   * @since 2.2.0
    * @category Share Annotation
    */
   function canDoAnnotation(): boolean;
   /**
    * Get the annotation control methods.
+   *
+   * @since 2.2.0
    * @category Share Annotation
    */
   function getAnnotationController(): AnnotationControllerType;
@@ -2696,6 +2796,7 @@ export declare namespace Stream {
   /**
    * Create a processor.
    *
+   * @since 2.1.5
    * @param param Required. Processor parameters.
    *
    * @returns
@@ -2706,6 +2807,7 @@ export declare namespace Stream {
   /**
    * Add the processor to the current media stream.
    *
+   * @since 2.1.5
    * @param processor required. The processor instance you want to add.
    *
    * @returns
@@ -2716,6 +2818,7 @@ export declare namespace Stream {
   /**
    * Remove the current media stream processor.
    *
+   * @since 2.1.5
    * @param processor required. The processor instance you want to remove.
    *
    * @returns
@@ -2726,6 +2829,7 @@ export declare namespace Stream {
   /**
    * Determines whether the current platform supports the video processor.
    *
+   * @since 2.1.5
    * @returns Whether the current platform supports the video processor.
    * @category Processor
    */
@@ -2733,8 +2837,17 @@ export declare namespace Stream {
   /**
    * Determines whether the current platform supports the audio processor.
    *
+   * @since 2.2.0
    * @returns Whether the current platform supports the audio processor.
    * @category Processor
    */
   function isSupportAudioProcessor(): boolean;
+  /**
+   * Checks if the current platform supports the share processor.
+   *
+   * @returns `true` if the share processor is supported on the current platform; otherwise, `false`.
+   * @category Processor
+   * @since 2.2.10
+   */
+  function isSupportShareProcessor(): boolean;
 }

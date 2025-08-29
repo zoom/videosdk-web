@@ -640,7 +640,7 @@ export abstract class VideoProcessor {
   ): boolean | Promise<boolean>;
 }
 /**
- * Native AudioWorkletProcessor type definition from browser，see https://developer.mozilla.org/en-US/docs/Web/API/AudioWorkletProcessor https://developer.mozilla.org/en-US/docs/Web/API/AudioWorkletProcessor for details.
+ * Native AudioWorkletProcessor type definition from browser，see https://developer.mozilla.org/en-US/docs/Web/API/AudioWorkletProcessor for details.
  */
 declare abstract class AudioWorkletProcessor {
   constructor(options?: any);
@@ -684,6 +684,48 @@ export abstract class AudioProcessor extends AudioWorkletProcessor {
   public onUninit(): void;
 }
 /**
+ * Base class for all source share stream processors.
+ * > ***Note***: Available only in the share processor worker.
+ *
+ * @category Global
+ */
+export abstract class ShareProcessor {
+  /**
+   * Creates a new `ShareProcessor`.
+   * @param port port message port - The message port used for communication.
+   * @param options customised options  - Optional processor configuration.
+   */
+  public constructor(port: MessagePort, options?: any);
+  /**
+   * The communication port used for messaging between the processor and the main thread.
+   */
+  protected port: MessagePort;
+  /**
+   * Retrieves the `OffscreenCanvas` that renders the current output frame or processed result.
+   */
+  public getOutput(): OffscreenCanvas | null;
+  /**
+   * Called when the processor is initializated.
+   */
+  public onInit(): void;
+  /**
+   * Called when the processor is uninitialized.
+   */
+  public onUninit(): void;
+  /**
+   * Processes a share frame and optionally applies effects or transformations.
+   *
+   * @param input - The input share frame to process.
+   * @param output - The canvas where the processed frame is rendered.
+   * @returns `true`/`false` or a `Promise` that resolves to a boolean
+   * indicating success or failure.
+   */
+  public abstract processFrame(
+    input: VideoFrame,
+    output: OffscreenCanvas,
+  ): boolean | Promise<boolean>;
+}
+/**
  * Registers a custom processor class.
  *> ***Note***: Only available in the processor worker.
  * @param name The name of the processor
@@ -693,7 +735,7 @@ export abstract class AudioProcessor extends AudioWorkletProcessor {
  */
 export function registerProcessor(
   name: string,
-  processor: typeof VideoProcessor | typeof AudioProcessor,
+  processor: typeof VideoProcessor | typeof AudioProcessor | typeof ShareProcessor,
 ): void;
 /**
  * Custom web component for video render

@@ -35,7 +35,7 @@ export interface ZoomBroadcastStreamingOptions {
    */
   dependentAssets?: string;
   /**
-   * Optional.  Alternative name for Zoom Live Video to avoid name conflict with existing web component.
+   * Optional. Alternative name for Zoom Live Video to avoid name conflict with any existing web components you may be using.
    */
   alternativeNameForLiveVideo?: string;
   /**
@@ -71,7 +71,7 @@ export declare class LiveVideo extends HTMLElement {
    */
   ['volume']: string;
   /**
-   * Is show default controls, default false
+   * Show default controls? Default false.
    */
   ['controls']: 'true' | 'false';
   /**
@@ -79,11 +79,11 @@ export declare class LiveVideo extends HTMLElement {
    */
   ['rewind']: 'true' | 'false';
   /**
-   * rewind time for seek
+   * Rewind time for seek
    */
   currentTime: number;
   /**
-   * playback rate of rewind video
+   * Playback rate of video rewind
    */
   playbackRate: number;
   /**
@@ -114,7 +114,7 @@ export declare const onEnded: ((this: LiveVideo, ev: CustomEvent) => any) | null
  */
 export declare const onPlaying: ((this: LiveVideo, ev: CustomEvent) => any) | null;
 /**
- * Occurs when streaming is blocking, it's better to show the loading.
+ * Occurs when streaming is blocked, for example, when there is insufficient network bandwidth, which prevents the next playback segment from being prepared in time to stream. This is similar to buffer loading on other streaming platforms. Best practice is to show that the content is loading.
  * ```javascript
  * liveVideo.addEventListener('waiting', () => {
  *
@@ -189,7 +189,7 @@ export declare function event_video_statistic_data_change(payload: {
    */
   avg_loss: number;
   /**
-   * If encoding is true, the following metrics stand for the Send data statistics, otherwise, it stands for the Receive data statistics.
+   * If encoding is true, the following metrics stand for the Send data statistics; otherwise, they stand for the Receive data statistics.
    */
   encoding: boolean;
   /**
@@ -240,7 +240,7 @@ export declare function event_audio_statistic_data_change(payload: {
    */
   avg_loss: number;
   /**
-   * If encoding is true, the following metrics stand for the Send data statistics, otherwise, it stands for the Receive data statistics.
+   * If encoding is true, the following metrics stand for the Send data statistics; otherwise, they stand for the Receive data statistics.
    */
   encoding: boolean;
   /**
@@ -281,6 +281,8 @@ declare class ZoomBroadcastStreaming {
   /**
    * Get an instance for managing the streaming.
    * This method will return a same instance if called multiple times.
+   *
+   * @since 2.2.5
    * @param options Optional. Specifies the init options.
    */
   static createClient(
@@ -288,6 +290,7 @@ declare class ZoomBroadcastStreaming {
   ): ZoomBroadcastStreaming;
   /**
    * Destroys the client.
+   * @since 2.2.5
    */
   static destroyClient(): void;
   /**
@@ -312,6 +315,8 @@ declare class ZoomBroadcastStreaming {
    * );
    * document.querySelector(".streaming-container").appendChild(element);
    * ```
+   * @since 2.2.5
+   *
    * @param channelId Required. The channel ID.
    * @param token Required. The JWT token.
    * @param videoQuality Required. Quality of the video. One of the following: 90P/360P/640P/720P/1080P.
@@ -334,6 +339,9 @@ declare class ZoomBroadcastStreaming {
    *  elements.remove();
    * }`
    * ```
+   *
+   * @since 2.2.5
+   *
    * @param channelId Required. The channel ID.
    * @param element Optional. Empty value: detach all streamings. String value:LiveVideo element selector specified by document.querySelector; LiveVideo Element value: Specified element
    *
@@ -345,6 +353,7 @@ declare class ZoomBroadcastStreaming {
   /**
    * Listens for events and handles them.
    *
+   * @since 2.2.5
    * @param event Event name.
    * @param callback The event handler.
    */
@@ -384,6 +393,8 @@ declare class ZoomBroadcastStreaming {
   ): void;
   /**
    *  Removes the event handler.
+   *
+   * @since 2.2.5
    * @param event Event name.
    * @param callback The event handler.
    */

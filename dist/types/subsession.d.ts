@@ -65,13 +65,14 @@ export interface SubsessionOption {
    */
   waitSeconds?: number;
   /**
-   * Whether a participant should automatically move back to the main session when the host moves them back.
-   * If true, the participant returns to the main session without needing to agree to return.
-   * If false, the participant receives a `subsession-invite-back-to-main-session` event.
+   * Indicates whether a participant should automatically return to the main session when the host moves them back.
+   *
+   * - If `true`, the participant returns automatically without confirmation.
+   * - If `false`, the participant receives a `subsession-invite-back-to-main-session` event and must agree to return.
    */
   isAutoMoveBackToMainSession?: boolean;
   /**
-   * Whether allow to the participant to select a subsession to join
+   * Indicates whether participants are allowed to select a subsession to join.
    */
   isSubsessionSelectionEnabled?: boolean;
 }
@@ -315,7 +316,7 @@ export declare namespace SubsessionClient {
    */
   function getSubsessionOptions(): SubsessionOption;
   /**
-   * Determines whether the subsession is enabled.
+   * Checks whether the subsessions are enabled.
    */
   function isSubsessionEnabled(): boolean;
 }

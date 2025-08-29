@@ -170,6 +170,10 @@ export enum LiveTranscriptionLanguageCode {
    */
   Cantonese = 44,
   /**
+   * Catalan
+   */
+  Catalan = 48,
+  /**
    * No translation.
    */
   NoTranslation = 400,
@@ -327,6 +331,23 @@ export enum LiveTranscriptionLanguage {
    * Cantonese
    */
   Cantonese = 'zh-yue',
+  /**
+   * Catalan
+   */
+  Catalan = 'ca',
+}
+/**
+ * Specifies the transcription mode.
+ */
+export enum TranscriptionMode {
+  /**
+   * Individual mode — each user sets their own transcription language.
+   */
+  Individual = 'individual',
+  /**
+   * Session mode — the transcription language is set for the entire session.
+   */
+  Session = 'session',
 }
 /**
  *  Live transcription message.
@@ -379,11 +400,16 @@ interface LiveTranscriptionStatus {
    */
   isLiveTranslationEnabled: boolean;
   /**
-   * Is host disable the captions?
+   * Has the host disabled captions?
    */
   isHostDisableCaptions: boolean;
   /**
-   * Is manual caption enabled?
+   * Indicates whether the host has locked the transcription language.
+   * @since 2.2.10
+   */
+  isHostLockTranscriptionLanguage: boolean;
+  /**
+   * Are manual captions enabled?
    */
   isManualCaptionerEnabled: boolean;
   /**
@@ -436,12 +462,17 @@ export declare namespace LiveTranscriptionClient {
    */
   function startLiveTranscription(): ExecutedResult;
   /**
-   * Set speaking language.
-   * Note:
-   *  - Need to start live transcription before calling this function.
-   * @param language
+   * Sets the speaking language.
+   * @param language - The language to set for speech transcription.
+   * @param options - Optional configuration.  @since 2.2.10
+   * @param options.mode - The transcription mode to use (defaults to `Individual`)
+   *
+   * @returns An {@link ExecutedResult} indicating the success or failure of the operation.
    */
-  function setSpeakingLanguage(language: LiveTranscriptionLanguage): ExecutedResult;
+  function setSpeakingLanguage(
+    language: LiveTranscriptionLanguage,
+    options?: { mode: TranscriptionMode },
+  ): ExecutedResult;
   /**
    * Set translation language.
    * Notes:
@@ -457,6 +488,15 @@ export declare namespace LiveTranscriptionClient {
    * @param disable
    */
   function disableCaptions(disable: boolean): ExecutedResult;
+  /**
+   * Locks or unlocks the transcription language during a session.
+   * **Note:** Only the host can call this function
+   *
+   * @param isLock - `true` to lock, `false` to unlock the transcription language.
+   * @returns An {@link ExecutedResult} indicating the success or failure of the operation.
+   * @since 2.2.10
+   */
+  function lockTranscriptionLanguage(isLock: boolean): ExecutedResult;
   /**
    * Get the live transcription status.
    */

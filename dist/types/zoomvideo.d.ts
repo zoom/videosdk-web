@@ -84,10 +84,12 @@ export declare namespace ZoomVideo {
   function createLocalVideoTrack(deviceId?: string): LocalVideoTrack;
   /**
    * Destroys the client.
+   * @category ZOOM Core
    */
   function destroyClient(): Promise<void>;
   /**
    * Preloads dependent assets to optimize performance.
+   *
    */
   function preloadDependentAssets(path?: string): void;
 }

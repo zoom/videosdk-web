@@ -1224,6 +1224,29 @@ export declare function event_caption_status(payload: {
    * Language code.
    */
   lang?: number;
+  /**
+   * Language [ISO 639](https://www.iso.org/iso-639-language-code) format.
+   * Paired with the numeric {@link lang} property.
+   * @since 2.2.10
+   */
+  language?: string;
+  /**
+   * Session language code. When a user sets the speaking language in session mode, other participants will receive this notification.
+   * @since 2.2.10
+   */
+  sessionLang?: number;
+  /**
+   * Session-level language ISO 639 format.
+   * Paired with the numeric {@link sessionLang} property.
+   * @since 2.2.10
+   */
+  sessionLanguage?: string;
+  /**
+   * Whether translation captions are enabled in the session.
+   * When enabled, other participants receive a notification to set their speaking language.
+   * @since 2.2.10
+   */
+  translationStarted?: boolean;
 }): void;
 /**
  * Occurs when the SDK receives the live transcription, live translation, or manual captions message.
@@ -1917,8 +1940,11 @@ export declare function event_video_spotlight_change(payload: {
 
 /**
  * Occurs when someone in the meeting takes a screenshot of the video
+ *
+ * @since 2.1.10
  * @category Video
  * @param payload
+ * @event
  */
 export declare function event_video_screenshot_taken(payload: {
   /**
@@ -1932,8 +1958,11 @@ export declare function event_video_screenshot_taken(payload: {
 }): void;
 /**
  * Occurs when someone in the meeting takes a screenshot of the screen share
+ *
+ * @since 2.1.10
  * @param payload
  * @category Screen share
+ * @event
  */
 export declare function event_share_content_screenshot_taken(payload: {
   /**
@@ -1947,8 +1976,11 @@ export declare function event_share_content_screenshot_taken(payload: {
 }): void;
 /**
  * Occurs when the sharer changes the annotation privilege of his share session.
+ *
+ * @since 2.2.0
  * @param payload
  * @category Annotation
+ * @event
  */
 export declare function event_annotation_privilege_change(payload: {
   /**
@@ -1962,8 +1994,11 @@ export declare function event_annotation_privilege_change(payload: {
 }): void;
 /**
  * Occurs when the availability status of the redo option changes.
+ *
+ * @since 2.2.0
  * @param payload
  * @category Annotation
+ * @event
  */
 export declare function event_annotation_redo_status(payload: {
   /**
@@ -1977,8 +2012,11 @@ export declare function event_annotation_redo_status(payload: {
 }): void;
 /**
  * Occurs when the availability status of the undo option changes.
+ *
+ * @since 2.2.0
  * @param payload
  * @category Annotation
+ * @event
  */
 export declare function event_annotation_undo_status(payload: {
   /**
@@ -1992,8 +2030,11 @@ export declare function event_annotation_undo_status(payload: {
 }): void;
 /**
  * Occurs for the presenter when the viewer calls the startAnnotation() function to draw on sharing content.
+ *
+ * @since 2.2.0
  * @param payload
  * @category Annotation
+ * @event
  */
 export declare function event_annotation_viewer_draw_request(payload: {
   /**
@@ -2003,8 +2044,11 @@ export declare function event_annotation_viewer_draw_request(payload: {
 }): void;
 /**
  * Occurs when the status of the broadcast streaming changes.
+ *
+ * @since 2.2.5
  * @param payload
  * @category Broadcast Streaming
+ * @event
  */
 export declare function event_broadcast_streaming_status(payload: {
   /**
@@ -2012,3 +2056,13 @@ export declare function event_broadcast_streaming_status(payload: {
    */
   status: BroadcastStreamingStatus;
 });
+/**
+ * Occurs when the host locks or unlocks the transcription language during a session.
+ * @param payload - `true` if the transcription language is locked, `false` if unlocked.
+ *
+ * @event
+ * @category Live transcription
+ * @since 2.2.10
+ * @event
+ */
+export declare function event_caption_language_lock(payload: boolean): void;

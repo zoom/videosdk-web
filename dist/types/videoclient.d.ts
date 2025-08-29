@@ -88,6 +88,7 @@ import {
   event_annotation_undo_status,
   event_annotation_viewer_draw_request,
   event_broadcast_streaming_status,
+  event_caption_language_lock,
 } from './event-callback';
 import { BroadcastStreamingClient } from './broadcast-streaming';
 // import AIClient from '../src/summary';
@@ -232,6 +233,7 @@ interface InitOptions {
    * > ***Note**: Default is true.
    *
    * If enabled, the detailed log will be reported to the Zoom server when the session ends or the user leaves the session.
+   * @since 2.2.0
    */
   isLogDetailed?: boolean;
 }
@@ -642,6 +644,15 @@ export declare namespace VideoClient {
   /**
    *
    * @param event
+   * @param listener Details in {@link event_caption_language_lock}
+   */
+  function on(
+    event: 'caption-language-lock',
+    listener: typeof event_caption_language_lock,
+  ): void;
+  /**
+   *
+   * @param event
    * @param listener Details in {@link event_share_can_see_screen}
    */
   function on(
@@ -969,6 +980,7 @@ export declare namespace VideoClient {
    * @param userName Required. A name for the user.
    * @param sessionPassword Optional, unless it was set with the host. A session password of your choice. If set with the host, all attendees must provide the same password value or they will fail to join the session.
    * @param sessionIdleTimeoutMins Optional. The number of minutes your session can idle before ending, with one user present and without cloud recording. The default is 40 minutes.
+   * > **Note**: This parameter only applies to the session host or original host; otherwise, the default value of 40 minutes will be used.
    *
    * @returns an executed promise. Following are the possible error reasons:
    * - `duplicated operation`: Duplicated invoking of the `join` method.

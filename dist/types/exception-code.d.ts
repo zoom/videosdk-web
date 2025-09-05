@@ -15,6 +15,15 @@ export enum ExceptionCode {
    */
   INTERNAL_ERROR = 2,
   /**
+   * Operation was cancelled due to session state changes
+   * > This occurs when an ongoing operation is interrupted by:
+   * > - Session termination (LEAVING_MEETING)
+   * > - Failed session join (JOIN_MEETING_FAILED)
+   * > - Session reconnection process (RECONNECTING_MEETING)
+   * > The operation promise will be rejected with this error code when meeting state changes make the operation invalid
+   */
+  OPERATION_CANCELLED = 3,
+  /**
    * Session creation or retrieval error—this is usually caused by an incorrect field value in the JWT token.
    * - connection error
    * - The token has expired, is over 2 days old, or is ineffective

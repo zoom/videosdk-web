@@ -661,9 +661,18 @@ export enum AnnotationToolType {
   StampStar = 31,
   StampHeart = 32,
   StampQuestionMark = 33,
+  /**
+   * @deprecated Use VanishingPen instead. Will be removed in a future release.
+   */
   FadePen = 36,
+  VanishingPen = 36,
   DiamondSemiFill = 37,
   DiamondFill = 38,
+  VanishingArrow = 43,
+  VanishingDoubleArrow = 44,
+  VanishingDiamond = 45,
+  VanishingEllipse = 46,
+  VanishingRectangle = 47,
 }
 /**
  * Annotation clear type
@@ -722,6 +731,18 @@ export interface AnnotationControllerType {
    * @param clearType AnnotationClearType
    */
   clear: (clearType: AnnotationClearType) => ExecutedResult;
+  /**
+   * Set the display time and vanishing time for the vanishing tool types. It only work for the screen share sender. After the value is set, the screen share sender and receiver annotation will follow the same timer.
+   * @param vanishingToolTimer displayTime in milliseconds (default is 0), vanishingTime in milliseconds (default is 2000).
+   */
+  setVanishingToolTimer: (vanishingToolTimer: {
+    displayTime?: number;
+    vanishingTime?: number;
+  }) => ExecutedResult;
+  /**
+   * Get the vanishing tool displayTime and vanishingTime.
+   */
+  getVanishingToolTimer: () => { displayTime: number; vanishingTime: number };
 }
 /**
  * Far end camera control command.

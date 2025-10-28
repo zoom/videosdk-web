@@ -12,6 +12,7 @@ import {
   CRCProtocol,
   ProcessorParams,
   Processor,
+  StatsReport,
 } from './common';
 
 /**
@@ -606,6 +607,31 @@ export enum ShareStatus {
    * Sharing ended.
    */
   End = 'ended',
+}
+/**
+ * Share camera source
+ */
+export enum ShareCameraSource {
+  FrontCamera = 'frontCam',
+  RearCamera = 'rearCam',
+}
+/**
+ * Response to share camera request.
+ */
+export enum ShareCameraResponse {
+  Approved = 0,
+  Declined = 1,
+  /**
+   * The remote user doesn't support share camera feature.
+   */
+  NotEnabled = 2,
+}
+/**
+ * Share camera remote user implementation status.
+ */
+export enum ShareCameraRemoteStatus {
+  Success = 0,
+  Failed = 1,
 }
 /**
  * Local camera control command.
@@ -1838,6 +1864,119 @@ export declare namespace Stream {
    * @category Video
    */
   function screenshotVideo(userId: number): Promise<Blob | ExecutedFailure>;
+
+  /**
+   * Subscribe to system resource usage monitoring to receive real-time CPU and memory usage statistics.
+   * Once subscribed, the client will receive `system-resource-usage-change` events with resource usage data.
+   *
+   * **Event Data Format**
+   * ```javascript
+   * // Event payload structure
+   * {
+   *   cpu_usage: {
+   *     system_cpu_pressure_level: 0  // SystemCPUPressureLevel enum value (0-3)
+   *   }
+   * }
+   * ```
+   *
+   * **CPU Pressure Levels**
+   * - `0` (Nominal): Low CPU usage (under 30% load) - System running smoothly
+   * - `1` (Fair): Moderate CPU usage (30-60% load) - Resources being utilized
+   * - `2` (Serious): High CPU usage (60-90% load) - May need to reduce processing quality
+   * - `3` (Critical): Very high CPU usage (90%+ load) - Immediate action recommended
+   *
+   * **Usage Example**
+   * ```javascript
+   * // Subscribe to system resource monitoring
+   * await stream.subscribeSystemResourceUsage();
+   *
+   * // Listen for resource usage changes
+   * client.on('system-resource-usage-change', (event) => {
+   *   const { cpu_usage } = event;
+   *   console.log('CPU Pressure Level:', cpu_usage.system_cpu_pressure_level);
+   *
+   *   // Adjust video quality based on CPU pressure
+   *   if (cpu_usage.system_cpu_pressure_level >= 2) {
+   *     // Reduce video quality to help system performance
+   *   }
+   * });
+   * ```
+   *
+   * @returns
+   * - `''`: Success - System resource monitoring started
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   * @since 2.3.0
+   * @category Video
+   */
+  function subscribeSystemResourceUsage(): Promise<''>;
+  /**
+   * Unsubscribe from system resource usage monitoring to stop receiving resource usage events.
+   * This will stop the `system-resource-usage-change` events from being emitted.
+   *
+   * **Usage Example**
+   * ```javascript
+   * // Stop receiving system resource usage updates
+   * await stream.unsubscribeSystemResourceUsage();
+   * ```
+   *
+   * @returns
+   * - `''`: Success - System resource monitoring stopped
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   * @since 2.3.0
+   * @category Video
+   */
+  function unsubscribeSystemResourceUsage(): Promise<''>;
+  /**
+   * Subscribe to WebRTC statistics report data to receive detailed network and media transmission statistics.
+   * Once subscribed, the client will receive `webrtc-stats-report-data-change` events with comprehensive WebRTC statistics.
+   *
+   * ```javascript
+   * // Subscribe to WebRTC statistics
+   * await stream.subscribeWebRTCStatsReportData();
+   *
+   * // Listen for WebRTC statistics events
+   * client.on('webrtc-stats-report-data-change', (statsReport) => {
+   *   console.log('WebRTC Statistics Report:', statsReport);
+   *
+   *   // Access specific statistics
+   *   for (const [id, stats] of statsReport.entries()) {
+   *     if (stats.type === 'inbound-rtp' && stats.kind === 'video') {
+   *       console.log(`Video reception - Bitrate: ${stats.bytesReceived}, FPS: ${stats.framesDecoded}`);
+   *     }
+   *     if (stats.type === 'outbound-rtp' && stats.kind === 'audio') {
+   *       console.log(`Audio transmission - Packets sent: ${stats.packetsSent}, RTT: ${stats.roundTripTime}`);
+   *     }
+   *   }
+   * });
+   * ```
+   *
+   * @returns
+   * - `''`: Success - WebRTC statistics subscription started
+   * - `Error`: Failure. Details in {@link ErrorTypes}
+   * @since 2.3.0
+   * @category Video
+   */
+  function subscribeWebRTCStatsReportData(): Promise<''>;
+
+  /**
+   * Unsubscribe from WebRTC statistics report data to stop receiving WebRTC statistics events.
+   * This will stop the `webrtc-stats-report-data-change` events from being emitted.
+   *
+   * ```javascript
+   * // Stop receiving WebRTC statistics updates
+   * await stream.unsubscribeWebRTCStatsReportData();
+   *
+   * // Remove event listener (optional cleanup)
+   * client.off('webrtc-stats-report-data-change', statisticsHandler);
+   * ```
+   *
+   * @returns
+   * - `''`: Success - WebRTC statistics subscription stopped
+   * - `Error`: Failure. Details in {@link ErrorTypes}
+   * @since 2.3.0
+   * @category Video
+   */
+  function unsubscribeWebRTCStatsReportData(): Promise<''>;
   /**
    *
    * Gets the `isCapturingVideo` flag status.
@@ -2015,7 +2154,15 @@ export declare namespace Stream {
     HTMLAudioElement,
     'play' | 'pause' | 'paused' | 'muted' | 'currentTime' | 'loop'
   > | null;
-
+  /**
+   * Get the current WebRTC statistics report data synchronously.
+   * Returns a comprehensive snapshot of current WebRTC connection statistics.
+   *
+   * @returns Current WebRTC statistics report as a Map of statistic IDs to extended RTCStats objects
+   * @since 2.3.0
+   * @category Video
+   */
+  function getWebRTCStatsReportData(): StatsReport;
   // -------------------------------------------------[share]-----------------------------------------------------------
 
   /**
@@ -2051,7 +2198,7 @@ export declare namespace Stream {
   /**
    * Attaches the share view to a specified element.
    * > The returned {@link VideoPlayer} element must be a child node of a {@link VideoPlayerContainer}.
-   * > The container used for share view cannot be the as the one used for `attachVideo`; the two must not be mixed.
+   * > The container used for share view cannot be the same as the one used for `attachVideo`; the two must not be mixed.
    * ```html
    * <video-player-container class="share-container">
    *  <div class="share-tile"></div>
@@ -2141,6 +2288,31 @@ export declare namespace Stream {
   function startShareScreen(
     canvas: HTMLCanvasElement | HTMLVideoElement,
     options?: ScreenShareOption,
+  ): ExecutedResult;
+  /**
+   * Start screen camera.
+   * - Check the share privilege before starting camera share.
+   * - To stop the share camera, use stopShareScreen().
+   * - If you start screen camera, you will stop receiving others' shared content.
+   * - To pause the share camera, use pauseShareScreen().
+   * - To resume the share camera, use resumeShareScreen().
+   * @param canvas Required. The canvas to render the shared camera content. If WebCodecs enabled, use Video element instead of Canvas element.
+   *
+   * @param cameraId Required. The cameraId of the camera to share.
+   *
+   * @param options Optional. Whether to share 720p from the camera. Default is 360p.
+   *
+   * @returns executed promise.
+   * - {type:'INVALID_OPERATION',reason:'required extension',extensionUrl:'url'} : Installed the extension before start share
+   *
+   * @category Screen Share
+   * @since 2.3.0
+   * @ignore
+   */
+  function startShareCamera(
+    canvas: HTMLCanvasElement | HTMLVideoElement,
+    cameraId: string,
+    hd?: boolean,
   ): ExecutedResult;
   /**
    * Pauses screen share.
@@ -2351,7 +2523,52 @@ export declare namespace Stream {
     deviceId?: string;
     displaySurface?: string;
   };
-
+  /**
+   * Request the remote user in to share their camera content.
+   * @param userId userId of the target user to share camera.
+   * @param shareSource Requested camera to share from the remote user. Should be either 'environment' or 'user'.
+   * @param startAnnotation Whether to enable the startAnnotation() for the remote user. If the value is true, startAnnotation() API need to be used after startShareCamera().
+   * @category Screen Share
+   * @since 2.3.0
+   * @ignore
+   */
+  function requestShareCamera(
+    userId: number,
+    shareSource: MobileVideoFacingMode,
+    startAnnotation: boolean,
+  ): ExecutedResult;
+  /**
+   * Approve the share camera request.
+   * @param requestId requestId from the event 'share-remote-camera-request'.
+   * @param userId userId of the request sender from 'share-remote-camera-request'.
+   * @category Screen Share
+   * @since 2.3.0
+   * @ignore
+   */
+  function approveShareCamera(requestId: number, userId: number): ExecutedResult;
+  /**
+   * Decline the share camera request.
+   * @param requestId requestId from the event 'share-remote-camera-request'.
+   * @param userId userId of the request sender from 'share-remote-camera-request'.
+   * @category Screen Share
+   * @since 2.3.0
+   * @ignore
+   */
+  function declineShareCamera(requestId: number, userId: number): ExecutedResult;
+  /**
+   * Inform the request share camera sender about if the request can be fulfilled.
+   * @param requestId requestId from the event 'share-remote-camera-request'.
+   * @param userId userId of the request sender from 'share-remote-camera-request'.
+   * @param status execution result of startShareCamera() and/or startAnnotation().
+   * @category Screen Share
+   * @since 2.3.0
+   * @ignore
+   */
+  function informShareCameraStatus(
+    requestId: number,
+    userId: number,
+    status: ShareCameraRemoteStatus,
+  ): ExecutedResult;
   /**
    * Returns the maximum number of concurrent share views supported by the current device.
    *

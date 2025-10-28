@@ -88,9 +88,18 @@ import {
   event_annotation_undo_status,
   event_annotation_viewer_draw_request,
   event_broadcast_streaming_status,
+  event_whiteboard_status_change,
+  event_whiteboard_privilege_change,
+  event_share_camera_request,
+  event_share_camera_approve_change,
+  event_share_camera_status,
   event_caption_language_lock,
+  event_speaking_while_muted,
+  event_system_resource_usage_change,
+  event_webrtc_statistic_data_change,
 } from './event-callback';
 import { BroadcastStreamingClient } from './broadcast-streaming';
+import { WhiteboardClient } from './whiteboard';
 // import AIClient from '../src/summary';
 
 /**
@@ -243,18 +252,26 @@ interface InitOptions {
 export declare namespace VideoClient {
   /**
    * Initializes the Zoom Video SDK before join a session.
-   * The Zoom Video SDK uses an [SDK key & secret](https://developers.zoom.us/docs/video-sdk/auth/) for authentication.
-   * @param language The language of the Video SDK. The default is `en-US`.
-   * @param dependentAssets The Zoom Video SDK uses web workers and web assembly to process the media stream.
-   * This part of the code is separate from the SDK code, so you must specify the dependent assets path.
-   * Each SDK release includes the web worker and the web assembly assets in the `lib` folder.
-   * You can either deploy these assets to your private servers or use the cloud assets provided by Zoom.
-   * The property has following value:
-   * - `Global`: The default value. The dependent assets path will be `https://source.zoom.us/videosdk/{version}/lib/`
-   * - `CDN`: The dependent assets path will be `https://dmogdx0jrul3u.cloudfront.net/videosdk/{version}/lib/`
-   * - `CN`: Only applicable for China. The dependent assets path will be https://jssdk.zoomus.cn/videosdk/{version}/lib
-   * - `{FULL_ASSETS_PATH}`: The SDK will load the dependent assets specified by the developer.
-   * @param options Optional additional options for initialization.
+   * The Zoom Video SDK uses an [SDK key & secret](https://developers.zoom.us/docs/video-sdk/auth/) for authorization.
+   * @param language The language of the Video SDK interface. Defaults to `en-US`.
+   * @param dependentAssets Specifies the source path for the SDK's dependent assets.
+   * The Zoom Video SDK uses Web Workers and WebAssembly to process media streams. These
+   * components are distributed separately from the SDK, and you must specify the path
+   * where they are hosted. Each SDK release includes these assets in the `lib` folder.
+   * You can host the assets on your own server or use the paths provided by Zoom:
+   * - **`Global`** (default): Loads assets from
+   *   `https://source.zoom.us/videosdk/{version}/lib/`.
+   *    Recommended for most use cases.
+   * - **`CDN`**: Loads assets from
+   *   `https://dmogdx0jrul3u.cloudfront.net/videosdk/{version}/lib/`.
+   *   Recommended for global users when users include those in China.
+   * - **`CN`**: Loads assets from
+   *   `https://jssdk.zoomus.cn/videosdk/{version}/lib`.
+   *   Recommended if users are located exclusively in China.
+   * - **Custom path (`{FULL_ASSETS_PATH}`)**: Loads assets from a developer-specified path.
+   *   Not recommended except for special deployment cases.
+   * @param options Optional additional settings for SDK initialization.
+   * @returns An `ExecutedResult` indicating whether initialization succeeded.
    */
   function init(
     language: string,
@@ -961,11 +978,85 @@ export declare namespace VideoClient {
   /**
    *
    * @param event
+   * @param listener Details in {@link event_share_camera_request}
+   */
+  function on(
+    event: 'share-camera-request',
+    listener: typeof event_share_camera_request,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_share_camera_approve_change}
+   */
+  function on(
+    event: 'share-camera-approve-change',
+    listener: typeof event_share_camera_approve_change,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_share_camera_status}
+   */
+  function on(
+    event: 'share-camera-status',
+    listener: typeof event_share_camera_status,
+  ): void;
+  /**
+   *
+   * @param event
    * @param listener Details in {@link event_broadcast_streaming_status}
    */
   function on(
     event: 'broadcast-streaming-status',
     listener: typeof event_broadcast_streaming_status,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener  Details in {@link event_whiteboard_status_change}
+   * @category Whiteboard
+   */
+  function on(
+    event: 'whiteboard-status-change',
+    listener: typeof event_whiteboard_status_change,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener  Details in {@link event_whiteboard_privilege_change}
+   * @category Whiteboard
+   */
+  function on(
+    event: 'whiteboard-privilege-change',
+    listener: typeof event_whiteboard_privilege_change,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_speaking_while_muted}
+   */
+  function on(
+    event: 'speaking-while-muted',
+    listener: typeof event_speaking_while_muted,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_system_resource_usage_change}
+   */
+  function on(
+    event: 'system-resource-usage-change',
+    listener: typeof event_system_resource_usage_change,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener  Details in {@link event_webrtc_statistic_data_change}
+   */
+  function on(
+    event: 'webrtc-statistic-data-change',
+    listener: typeof event_webrtc_statistic_data_change,
   ): void;
   /**
    * Removes the event handler.
@@ -1102,6 +1193,13 @@ export declare namespace VideoClient {
    *  Gets the broadcast streaming client.
    */
   function getBroadcastStreamingClient(): typeof BroadcastStreamingClient;
+
+  /**
+   * Gets the whiteboard client.
+   * @category Whiteboard
+   */
+  // function getWhiteboardClient(): typeof WhiteboardClient;
+
   /**
    * Gets the current session’s information.
    */

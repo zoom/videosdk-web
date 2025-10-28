@@ -692,8 +692,8 @@ export abstract class AudioProcessor extends AudioWorkletProcessor {
 export abstract class ShareProcessor {
   /**
    * Creates a new `ShareProcessor`.
-   * @param port port message port - The message port used for communication.
-   * @param options customised options  - Optional processor configuration.
+   * @param port message port - The message port used for communication.
+   * @param options customised options - Optional processor configuration.
    */
   public constructor(port: MessagePort, options?: any);
   /**
@@ -876,7 +876,7 @@ export interface Processor {
    */
   name: string;
   /**
-   * Processor type, currently only supports video
+   * Processor type
    */
   type: MediaType;
   /**
@@ -898,11 +898,171 @@ export interface ProcessorParams {
    */
   name: string;
   /**
-   * Processor type, currently only supports video
+   * Processor type
    */
   type: MediaType;
   /**
    * Parameters to pass into the processor constructor
    */
   options?: any;
+}
+
+/**
+ * Whiteboard view role
+ * @category Whiteboard
+ */
+export enum WHITEBOARD_VIEW_ROLE {
+  OWNER = 0,
+  COOWNER = 1,
+  EDITOR = 2,
+  COMMENTER = 3,
+  REVIEWER = 4,
+}
+
+/**
+ * Whiteboard privilege
+ * @category Whiteboard
+ */
+export enum WHITEBOARD_PRIVILEGE {
+  OnlyHost = 0, //Only host can share, the same as "lock share"
+  HostGrab = 1, //Anyone can share, but one sharing only at one moment, and only host can grab other's sharing
+}
+
+/**
+ * Whiteboard status '' => init -> ready -> loading -> open/error -> close
+ * @category Whiteboard
+ */
+export enum WHITEBOARD_STATUS {
+  default = '',
+  init = 'init', // init whiteboard sdk
+  ready = 'ready', // get whiteboard token success
+  open = 'open', // can open whiteboard
+  loading = 'loading', // after call openWhiteboard, waiting for whiteboard to be opened
+  opened = 'opened', // whiteboard is opened
+  leave = 'leave', // whiteboard is leave
+  close = 'close', // whiteboard closed
+  error = 'error', // whiteboard error
+}
+
+/**
+ * Whiteboard dashboard status
+ * @category Whiteboard
+ */
+export type WHITEBOARD_DASHBOARD_STATUS = typeof WHITEBOARD_STATUS;
+/**
+ * Whiteboard privilege role
+ * @category Whiteboard
+ */
+export enum WHITEBOARD_PRIVILEGE_ROLE {
+  HOST_ONLY = 0,
+  INTERNAL_USER = 1,
+  ALL_PARTICIPANTS = 2,
+}
+/**
+ * System CPU pressure level indicating current CPU usage intensity.
+ * Used to monitor system performance and adjust media processing accordingly.
+ */
+export enum SystemCPUPressureLevel {
+  /**
+   * Nominal - Low CPU usage (under 30% load)
+   * System is running smoothly with plenty of available resources.
+   */
+  Nominal = 0,
+  /**
+   * Fair - Moderate CPU usage (30-60% load)
+   * System is handling workload well but resources are being utilized.
+   */
+  Fair = 1,
+  /**
+   * Serious - High CPU usage (60-90% load)
+   * System is under significant load, may need to reduce processing quality.
+   */
+  Serious = 2,
+  /**
+   * Critical - Very high CPU usage (90% or higher)
+   * System is under severe stress, immediate action recommended to prevent performance degradation.
+   */
+  Critical = 3,
+}
+type RTCStatsTypes =
+  | RTCInboundRtpStreamStats
+  | RTCOutboundRtpStreamStats
+  | RTCRemoteInboundRtpStreamStats
+  | RTCRemoteOutboundRtpStreamStats
+  | RTCAudioSourceStats
+  | RTCVideoSourceStats;
+
+type RTCStatsExtended = RTCStatsTypes & {
+  nodeId: string;
+  isSharing: boolean;
+};
+/**
+ * Statistics report for WebRTC statistics
+ */
+export type StatsReport = Map<string, RTCStatsExtended>;
+
+/**
+ * Extended WebRTC statistics interfaces for newer RTCStats types
+ * These types might not be available in all TypeScript DOM definitions
+ */
+
+/**
+ * Statistics for remote inbound RTP streams (remote side receiving our data)
+ * Provides metrics about how the remote peer is receiving our transmitted data
+ */
+declare global {
+  interface RTCRemoteInboundRtpStreamStats extends RTCReceivedRtpStreamStats {
+    kind: string;
+    localId?: string;
+    roundTripTime?: number;
+    totalRoundTripTime?: number;
+    fractionLost?: number;
+    roundTripTimeMeasurements?: number;
+  }
+
+  /**
+   * Statistics for remote outbound RTP streams (remote side sending data to us)
+   * Provides metrics about the remote peer's transmission to us
+   */
+  interface RTCRemoteOutboundRtpStreamStats extends RTCSentRtpStreamStats {
+    kind: string;
+    localId?: string;
+    remoteTimestamp?: DOMHighResTimeStamp;
+    reportsSent?: number;
+    roundTripTime?: number;
+    totalRoundTripTime?: number;
+    roundTripTimeMeasurements?: number;
+  }
+
+  /**
+   * Statistics for audio source (microphone input)
+   * Provides metrics about audio capture and processing
+   */
+  interface RTCAudioSourceStats extends RTCStats {
+    kind: 'audio';
+    trackIdentifier: string;
+    audioLevel?: number;
+    totalAudioEnergy?: number;
+    totalSamplesDuration?: number;
+    echoReturnLoss?: number;
+    echoReturnLossEnhancement?: number;
+    droppedSamplesDuration?: number;
+    droppedSamplesEvents?: number;
+    totalCaptureDelay?: number;
+    totalSamplesCaptured?: number;
+  }
+
+  /**
+   * Statistics for video source (camera input)
+   * Provides metrics about video capture and processing
+   */
+  interface RTCVideoSourceStats extends RTCStats {
+    kind: 'video';
+    trackIdentifier: string;
+    width?: number;
+    height?: number;
+    frames?: number;
+    framesPerSecond?: number;
+    framesDropped?: number;
+  }
 }

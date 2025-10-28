@@ -1,5 +1,9 @@
 import { RecordingStatus } from './recording';
-import { SharePrivilege } from './media';
+import {
+  ShareCameraRemoteStatus,
+  ShareCameraResponse,
+  SharePrivilege,
+} from './media';
 import { ChatMessage, ChatPrivilege } from './chat';
 import {
   SubsessionStatus,
@@ -18,6 +22,10 @@ import {
   CRCReturnCode,
   CRCProtocol,
   ActiveMediaFailedCode,
+  WHITEBOARD_STATUS,
+  SystemCPUPressureLevel,
+  StatsReport,
+  MobileVideoFacingMode,
 } from './common';
 import { LiveTranscriptionMessage } from './live-transcription';
 import { LiveStreamStatus } from './live-stream';
@@ -2055,14 +2063,174 @@ export declare function event_broadcast_streaming_status(payload: {
    * The broadcast streaming status
    */
   status: BroadcastStreamingStatus;
-});
+}): void;
+
+/**
+ * @category Whiteboard
+ * @ignore
+ */
+export declare function event_whiteboard_status_change(payload: {
+  /**
+   * The status of the whiteboard.
+   */
+  type: WHITEBOARD_STATUS;
+  wbInfo?: any;
+}): void;
+
+/**
+ * @category Whiteboard
+ * @ignore
+ */
+export declare function event_whiteboard_privilege_change(payload: {
+  /**
+   * The privilege of the whiteboard.
+   */
+  isLock: boolean;
+}): void;
+/**
+ * Occurs when the receive the request invoke by requestShareCamera().
+ * @param payload
+ * @since 2.3.0
+ * @event
+ * @category Screen share
+ * @ignore
+ */
+export declare function event_share_camera_request(payload: {
+  /**
+   * The requestId of the share camera request.
+   */
+  requestId: string;
+  /**
+   * The userId of the request sender.
+   */
+  userId: number;
+  /**
+   * Requested share source, could be 'user' or 'environment'.
+   */
+  shareSource: MobileVideoFacingMode;
+  /**
+   * whether to startAnnotation.
+   */
+  startAnnotation: boolean;
+}): void;
+/**
+ * Occurs when the approve or decline the share camera request.
+ * @param payload
+ * @since 2.3.0
+ * @event
+ * @category Screen share
+ * @ignore
+ */
+export declare function event_share_camera_approve_change(payload: {
+  /**
+   * The requestId of the share camera request.
+   */
+  requestId: string;
+  /**
+   * The userId of the request sender.
+   */
+  userId: number;
+  /**
+   * Receiver response to the share camera request sender.
+   */
+  status: ShareCameraResponse;
+}): void;
+/**
+ * Occurs when calling the informShareCameraStatus() about the status of the share camera request.
+ * @param payload
+ * @since 2.3.0
+ * @event
+ * @category Screen share
+ * @ignore
+ */
+export declare function event_share_camera_status(payload: {
+  /**
+   * The requestId of the share camera request.
+   */
+  requestId: string;
+  /**
+   * The userId of the request sender.
+   */
+  userId: number;
+  /**
+   * Receiver status update to the share camera request sender.
+   */
+  status: ShareCameraRemoteStatus;
+}): void;
 /**
  * Occurs when the host locks or unlocks the transcription language during a session.
  * @param payload - `true` if the transcription language is locked, `false` if unlocked.
  *
- * @event
  * @category Live transcription
  * @since 2.2.10
  * @event
  */
 export declare function event_caption_language_lock(payload: boolean): void;
+/**
+ * Occurs when the user is detected speaking while their audio is muted.
+ * This event provides a notification to prompt the user to unmute their audio for better communication.
+ *
+ * **Use Case:**
+ * This event helps improve meeting experience by alerting users when they are trying to speak
+ * but their microphone is muted, preventing communication gaps and confusion.
+ *
+ * **Example Usage:**
+ * ```javascript
+ * client.on('speaking-while-muted', () => {
+ *   // Show unmute reminder to user
+ *   showUnmuteReminder();
+ *
+ *   // Or automatically prompt user to unmute
+ *   if (confirm('You are speaking while muted. Would you like to unmute?')) {
+ *     stream.unmuteAudio();
+ *   }
+ * });
+ * ```
+ * @category Audio
+ * @since 2.3.0
+ * @event
+ */
+export declare function event_speaking_while_muted(): void;
+/**
+ * Occurs when system resource usage changes, particularly CPU pressure levels.
+ * This event can be used to monitor system performance and adjust application behavior accordingly.
+ *
+ * @param payload The event detail containing system resource usage information
+ * @since 2.3.0
+ * @event
+ */
+export declare function event_system_resource_usage_change(payload: {
+  cpu_usage: { system_cpu_pressure_level: SystemCPUPressureLevel };
+}): void;
+/**
+ * Occurs when WebRTC statistics report data changes.
+ * This event provides comprehensive native WebRTC statistics similar to browser's `RTCPeerConnection.getStats()` API.
+ *
+ * **Statistics Types**
+ * - **RTP Streams**: `inbound-rtp`, `outbound-rtp`, `remote-inbound-rtp`, `remote-outbound-rtp`
+ * - **Media Sources**: `media-source` for audio/video input devices
+ * - **Network**: `candidate-pair`, `transport` for connection statistics
+ *
+ * **Key Metrics**
+ * - Network: RTT, jitter, packet loss, bandwidth
+ * - Video: Resolution, FPS, bitrate, dropped frames
+ * - Audio: Audio levels, sample rates, jitter buffer
+ *
+ * **Example**
+ * ```javascript
+ * client.on('webrtc-statistic-data-change', (statsReport) => {
+ *   for (const [id, stats] of statsReport.entries()) {
+ *     if (stats.type === 'inbound-rtp' && stats.kind === 'video') {
+ *       console.log(`Video: ${stats.frameWidth}x${stats.frameHeight} @ ${stats.framesPerSecond}fps`);
+ *     }
+ *   }
+ * });
+ * ```
+ *
+ * @param payload WebRTC statistics report as a Map of statistic IDs to extended RTCStats objects
+ * @since 2.3.0
+ * @event
+ */
+export declare function event_webrtc_statistic_data_change(
+  payload: StatsReport,
+): void;

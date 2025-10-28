@@ -1006,4 +1006,132 @@ export enum ExceptionCode {
    * Occurs in `broadcastStreamingClient.stopBroadcast()` method because the channel ID in current case is required.
    */
   BROADCAST_STREAMING_INVALID_CHANNEL_ID = 7902,
+  /**
+   * Whiteboard exception
+   */
+  /**
+   * Whiteboard not initialized
+   * @category Whiteboard
+   */
+  WHITEBOARD_NOT_INIT = 8000,
+  /**
+   * Whiteboard initialization not successful
+   * @category Whiteboard
+   */
+  WHITEBOARD_NOT_INIT_SUCCESS = 8001,
+  /**
+   * Whiteboard presenter has left
+   * @category Whiteboard
+   */
+  WHITEBOARD_PRESENTER_LEAVE = 8002,
+  /**
+   * Whiteboard token is not available
+   * @category Whiteboard
+   */
+  WHITEBOARD_TOKEN_NOT_AVAILABLE = 8003,
+  /**
+   * Whiteboard backend error
+   * @category Whiteboard
+   */
+  WHITEBOARD_BACKEND_ERROR = 8004,
+  /**
+   * Failed to get whiteboard initialization token
+   * @category Whiteboard
+   */
+  WHITEBOARD_GET_INIT_TOKEN_FAIL = 8005,
+  /**
+   * Error loading whiteboard JavaScript/CSS files
+   * @category Whiteboard
+   */
+  WHITEBOARD_LOAD_WHITEBOARD_JS_CSS_ERROR = 8006,
+  /**
+   * Video SDK does not support dashboard feature
+   * @category Whiteboard
+   */
+  WHITEBOARD_VIDEOSDK_NOT_SUPPORT_DASHBOARD = 8007,
+  /**
+   * Meeting not joined for whiteboard operation
+   * @category Whiteboard
+   */
+  WHITEBOARD_MEETING_NOT_JOINED = 8008,
+  /**
+   * Whiteboard element not found
+   * @category Whiteboard
+   */
+  WHITEBOARD_ELEMENT_NOT_FOUND = 8009,
+  /**
+   * Whiteboard not supported in webinar mode
+   * @category Whiteboard
+   */
+  WHITEBOARD_WEBINAR_NOT_SUPPORTED = 8010,
+  /**
+   * Whiteboard document ID not available
+   * @category Whiteboard
+   */
+  WHITEBOARD_DOC_ID_NOT_AVAILABLE = 8011,
+  /**
+   * Insufficient privileges for whiteboard operation
+   * @category Whiteboard
+   */
+  WHITEBOARD_INSUFFICIENT_PRIVILEGES = 8012,
+  /**
+   * Whiteboard is in invalid state
+   * @category Whiteboard
+   */
+  WHITEBOARD_INVALID_STATE = 8013,
+  /**
+   * Whiteboard is not available
+   * @category Whiteboard
+   */
+  WHITEBOARD_NOT_AVAILABLE = 8014,
+  /**
+   * Failed to set whiteboard privilege
+   * @category Whiteboard
+   */
+  WHITEBOARD_PRIVILEGE_SET_FAILED = 8015,
+  /**
+   * Failed to change whiteboard user role
+   * @category Whiteboard
+   */
+  WHITEBOARD_USER_ROLE_CHANGE_FAILED = 8016,
+  /**
+   * Whiteboard lock API not available
+   * @category Whiteboard
+   */
+  WHITEBOARD_LOCK_API_NOT_AVAILABLE = 8017,
+  /**
+   * Whiteboard is not opened
+   * @category Whiteboard
+   */
+  WHITEBOARD_NOT_OPENED = 8018,
+  /**
+   * Invalid whiteboard export format
+   * @category Whiteboard
+   */
+  WHITEBOARD_INVALID_EXPORT_FORMAT = 8019,
+  /**
+   * Whiteboard operation needs retry
+   * @category Whiteboard
+   */
+  WHITEBOARD_NEED_RETRY = 8020,
+  /**
+   * Sharing must be stopped before opening whiteboard
+   * @category Whiteboard
+   */
+  WHITEBOARD_REQUIRE_SHARING_STOP = 8021,
+  /**
+   * Whiteboard is already open
+   * @category Whiteboard
+   */
+  WHITEBOARD_ALREADY_OPEN = 8022,
+  /**
+   * Cannot share screen when whiteboard is active
+   * @category Whiteboard
+   */
+  WHITEBOARD_AND_SHARING_CONFLICT = 8023,
+  /**
+   * Cannot start annotation when whiteboard is active
+   * @category Whiteboard
+   */
+  WHITEBOARD_AND_ANNOTATION_CONFLICT = 8024,
 }

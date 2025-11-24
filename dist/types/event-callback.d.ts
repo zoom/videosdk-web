@@ -22,7 +22,6 @@ import {
   CRCReturnCode,
   CRCProtocol,
   ActiveMediaFailedCode,
-  WHITEBOARD_STATUS,
   SystemCPUPressureLevel,
   StatsReport,
   MobileVideoFacingMode,
@@ -30,6 +29,12 @@ import {
 import { LiveTranscriptionMessage } from './live-transcription';
 import { LiveStreamStatus } from './live-stream';
 import { BroadcastStreamingStatus } from './broadcast-streaming';
+import {
+  WhiteboardInitiatePermissionCode,
+  WhiteboardSharePermissionCode,
+  WhiteboardStatus,
+} from './whiteboard';
+import { RealTimeMediaStreamsStatus } from './real-time-media-streams';
 /**
  * Interface of a ParticipantPropertiesPayload.
  */
@@ -2066,27 +2071,19 @@ export declare function event_broadcast_streaming_status(payload: {
 }): void;
 
 /**
- * @category Whiteboard
- * @ignore
+ * Occurs when the status of the real-time media streams changes.
+ * @param payload
+ * @since 2.3.5
+ * @event
+ * @category Real-time media streams
  */
-export declare function event_whiteboard_status_change(payload: {
+export declare function event_real_time_media_streams_status_change(payload: {
   /**
-   * The status of the whiteboard.
+   * The real-time media streams status
    */
-  type: WHITEBOARD_STATUS;
-  wbInfo?: any;
+  status: RealTimeMediaStreamsStatus;
 }): void;
 
-/**
- * @category Whiteboard
- * @ignore
- */
-export declare function event_whiteboard_privilege_change(payload: {
-  /**
-   * The privilege of the whiteboard.
-   */
-  isLock: boolean;
-}): void;
 /**
  * Occurs when the receive the request invoke by requestShareCamera().
  * @param payload
@@ -2196,6 +2193,7 @@ export declare function event_speaking_while_muted(): void;
  * This event can be used to monitor system performance and adjust application behavior accordingly.
  *
  * @param payload The event detail containing system resource usage information
+ * @category Video
  * @since 2.3.0
  * @event
  */
@@ -2228,9 +2226,119 @@ export declare function event_system_resource_usage_change(payload: {
  * ```
  *
  * @param payload WebRTC statistics report as a Map of statistic IDs to extended RTCStats objects
+ * @category Video
  * @since 2.3.0
  * @event
  */
 export declare function event_webrtc_statistic_data_change(
   payload: StatsReport,
 ): void;
+/**
+ * Occurs when the whiteboard session status changes.
+ * This event is triggered when a whiteboard session starts, is in progress, or closes.
+ *
+ * **Status Values:**
+ * - `Closed`: Whiteboard session is closed or not started
+ * - `Pending`: Whiteboard is initializing
+ * - `InProgress`: Whiteboard session is active
+ *
+ *
+ * @param payload The whiteboard status
+ * @since 2.3.5
+ * @category Whiteboard
+ * @event
+ */
+export declare function event_whiteboard_status_change(
+  status: WhiteboardStatus,
+): void;
+
+/**
+ * Occurs when another participant starts or stops presenting a whiteboard.
+ * This event allows you to automatically view whiteboards presented by others.
+ *
+ * **Actions:**
+ * - `Start`: Another user started presenting a whiteboard
+ * - `Stop`: The presenter stopped sharing their whiteboard
+ *
+ *
+ * @param payload The event detail
+ *
+ * @example
+ * ```typescript
+ * client.on('peer-whiteboard-state-change', async (payload) => {
+ *   const { action, userId } = payload;
+ *
+ *   if (action === 'Start') {
+ *     console.log(`User ${userId} started presenting whiteboard`);
+ *     await whiteboardClient.startWhiteboardView(whiteboardElement, userId);
+ *   } else if (action === 'Stop') {
+ *     console.log(`User ${userId} stopped presenting whiteboard`);
+ *     await whiteboardClient.stopWhiteboardView();
+ *   }
+ * });
+ * ```
+ * @since 2.3.5
+ * @category Whiteboard
+ * @event
+ */
+export declare function event_peer_whiteboard_state_change(payload: {
+  /**
+   * Action type: 'Start' when user begins presenting, 'Stop' when they end
+   */
+  action: 'Start' | 'Stop';
+  /**
+   * User ID of the participant who started or stopped the whiteboard
+   */
+  userId: number;
+}): void;
+
+/**
+ * Occurs when the whiteboard permission settings change.
+ * This event is triggered when the host modifies who can start or control whiteboards.
+ *
+ * **Permission Types:**
+ * - **Share Permission**: Controls who can start/grab whiteboard control
+ *   - `LockShare (0)`: Only host/co-host can start
+ *   - `HostGrab (1)`: Host can grab control from others
+ *   - `LockShareSecurity (2)`: Locked with enhanced security
+ *   - `AnyoneGrab (3)`: Any participant can grab control
+ *
+ * - **Initiate Permission**: Controls who can create new whiteboards
+ *   - `HostOnly (0)`: Only host/co-host can create
+ *   - `InternalUsers (1)`: Internal users only
+ *   - `AllParticipants (2)`: Everyone can create
+ *
+ *
+ * @param payload The event detail containing new permission codes
+ * @ignore
+ * @since 2.3.5
+ * @category Whiteboard
+ * @event
+ */
+export declare function event_whiteboard_permission_change(payload: {
+  /**
+   * Share permission code controlling who can start/grab whiteboard
+   */
+  sharePermission: WhiteboardSharePermissionCode;
+  /**
+   * Initiate permission code controlling who can create new whiteboards
+   */
+  initiatePermission: WhiteboardInitiatePermissionCode;
+}): void;
+
+/**
+ * Occurs when the current user's whiteboard session is passively stopped.
+ * This happens when the host changes permissions or another action forces the whiteboard to close.
+ *
+ * **Common Scenarios:**
+ * - Host changes share permissions to lock whiteboard
+ * - Host ends the whiteboard session for all
+ * - Permission change makes current user ineligible to present
+ * @ignore
+ * @since 2.3.5
+ * @category Whiteboard
+ * @event
+ */
+export declare function event_passively_stop_whiteboard(payload: {
+  reason: 'string';
+}): void;

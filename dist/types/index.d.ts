@@ -16,6 +16,7 @@ export * from './logger';
 export * from './live-stream';
 export * from './exception-code';
 export * from './broadcast-streaming';
-// export * from './whiteboard';
+export * from './whiteboard';
+export * from './real-time-media-streams';
 // export * from './summary';
 export default ZoomVideo;

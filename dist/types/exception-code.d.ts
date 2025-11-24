@@ -1010,128 +1010,47 @@ export enum ExceptionCode {
    * Whiteboard exception
    */
   /**
-   * Whiteboard not initialized
-   * @category Whiteboard
+   * Occurs in `whiteboard.startWhiteboardScreen` method because the whiteboard feature is not enabled in the account setting.
    */
-  WHITEBOARD_NOT_INIT = 8000,
+  WHITEBOARD_ACCOUNT_DISABLE = 8000,
   /**
-   * Whiteboard initialization not successful
-   * @category Whiteboard
+   * Occurs in `whiteboard.startWhiteboardScreen` method because the whiteboard feature is not supported on the current platform (mobile browsers).
    */
-  WHITEBOARD_NOT_INIT_SUCCESS = 8001,
+  WHITEBOARD_UNSUPPORTED = 8001,
   /**
-   * Whiteboard presenter has left
-   * @category Whiteboard
+   * Occurs in `whiteboard.startWhiteboardScreen` method because screen sharing is currently in progress.
    */
-  WHITEBOARD_PRESENTER_LEAVE = 8002,
+  WHITEBOARD_SCREEN_SHARE_CONFLICT = 8002,
   /**
-   * Whiteboard token is not available
-   * @category Whiteboard
+   * Occurs in `whiteboard.startWhiteboardScreen` or `whiteboard.exportWhiteboard` methods because the whiteboard state does not match the required state.
    */
-  WHITEBOARD_TOKEN_NOT_AVAILABLE = 8003,
+  WHITEBOARD_MISMATCH_STATE = 8003,
   /**
-   * Whiteboard backend error
-   * @category Whiteboard
+   * Occurs in `whiteboard.startWhiteboardScreen` or `whiteboard.stopWhiteboardScreen` or `whiteboard.setWhiteboardPermission` methods because only the host or manager has permission to perform this action.
    */
-  WHITEBOARD_BACKEND_ERROR = 8004,
+  WHITEBOARD_HOST_PRIVILEGE_REQUIRED = 8004,
   /**
-   * Failed to get whiteboard initialization token
-   * @category Whiteboard
+   * Occurs in `whiteboard.startWhiteboardScreen` or `whiteboard.stopWhiteboardScreen` or `whiteboard.startWhiteboardView` methods because the parameter is invalid (e.g., invalid document ID, template ID, or presenter ID).
    */
-  WHITEBOARD_GET_INIT_TOKEN_FAIL = 8005,
+  WHITEBOARD_INVALID_PARAMETER = 8005,
   /**
-   * Error loading whiteboard JavaScript/CSS files
-   * @category Whiteboard
+   * Occurs in `whiteboard.exportWhiteboard` method because the whiteboard export feature has been disabled for the current session.
    */
-  WHITEBOARD_LOAD_WHITEBOARD_JS_CSS_ERROR = 8006,
+  WHITEBOARD_EXPORT_DISABLE = 8006,
+
   /**
-   * Video SDK does not support dashboard feature
-   * @category Whiteboard
+   * Real-time media streams exception
    */
-  WHITEBOARD_VIDEOSDK_NOT_SUPPORT_DASHBOARD = 8007,
   /**
-   * Meeting not joined for whiteboard operation
-   * @category Whiteboard
+   * Occurs in `realTimeMediaStreamsClient.startRealTimeMediaStreams` method because the real-time media streams feature is not enabled in the account setting.
    */
-  WHITEBOARD_MEETING_NOT_JOINED = 8008,
+  REAL_TIME_MEDIA_STREAMS_NOT_ENABLED = 8100,
   /**
-   * Whiteboard element not found
-   * @category Whiteboard
+   * Occurs in `realTimeMediaStreamsClient.startRealTimeMediaStreams` or `realTimeMediaStreamsClient.stopRealTimeMediaStreams` methods because the real-time media streams state does not match the required state.
    */
-  WHITEBOARD_ELEMENT_NOT_FOUND = 8009,
+  REAL_TIME_MEDIA_STREAMS_INVALID_STATE = 8101,
   /**
-   * Whiteboard not supported in webinar mode
-   * @category Whiteboard
+   * Occurs in `realTimeMediaStreamsClient.startRealTimeMediaStreams` method because real-time media streams is not supported in breakout rooms.
    */
-  WHITEBOARD_WEBINAR_NOT_SUPPORTED = 8010,
-  /**
-   * Whiteboard document ID not available
-   * @category Whiteboard
-   */
-  WHITEBOARD_DOC_ID_NOT_AVAILABLE = 8011,
-  /**
-   * Insufficient privileges for whiteboard operation
-   * @category Whiteboard
-   */
-  WHITEBOARD_INSUFFICIENT_PRIVILEGES = 8012,
-  /**
-   * Whiteboard is in invalid state
-   * @category Whiteboard
-   */
-  WHITEBOARD_INVALID_STATE = 8013,
-  /**
-   * Whiteboard is not available
-   * @category Whiteboard
-   */
-  WHITEBOARD_NOT_AVAILABLE = 8014,
-  /**
-   * Failed to set whiteboard privilege
-   * @category Whiteboard
-   */
-  WHITEBOARD_PRIVILEGE_SET_FAILED = 8015,
-  /**
-   * Failed to change whiteboard user role
-   * @category Whiteboard
-   */
-  WHITEBOARD_USER_ROLE_CHANGE_FAILED = 8016,
-  /**
-   * Whiteboard lock API not available
-   * @category Whiteboard
-   */
-  WHITEBOARD_LOCK_API_NOT_AVAILABLE = 8017,
-  /**
-   * Whiteboard is not opened
-   * @category Whiteboard
-   */
-  WHITEBOARD_NOT_OPENED = 8018,
-  /**
-   * Invalid whiteboard export format
-   * @category Whiteboard
-   */
-  WHITEBOARD_INVALID_EXPORT_FORMAT = 8019,
-  /**
-   * Whiteboard operation needs retry
-   * @category Whiteboard
-   */
-  WHITEBOARD_NEED_RETRY = 8020,
-  /**
-   * Sharing must be stopped before opening whiteboard
-   * @category Whiteboard
-   */
-  WHITEBOARD_REQUIRE_SHARING_STOP = 8021,
-  /**
-   * Whiteboard is already open
-   * @category Whiteboard
-   */
-  WHITEBOARD_ALREADY_OPEN = 8022,
-  /**
-   * Cannot share screen when whiteboard is active
-   * @category Whiteboard
-   */
-  WHITEBOARD_AND_SHARING_CONFLICT = 8023,
-  /**
-   * Cannot start annotation when whiteboard is active
-   * @category Whiteboard
-   */
-  WHITEBOARD_AND_ANNOTATION_CONFLICT = 8024,
+  REAL_TIME_MEDIA_STREAMS_NOT_SUPPORTED_IN_BREAKOUT_ROOM = 8102,
 }

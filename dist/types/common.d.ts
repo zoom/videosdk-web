@@ -906,58 +906,6 @@ export interface ProcessorParams {
    */
   options?: any;
 }
-
-/**
- * Whiteboard view role
- * @category Whiteboard
- */
-export enum WHITEBOARD_VIEW_ROLE {
-  OWNER = 0,
-  COOWNER = 1,
-  EDITOR = 2,
-  COMMENTER = 3,
-  REVIEWER = 4,
-}
-
-/**
- * Whiteboard privilege
- * @category Whiteboard
- */
-export enum WHITEBOARD_PRIVILEGE {
-  OnlyHost = 0, //Only host can share, the same as "lock share"
-  HostGrab = 1, //Anyone can share, but one sharing only at one moment, and only host can grab other's sharing
-}
-
-/**
- * Whiteboard status '' => init -> ready -> loading -> open/error -> close
- * @category Whiteboard
- */
-export enum WHITEBOARD_STATUS {
-  default = '',
-  init = 'init', // init whiteboard sdk
-  ready = 'ready', // get whiteboard token success
-  open = 'open', // can open whiteboard
-  loading = 'loading', // after call openWhiteboard, waiting for whiteboard to be opened
-  opened = 'opened', // whiteboard is opened
-  leave = 'leave', // whiteboard is leave
-  close = 'close', // whiteboard closed
-  error = 'error', // whiteboard error
-}
-
-/**
- * Whiteboard dashboard status
- * @category Whiteboard
- */
-export type WHITEBOARD_DASHBOARD_STATUS = typeof WHITEBOARD_STATUS;
-/**
- * Whiteboard privilege role
- * @category Whiteboard
- */
-export enum WHITEBOARD_PRIVILEGE_ROLE {
-  HOST_ONLY = 0,
-  INTERNAL_USER = 1,
-  ALL_PARTICIPANTS = 2,
-}
 /**
  * System CPU pressure level indicating current CPU usage intensity.
  * Used to monitor system performance and adjust media processing accordingly.

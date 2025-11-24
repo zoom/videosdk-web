@@ -2311,7 +2311,7 @@ export declare namespace Stream {
    */
   function startShareCamera(
     canvas: HTMLCanvasElement | HTMLVideoElement,
-    cameraId: string,
+    cameraId: string | MobileVideoFacingMode,
     hd?: boolean,
   ): ExecutedResult;
   /**

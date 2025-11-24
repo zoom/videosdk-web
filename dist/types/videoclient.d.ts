@@ -88,8 +88,7 @@ import {
   event_annotation_undo_status,
   event_annotation_viewer_draw_request,
   event_broadcast_streaming_status,
-  event_whiteboard_status_change,
-  event_whiteboard_privilege_change,
+  event_real_time_media_streams_status_change,
   event_share_camera_request,
   event_share_camera_approve_change,
   event_share_camera_status,
@@ -97,8 +96,13 @@ import {
   event_speaking_while_muted,
   event_system_resource_usage_change,
   event_webrtc_statistic_data_change,
+  event_whiteboard_status_change,
+  event_whiteboard_permission_change,
+  event_peer_whiteboard_state_change,
+  event_passively_stop_whiteboard,
 } from './event-callback';
 import { BroadcastStreamingClient } from './broadcast-streaming';
+import { RealTimeMediaStreamsClient } from './real-time-media-streams';
 import { WhiteboardClient } from './whiteboard';
 // import AIClient from '../src/summary';
 
@@ -1014,6 +1018,15 @@ export declare namespace VideoClient {
   /**
    *
    * @param event
+   * @param listener Details in {@link event_real_time_media_streams_status_change}
+   */
+  function on(
+    event: 'real-time-media-streams-status-change',
+    listener: typeof event_real_time_media_streams_status_change,
+  ): void;
+  /**
+   *
+   * @param event
    * @param listener  Details in {@link event_whiteboard_status_change}
    * @category Whiteboard
    */
@@ -1024,13 +1037,35 @@ export declare namespace VideoClient {
   /**
    *
    * @param event
-   * @param listener  Details in {@link event_whiteboard_privilege_change}
+   * @param listener  Details in {@link event_whiteboard_permission_change}
+   * @category Whiteboard
+   */
+
+  // function on(
+  //   event: 'whiteboard-permission-change',
+  //   listener: typeof event_whiteboard_permission_change,
+  // ): void;
+  /**
+   *
+   * @param event
+   * @param listener  Details in {@link event_peer_whiteboard_state_change}
    * @category Whiteboard
    */
   function on(
-    event: 'whiteboard-privilege-change',
-    listener: typeof event_whiteboard_privilege_change,
+    event: 'peer-whiteboard-state-change',
+    listener: typeof event_peer_whiteboard_state_change,
   ): void;
+  /**
+   *
+   * @param event
+   * @param listener  Details in {@link event_passively_stop_whiteboard}
+   * @category Whiteboard
+   */
+
+  // function on(
+  //   event: 'passively-stop-whiteboard',
+  //   listener: typeof event_passively_stop_whiteboard,
+  // ): void;
   /**
    *
    * @param event
@@ -1193,12 +1228,15 @@ export declare namespace VideoClient {
    *  Gets the broadcast streaming client.
    */
   function getBroadcastStreamingClient(): typeof BroadcastStreamingClient;
+  /**
+   * Gets the real-time media streams client.
+   */
+  function getRealTimeMediaStreamsClient(): typeof RealTimeMediaStreamsClient;
 
   /**
    * Gets the whiteboard client.
-   * @category Whiteboard
    */
-  // function getWhiteboardClient(): typeof WhiteboardClient;
+  function getWhiteboardClient(): typeof WhiteboardClient;
 
   /**
    * Gets the current session’s information.

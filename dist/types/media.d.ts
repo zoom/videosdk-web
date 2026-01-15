@@ -1392,6 +1392,13 @@ export declare namespace Stream {
    * @category CRC
    */
   function getSessionSIPAddress(): string;
+  /**
+   * Check if background noise suppression is supported on the current platform.
+   * @since 2.3.10
+   * @returns boolean
+   * @category Audio
+   */
+  function isSupportBackgroundNoiseSuppression(): boolean;
 
   // -------------------------------------------------[video]-----------------------------------------------------------
 

@@ -74,18 +74,14 @@ function checkSourceUrl() {
       flag: 'r',
     });
     
-    const hasZoomUs = content.includes('source.zoom.us');
     const hasZoomGov = content.includes('source.zoomgov.com');
 
-    if (hasZoomUs) {
-      console.log('source.zoom.us');
-    }
     if (hasZoomGov) {
       console.log('source.zoomgov.com');
     }
     
     return {
-      hasZoomUs,
+      hasZoomUs: !hasZoomGov,
       hasZoomGov,
     };
   } catch (e) {

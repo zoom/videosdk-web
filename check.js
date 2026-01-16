@@ -4,6 +4,7 @@ const VIDEO_WORKER_FILE_NAME = 'video_m.min.js';
 const AUDIO_WORKER_FILE_NAME = 'js_audio_process.min.js';
 const JS_MEDIA_FILE_NAME = 'js_media.min.js';
 const WEBCLIENT_SDK_NAME = './dist/lib';
+const INDEX_JS_PATH = './dist/index.js';
 
 function getWasmVersion() {
   try {
@@ -13,7 +14,6 @@ function getWasmVersion() {
     ]
       .map((item) => {
         const tmpFilePath = `${WEBCLIENT_SDK_NAME}/${item.file}`;
-        console.log(`${item.type}: ${tmpFilePath}`);
         const content = fs.readFileSync(tmpFilePath, {
           encoding: 'utf-8',
           flag: 'r',
@@ -66,7 +66,48 @@ function getJsMediaVersion() {
   }
 }
 
-module.exports = { getWasmVersion, getJsMediaVersion };
+function checkSourceDomain() {
+  try {
+    const content = fs.readFileSync(INDEX_JS_PATH, {
+      encoding: 'utf-8',
+      flag: 'r',
+    });
+    
+    const hasZoomGov = content.includes('source.zoomgov.com');
+    
+    return {
+      hasZoomUs: !hasZoomGov,
+      hasZoomGov,
+    };
+  } catch (e) {
+    console.error('Error checking source URL:', e);
+    return null;
+  }
+}
 
-console.log("getWasmVersion", getWasmVersion());
-console.log("getJsMediaVersion", getJsMediaVersion());
+module.exports = { getWasmVersion, getJsMediaVersion, checkSourceDomain };
+
+const wasmVersion = getWasmVersion();
+const jsMediaVersion = getJsMediaVersion();
+const sourceUrlResult = checkSourceDomain();
+
+console.log('\n========== SDK Check Results ==========\n');
+
+console.log('📦 WASM Version:');
+console.log(JSON.stringify(wasmVersion, null, 2));
+
+console.log('\n📄 JS Media Version:');
+console.log(JSON.stringify(jsMediaVersion, null, 2));
+
+console.log('\n🌐 Source Domain:');
+console.log(JSON.stringify(sourceUrlResult, null, 2));
+
+console.log('\n========================================\n');
+
+// Exit with error if source.zoom.us is not found
+if (!sourceUrlResult || !sourceUrlResult.hasZoomUs) {
+  console.error('❌ ERROR: source.zoom.us not found in dist/index.js');
+  process.exit(1);
+} else {
+  console.log('✅ SUCCESS: source.zoom.us check passed');
+}

@@ -14,7 +14,6 @@ function getWasmVersion() {
     ]
       .map((item) => {
         const tmpFilePath = `${WEBCLIENT_SDK_NAME}/${item.file}`;
-        console.log(`${item.type}: ${tmpFilePath}`);
         const content = fs.readFileSync(tmpFilePath, {
           encoding: 'utf-8',
           flag: 'r',
@@ -75,10 +74,6 @@ function checkSourceDomain() {
     });
     
     const hasZoomGov = content.includes('source.zoomgov.com');
-
-    if (hasZoomGov) {
-      console.log('source.zoomgov.com');
-    }
     
     return {
       hasZoomUs: !hasZoomGov,
@@ -92,14 +87,27 @@ function checkSourceDomain() {
 
 module.exports = { getWasmVersion, getJsMediaVersion, checkSourceDomain };
 
-console.log("getWasmVersion", getWasmVersion());
-console.log("getJsMediaVersion", getJsMediaVersion());
-
+const wasmVersion = getWasmVersion();
+const jsMediaVersion = getJsMediaVersion();
 const sourceUrlResult = checkSourceDomain();
-console.log("checkSourceDomain", sourceUrlResult);
+
+console.log('\n========== SDK Check Results ==========\n');
+
+console.log('📦 WASM Version:');
+console.log(JSON.stringify(wasmVersion, null, 2));
+
+console.log('\n📄 JS Media Version:');
+console.log(JSON.stringify(jsMediaVersion, null, 2));
+
+console.log('\n🌐 Source Domain:');
+console.log(JSON.stringify(sourceUrlResult, null, 2));
+
+console.log('\n========================================\n');
 
 // Exit with error if source.zoom.us is not found
 if (!sourceUrlResult || !sourceUrlResult.hasZoomUs) {
-  console.error('ERROR: source.zoom.us not found in dist/index.js');
+  console.error('❌ ERROR: source.zoom.us not found in dist/index.js');
   process.exit(1);
+} else {
+  console.log('✅ SUCCESS: source.zoom.us check passed');
 }

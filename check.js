@@ -4,6 +4,7 @@ const VIDEO_WORKER_FILE_NAME = 'video_m.min.js';
 const AUDIO_WORKER_FILE_NAME = 'js_audio_process.min.js';
 const JS_MEDIA_FILE_NAME = 'js_media.min.js';
 const WEBCLIENT_SDK_NAME = './dist/lib';
+const INDEX_JS_PATH = './dist/index.js';
 
 function getWasmVersion() {
   try {
@@ -66,7 +67,34 @@ function getJsMediaVersion() {
   }
 }
 
-module.exports = { getWasmVersion, getJsMediaVersion };
+function checkSourceUrl() {
+  try {
+    const content = fs.readFileSync(INDEX_JS_PATH, {
+      encoding: 'utf-8',
+      flag: 'r',
+    });
+    
+    const hasZoomUs = content.includes('source.zoom.us');
+    const hasZoomGov = content.includes('source.zoomgov.com');
+
+    if (hasZoomUs) {
+      console.log('source.zoom.us');
+    }
+    if (hasZoomGov) {
+      console.log('source.zoomgov.com');
+    }
+    
+    return {
+      hasZoomUs,
+      hasZoomGov,
+    };
+  } catch (e) {
+    console.error('Error checking source URL:', e);
+    return null;
+  }
+}
+
+module.exports = { getWasmVersion, getJsMediaVersion, checkSourceUrl };
 
 console.log("getWasmVersion", getWasmVersion());
 console.log("getJsMediaVersion", getJsMediaVersion());

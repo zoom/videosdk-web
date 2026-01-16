@@ -1,4 +1,4 @@
-import { MediaCompatibility, VideoClient, SupportFeatures } from './videoclient';
+import { MediaCompatiblity, VideoClient, SupportFeatures } from './videoclient';
 import { LocalVideoTrack, LocalAudioTrack } from './preview';
 
 /**
@@ -21,12 +21,12 @@ export declare namespace ZoomVideo {
    * Checks the compatibility of the current browser.
    * Use this method before calling {@link init} to check if the SDK is compatible with the web browser.
    *
-   * @returns A `MediaCompatibility` object. The object has following properties:
+   * @returns A `MediaCompatiblity` object. The object has following properties:
    * - `audio`: boolean, whether the audio is compatible with the current web browser.
    * - `video`: boolean, whether the video is compatible with the current web browser.
    * - `screen`: boolean, whether the screen is compatible with the current web browser.
    */
-  function checkSystemRequirements(): MediaCompatibility;
+  function checkSystemRequirements(): MediaCompatiblity;
 
   /**
    * Shows which features are supported and not supported on the current browser or platform.

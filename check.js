@@ -67,7 +67,7 @@ function getJsMediaVersion() {
   }
 }
 
-function checkSourceUrl() {
+function checkSourceDomain() {
   try {
     const content = fs.readFileSync(INDEX_JS_PATH, {
       encoding: 'utf-8',
@@ -90,13 +90,13 @@ function checkSourceUrl() {
   }
 }
 
-module.exports = { getWasmVersion, getJsMediaVersion, checkSourceUrl };
+module.exports = { getWasmVersion, getJsMediaVersion, checkSourceDomain };
 
 console.log("getWasmVersion", getWasmVersion());
 console.log("getJsMediaVersion", getJsMediaVersion());
 
-const sourceUrlResult = checkSourceUrl();
-console.log("checkSourceUrl", sourceUrlResult);
+const sourceUrlResult = checkSourceDomain();
+console.log("checkSourceDomain", sourceUrlResult);
 
 // Exit with error if source.zoom.us is not found
 if (!sourceUrlResult || !sourceUrlResult.hasZoomUs) {

@@ -98,4 +98,12 @@ module.exports = { getWasmVersion, getJsMediaVersion, checkSourceUrl };
 
 console.log("getWasmVersion", getWasmVersion());
 console.log("getJsMediaVersion", getJsMediaVersion());
-console.log("checkSourceUrl", checkSourceUrl());
+
+const sourceUrlResult = checkSourceUrl();
+console.log("checkSourceUrl", sourceUrlResult);
+
+// Exit with error if source.zoom.us is not found
+if (!sourceUrlResult || !sourceUrlResult.hasZoomUs) {
+  console.error('ERROR: source.zoom.us not found in dist/index.js');
+  process.exit(1);
+}

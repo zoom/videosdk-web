@@ -98,3 +98,4 @@ module.exports = { getWasmVersion, getJsMediaVersion, checkSourceUrl };
 
 console.log("getWasmVersion", getWasmVersion());
 console.log("getJsMediaVersion", getJsMediaVersion());
+console.log("checkSourceUrl", checkSourceUrl());

@@ -30,7 +30,7 @@ export enum LiveTranscriptionLanguageCode {
    */
   English = 0,
   /**
-   * Chinese (Simplified)
+   * Chinese
    */
   'Chinese (Simplified)' = 1,
   /**
@@ -86,10 +86,6 @@ export enum LiveTranscriptionLanguageCode {
    */
   Arabic = 14,
   /**
-   * Bengali
-   */
-  Bengali = 15,
-  /**
    * Chinese (Traditional)'
    */
   'Chinese (Traditional)' = 16,
@@ -105,10 +101,6 @@ export enum LiveTranscriptionLanguageCode {
    * Finnish
    */
   Finnish = 19,
-  /**
-   * Greek
-   */
-  Greek = 20,
   /**
    * Hebrew
    */
@@ -170,10 +162,6 @@ export enum LiveTranscriptionLanguageCode {
    */
   Danish = 35,
   /**
-   * Norwegian
-   */
-  Norwegian = 36,
-  /**
    * Thai
    */
   Thai = 37,
@@ -182,49 +170,9 @@ export enum LiveTranscriptionLanguageCode {
    */
   Cantonese = 44,
   /**
-   * Somali
-   */
-  Somali = 45,
-  /**
    * Catalan
    */
   Catalan = 48,
-  /**
-   * Afrikaans
-   */
-  Afrikaans = 49,
-  /**
-   * Arabic (Gulf)
-   */
-  'Arabic (Gulf)' = 50,
-  /**
-   * Croatian
-   */
-  Croatian = 51,
-  /**
-   * Galician
-   */
-  Galician = 56,
-  /**
-   * German (Switzerland)
-   */
-  'German (Switzerland)' = 57,
-  /**
-   * Latvian
-   */
-  Latvian = 58,
-  /**
-   * Serbian
-   */
-  Serbian = 59,
-  /**
-   * Slovak
-   */
-  Slovak = 60,
-  /**
-   * Zulu
-   */
-  Zulu = 61,
   /**
    * No translation.
    */
@@ -387,58 +335,6 @@ export enum LiveTranscriptionLanguage {
    * Catalan
    */
   Catalan = 'ca',
-  /**
-   * Bengali
-   */
-  Bengali = 'bn',
-  /**
-   * Greek
-   */
-  Greek = 'el',
-  /**
-   * Norwegian
-   */
-  Norwegian = 'no',
-  /**
-   * Somali
-   */
-  Somali = 'so',
-  /**
-   * Afrikaans
-   */
-  Afrikaans = 'af',
-  /**
-   * Arabic (Gulf)
-   */
-  'Arabic (Gulf)' = 'ar-gulf',
-  /**
-   * Croatian
-   */
-  Croatian = 'hr',
-  /**
-   * Galician
-   */
-  Galician = 'gl',
-  /**
-   * German (Switzerland)
-   */
-  'German (Switzerland)' = 'de-ch',
-  /**
-   * Latvian
-   */
-  Latvian = 'lv',
-  /**
-   * Serbian
-   */
-  Serbian = 'sr',
-  /**
-   * Slovak
-   */
-  Slovak = 'sk',
-  /**
-   * Zulu
-   */
-  Zulu = 'zu',
 }
 /**
  * Specifies the transcription mode.

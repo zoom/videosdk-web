@@ -18,7 +18,7 @@ export type ErrorTypes =
   | 'INSUFFICIENT_PRIVILEGES'
   | 'IMPROPER_MEETING_STATE'
   | 'INVALID_PARAMETERS'
-  | 'OPERATION_LOCKED';
+  | 'OPRATION_LOCKED';
 /**
  * Failure reason for async operation.
  */
@@ -122,13 +122,8 @@ interface Participant {
   isVideoConnect: boolean;
   /**
    * The `user_identity` from the JWT payload.
-   * @deprecated use `userKey` instead
    */
   userIdentity?: string;
-  /**
-   * The `user_key` from the JWT payload.
-   */
-  userKey?: string;
   /**
    * Whether the user is only connected to the audio speaker, not the microphone.
    */
@@ -909,18 +904,7 @@ export interface ProcessorParams {
   /**
    * Parameters to pass into the processor constructor
    */
-  options?:
-    | {
-        /**
-         * Controls video frame capture strategy for Share Processor only.
-         * - `true`: Forces fixed frame rate capture from Canvas, ensuring consistent output even if source produces minimal frames.
-         * - `false` or `undefined`: Uses native browser MediaStreamTrackProcessor/MediaStreamTrackGenerator if supported, following source frame rate.
-         * Useful for scenarios requiring stable frame rates such as recording or encoding.
-         */
-        needFixedCaptureRate?: boolean;
-        [key: string]: any;
-      }
-    | any;
+  options?: any;
 }
 /**
  * System CPU pressure level indicating current CPU usage intensity.

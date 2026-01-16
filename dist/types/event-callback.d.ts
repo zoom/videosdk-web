@@ -2071,7 +2071,7 @@ export declare function event_broadcast_streaming_status(payload: {
 }): void;
 
 /**
- * Occurs when the status of the real-time media stream changes.
+ * Occurs when the status of the real-time media streams changes.
  * @param payload
  * @since 2.3.5
  * @event
@@ -2283,11 +2283,11 @@ export declare function event_whiteboard_status_change(
  */
 export declare function event_peer_whiteboard_state_change(payload: {
   /**
-   * Action type: 'Start' when the user begins presenting, 'Stop' when they end.
+   * Action type: 'Start' when user begins presenting, 'Stop' when they end
    */
   action: 'Start' | 'Stop';
   /**
-   * User ID of the person who started or stopped the whiteboard.
+   * User ID of the participant who started or stopped the whiteboard
    */
   userId: number;
 }): void;
@@ -2317,11 +2317,11 @@ export declare function event_peer_whiteboard_state_change(payload: {
  */
 export declare function event_whiteboard_permission_change(payload: {
   /**
-   * Share permission code controlling who can start/grab whiteboard.
+   * Share permission code controlling who can start/grab whiteboard
    */
   sharePermission: WhiteboardSharePermissionCode;
   /**
-   * Initiate permission code controlling who can create new whiteboards.
+   * Initiate permission code controlling who can create new whiteboards
    */
   initiatePermission: WhiteboardInitiatePermissionCode;
 }): void;

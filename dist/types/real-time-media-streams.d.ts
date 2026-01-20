@@ -9,7 +9,7 @@ export enum RealTimeMediaStreamsStatus {
    */
   NoSubscription = -2,
   /**
-   * Real-time media streams start failed
+   * Real-time media streams failed to start
    */
   StartFailed = -1,
   /**
@@ -30,7 +30,7 @@ export enum RealTimeMediaStreamsStatus {
   Stop = 3,
 }
 /**
- * The client of real-time media streams.
+ * The real-time media streams client.
  */
 export declare namespace RealTimeMediaStreamsClient {
   /**

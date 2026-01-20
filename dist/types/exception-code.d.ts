@@ -593,7 +593,7 @@ export enum ExceptionCode {
    */
   SCREEN_SHARE_ANNOTATION_NOT_START = 6217,
   /**
-   * Error that occurs when calling `stream.attachShareView` and  the number of rendered share views exceeds the limit.
+   * Error that occurs when calling `stream.attachShareView` and the number of rendered share views exceeds the limit.
    * @category Screen share
    */
   SCREEN_SHARE_LIMIT_EXCEED = 6218,

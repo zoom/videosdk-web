@@ -109,7 +109,7 @@ import { WhiteboardClient } from './whiteboard';
 /**
  * Checks system requirements result interface.
  */
-interface MediaCompatiblity {
+interface MediaCompatibility {
   /**
    * If `audio` is `false`, the browser is not compatible with Voice over IP (VoIP).
    */
@@ -1027,7 +1027,7 @@ export declare namespace VideoClient {
   /**
    *
    * @param event
-   * @param listener  Details in {@link event_whiteboard_status_change}
+   * @param listener Details in {@link event_whiteboard_status_change}
    * @category Whiteboard
    */
   function on(
@@ -1037,7 +1037,7 @@ export declare namespace VideoClient {
   /**
    *
    * @param event
-   * @param listener  Details in {@link event_whiteboard_permission_change}
+   * @param listener Details in {@link event_whiteboard_permission_change}
    * @category Whiteboard
    */
 
@@ -1048,7 +1048,7 @@ export declare namespace VideoClient {
   /**
    *
    * @param event
-   * @param listener  Details in {@link event_peer_whiteboard_state_change}
+   * @param listener Details in {@link event_peer_whiteboard_state_change}
    * @category Whiteboard
    */
   function on(
@@ -1058,7 +1058,7 @@ export declare namespace VideoClient {
   /**
    *
    * @param event
-   * @param listener  Details in {@link event_passively_stop_whiteboard}
+   * @param listener Details in {@link event_passively_stop_whiteboard}
    * @category Whiteboard
    */
 
@@ -1087,7 +1087,7 @@ export declare namespace VideoClient {
   /**
    *
    * @param event
-   * @param listener  Details in {@link event_webrtc_statistic_data_change}
+   * @param listener Details in {@link event_webrtc_statistic_data_change}
    */
   function on(
     event: 'webrtc-statistic-data-change',

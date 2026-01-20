@@ -1355,7 +1355,8 @@ export declare namespace Stream {
    */
   function getUserVolumeLocally(userId: number): number;
   /**
-   * Determines whether the platform support microphone audio and share tab audio work at the same time.
+   * Determines whether the platform supports microphone audio and shared tab audio (or shared system audio) working simultaneously.
+   * > ***Note***: This method should be called again whenever the share source changes, as the return value may differ depending on the share source type.
    * @returns boolean.
    * @category Audio
    */
@@ -1392,6 +1393,13 @@ export declare namespace Stream {
    * @category CRC
    */
   function getSessionSIPAddress(): string;
+  /**
+   * Check if background noise suppression is supported on the current platform.
+   * @since 2.3.10
+   * @returns boolean
+   * @category Audio
+   */
+  function isSupportBackgroundNoiseSuppression(): boolean;
 
   // -------------------------------------------------[video]-----------------------------------------------------------
 

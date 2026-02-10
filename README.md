@@ -18,6 +18,10 @@ $ npm install @zoom/videosdk --save
 
 > The Video SDK provides video, audio, screen sharing, chat, data streams, and more, as a service. You can build with all of these features, or pick and choose. The Video SDK also comes with a full set of server side [APIs](https://developers.zoom.us/docs/api/rest/reference/video-sdk/methods/#overview) and [Webhooks](https://developers.zoom.us/docs/api/rest/reference/video-sdk/events/#overview).
 
+> **Use UTF-8 encoding**
+>
+> Add `<meta charset="UTF-8" />` to your web app's entry point (`index.html`) to ensure the browser uses UTF-8. If not set, the browser might choose a different encoding, causing text or data issues.
+
 In the component file where you want to use the Video SDK, import `ZoomVideo` and create the client.
 
 ```js

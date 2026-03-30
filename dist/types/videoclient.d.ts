@@ -97,13 +97,16 @@ import {
   event_system_resource_usage_change,
   event_webrtc_statistic_data_change,
   event_whiteboard_status_change,
-  event_whiteboard_permission_change,
+  // event_whiteboard_permission_change,
   event_peer_whiteboard_state_change,
-  event_passively_stop_whiteboard,
+  // event_passively_stop_whiteboard,
+  event_voice_translator_started,
+  event_voice_translator_unsupported_language_pair,
 } from './event-callback';
 import { BroadcastStreamingClient } from './broadcast-streaming';
 import { RealTimeMediaStreamsClient } from './real-time-media-streams';
 import { WhiteboardClient } from './whiteboard';
+import { VoiceTranslatorClient } from './voice-translator';
 // import AIClient from '../src/summary';
 
 /**
@@ -1094,6 +1097,24 @@ export declare namespace VideoClient {
     listener: typeof event_webrtc_statistic_data_change,
   ): void;
   /**
+   *
+   * @param event
+   * @param listener Details in {@link event_voice_translator_started}
+   */
+  function on(
+    event: 'voice-translator-started',
+    listener: typeof event_voice_translator_started,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_voice_translator_unsupported_language_pair}
+   */
+  function on(
+    event: 'voice-translator-unsupported-language-pair',
+    listener: typeof event_voice_translator_unsupported_language_pair,
+  ): void;
+  /**
    * Removes the event handler.
    * @param event Event name.
    * @param callback The event handler.
@@ -1237,6 +1258,10 @@ export declare namespace VideoClient {
    * Gets the whiteboard client.
    */
   function getWhiteboardClient(): typeof WhiteboardClient;
+  /**
+   *  Gets the voiceTranslator client.
+   */
+  function getVoiceTranslatorClient(): typeof VoiceTranslatorClient;
 
   /**
    * Gets the current session’s information.

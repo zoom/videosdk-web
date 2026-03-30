@@ -251,6 +251,14 @@ export interface DialOutOption {
    * Determines whether to require pressing 1 before being connected.
    */
   pressingOne?: boolean;
+  /**
+   * The language of the phone welcome message
+   */
+  language?: string;
+  /**
+   * The identifier of the phone welcome message
+   */
+  identifier?: string;
 }
 /**
  * Capture video option interface.
@@ -1348,16 +1356,20 @@ export declare namespace Stream {
    */
   function isUserAudioMutedLocally(userId: number): boolean;
   /**
-   * Get the user's volume.
-   * @param userId User ID.
-   * @returns Number.
+   * Retrieves the local audio volume level for a specific user.
+   * @param userId - The unique identifier of the user.
+   * @returns The user’s current local volume level as a number.
    * @category Audio
    */
   function getUserVolumeLocally(userId: number): number;
   /**
-   * Determines whether the platform supports microphone audio and shared tab audio (or shared system audio) working simultaneously.
-   * > ***Note***: This method should be called again whenever the share source changes, as the return value may differ depending on the share source type.
-   * @returns boolean.
+   * Checks whether the platform supports simultaneous use of microphone audio and shared tab audio (or shared system audio).
+   *
+   * > **Note:** This method should be called again whenever the share
+   * > source changes, as the return value may vary depending on the
+   * > type of share source.
+   *
+   * @returns `boolean` — `true` if simultaneous audio capture is supported; otherwise, `false`.
    * @category Audio
    */
   function isSupportMicrophoneAndShareAudioSimultaneously(): boolean;
@@ -1394,12 +1406,33 @@ export declare namespace Stream {
    */
   function getSessionSIPAddress(): string;
   /**
-   * Check if background noise suppression is supported on the current platform.
+   * Checks whether background noise suppression is supported on the current platform.
    * @since 2.3.10
-   * @returns boolean
+   * @returns `boolean` — `true` if background noise suppression is supported; otherwise, `false`.
    * @category Audio
    */
   function isSupportBackgroundNoiseSuppression(): boolean;
+
+  /**
+   * Get the phone welcome message info list
+   * @returns audio list
+   * @since 2.4.0
+   * @category Phone
+   */
+  function getPhoneWelcomeMessageInfoList(): Array<{
+    /**
+     * The language code of the phone welcome message.
+     */
+    language: string;
+    /**
+     * The identifier of the phone welcome message.
+     */
+    identifier: string;
+    /**
+     * The language name of the phone's welcome message.
+     */
+    languageName: string;
+  }>;
 
   // -------------------------------------------------[video]-----------------------------------------------------------
 
@@ -2581,6 +2614,7 @@ export declare namespace Stream {
    * Returns the maximum number of concurrent share views supported by the current device.
    *
    * @returns The maximum number of simultaneous share views, typically limited by GPU or CPU capabilities.
+   * @category Screen Share
    * @since 2.2.10
    */
   function getMaxRenderableShareViews(): number;

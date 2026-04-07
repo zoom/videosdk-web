@@ -147,6 +147,28 @@ interface Participant {
    * Available if the user is in a subsession.
    */
   subsessionId?: string;
+  /**
+   * Whether the voice translator is on.
+   */
+  isVoiceTranslatorOn?: boolean;
+  /**
+   * The selected voice timbre of the user if the voice translator is on.
+   */
+  voiceTimbre?: number;
+  /**
+   * The selected listening language of the user if the voice translator is on.
+   */
+  voiceListeningLanguage?: string;
+  /**
+   * The selected speaking language of the user if the voice translator is on.
+   */
+  voiceSpeakingLanguage?: string;
+  /**
+   * How the phone user joined the session. Only present when the user is a phone user.
+   * - 'dial in': User dialed into the session.
+   * - 'dial out': User was invited by the session user.
+   */
+  dialType?: string;
 }
 /**
  * Subsession's status.
@@ -891,19 +913,25 @@ export interface Processor {
 }
 
 /**
- * Processor construction parameters
+ * Defines the parameters required to initialize a media processor.
  */
 export interface ProcessorParams {
   /**
-   * Load the processor script from the absolute URL (the processor script must be from the same origin or CORS must be enabled).
+   * Absolute URL of the processor script.
+   * The script must be hosted on the same origin or have CORS enabled to allow cross-origin loading.
    */
   url: string;
   /**
-   * Processor name
+   * Unique name of the processor.
+   * Used to identify and register the processor implementation.
    */
   name: string;
   /**
-   * Processor type
+   * Specifies the processor category.
+   * Determines which media pipeline the processor integrates with:
+   * - `video`: Processes camera frames before encoding or transmission.
+   * - `audio`: Processes microphone input or playback streams.
+   * - `share`: Processes screen-share frames before distribution.
    */
   type: MediaType;
   /**
@@ -912,12 +940,21 @@ export interface ProcessorParams {
   options?:
     | {
         /**
-         * Controls video frame capture strategy for Share Processor only.
-         * - `true`: Forces fixed frame rate capture from Canvas, ensuring consistent output even if source produces minimal frames.
-         * - `false` or `undefined`: Uses native browser MediaStreamTrackProcessor/MediaStreamTrackGenerator if supported, following source frame rate.
-         * Useful for scenarios requiring stable frame rates such as recording or encoding.
+         * Controls the video frame capture strategy for Share
+         * Processors only.
+         *
+         * - `true`: Forces a fixed frame rate capture from the Canvas, ensuring consistent output even when the source produces few frames. Recommended for use cases such as recording, encoding, or AI-based frame analysis where uniform timing is important.
+         *
+         * - `false` or `undefined`: Uses the browser’s native
+         *   MediaStreamTrackProcessor/MediaStreamTrackGenerator (if supported), following the source’s natural frame rate. This approach reduces CPU usage and latency for dynamic or frequently changing content.
+         *
+         * Provides developers with control over frame timing
+         * consistency, balancing performance and stability.
          */
         needFixedCaptureRate?: boolean;
+        /**
+         * Additional custom parameters for processor-specific configuration.
+         */
         [key: string]: any;
       }
     | any;
@@ -947,6 +984,19 @@ export enum SystemCPUPressureLevel {
    * System is under severe stress, immediate action recommended to prevent performance degradation.
    */
   Critical = 3,
+}
+/**
+ * Language.
+ */
+interface Language {
+  /**
+   * Language code.
+   */
+  code: string;
+  /**
+   * Language name.
+   */
+  name: string;
 }
 type RTCStatsTypes =
   | RTCInboundRtpStreamStats

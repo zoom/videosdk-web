@@ -1,4 +1,4 @@
-import { ExecutedResult } from './common';
+import { ExecutedResult, Language } from './common';
 
 /**
  * Source of the live transcription message.
@@ -534,19 +534,7 @@ interface LiveTranscriptionStatus {
     translatedToLanguage: string;
   }>;
 }
-/**
- * Language.
- */
-interface Language {
-  /**
-   * Language code.
-   */
-  code: string;
-  /**
-   * Language name.
-   */
-  name: string;
-}
+
 /**
  * The client of live transcription.
  */
@@ -569,7 +557,7 @@ export declare namespace LiveTranscriptionClient {
    * Sets the speaking language.
    * @param language - The language to set for speech transcription.
    * @param options - Optional configuration.  @since 2.2.10
-   * @param options.mode - The transcription mode to use (defaults to `Individual`)
+   * @param options.mode - The transcription mode to use (defaults to `Individual`).
    *
    * @returns An {@link ExecutedResult} indicating the success or failure of the operation.
    */
@@ -594,7 +582,7 @@ export declare namespace LiveTranscriptionClient {
   function disableCaptions(disable: boolean): ExecutedResult;
   /**
    * Locks or unlocks the transcription language during a session.
-   * **Note:** Only the host can call this function
+   * **Note:** Only the host can call this function.
    *
    * @param isLock - `true` to lock, `false` to unlock the transcription language.
    * @returns An {@link ExecutedResult} indicating the success or failure of the operation.

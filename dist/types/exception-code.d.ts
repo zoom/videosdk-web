@@ -1053,4 +1053,31 @@ export enum ExceptionCode {
    * Occurs in `realTimeMediaStreamsClient.startRealTimeMediaStreams` method because real-time media streams is not supported in breakout rooms.
    */
   REAL_TIME_MEDIA_STREAMS_NOT_SUPPORTED_IN_BREAKOUT_ROOM = 8102,
+  /**
+   * Voice translator exception
+   */
+  /**
+   * Occurs in `voiceTranslatorClient.startVoiceTranslator` or `voiceTranslatorClient.setSpeakingLanguage` methods because the voice translator feature is not enabled in the account setting.
+   */
+  VOICE_TRANSLATOR_ACCOUNT_DISABLE = 8200,
+  /**
+   * Occurs in `voiceTranslatorClient.setSpeakingLanguage` method because the voice translator language list is not available.
+   */
+  VOICE_TRANSLATOR_NO_AVAILABLE_LANGUAGE_LIST = 8201,
+  /**
+   * Occurs in `voiceTranslatorClient.setListeningLanguage` or `voiceTranslatorClient.setOriginalAudioBalance` or `voiceTranslatorClient.setTranslatedVoiceStyle` methods because the voice translator must be started before performing the action.
+   */
+  VOICE_TRANSLATOR_MISMATCH_STATE = 8202,
+  /**
+   * Occurs in `voiceTranslatorClient.setSpeakingLanguage` or `voiceTranslatorClient.setListeningLanguage` methods because the specified language is not supported.
+   */
+  VOICE_TRANSLATOR_LANGUAGE_UNSUPPORTED = 8203,
+  /**
+   * Occurs in `voiceTranslatorClient.setOriginalAudioBalance` method because the balance value is not within the valid range (0 to 1).
+   */
+  VOICE_TRANSLATOR_INCORRECT_BALANCE_RANGE = 8204,
+  /**
+   * Occurs in `voiceTranslatorClient.setTranslatedVoiceStyle` method because the specified voice timbre ID is invalid or not found.
+   */
+  VOICE_TRANSLATOR_INCORRECT_TIMBRE = 8205,
 }

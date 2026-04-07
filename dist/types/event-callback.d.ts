@@ -132,6 +132,22 @@ export interface ParticipantPropertiesPayload {
    * Whether the user is in a failover process.
    */
   isInFailover?: boolean;
+  /**
+   * Whether the voice translator is on.
+   */
+  isVoiceTranslatorOn?: boolean;
+  /**
+   * The selected voice timbre of the user if the voice translator is on.
+   */
+  voiceTimbre?: number;
+  /**
+   * The selected listening language of the user if the voice translator is on.
+   */
+  voiceListeningLanguageCode?: number;
+  /**
+   * The selected speaking language of the user if the voice translator is on.
+   */
+  voiceSpeakingLanguageCode?: number;
 }
 /**
  * The session's connection state.
@@ -2341,4 +2357,53 @@ export declare function event_whiteboard_permission_change(payload: {
  */
 export declare function event_passively_stop_whiteboard(payload: {
   reason: 'string';
+}): void;
+/**
+ * Occurs when the voice translator receives the first frame of translated audio.
+ * This indicates that the voice translation service has successfully started.
+ * @since 2.4.0
+ * @category VoiceTranslator
+ * @event
+ */
+export declare function event_voice_translator_started(payload: {
+  /**
+   * The listening language code (e.g., 'en', 'zh', 'ja') that the current user has selected.
+   */
+  language: string;
+  /**
+   * The timbre index of the voice translator.
+   */
+  timbreIndex: number;
+}): void;
+/**
+ * Occurs when the active speaker's speaking language cannot be translated to the current user's listening language.
+ * This event is triggered when the language pair is not supported by the voice translator service.
+ *
+ * ```javascript
+ * client.on('voice-translator-unsupported-language-pair', (payload) => {
+ *   console.log(`User ${payload.displayName} is speaking ${payload.speakingLanguage}, but cannot be translated to ${payload.listeningLanguage}`);
+ * });
+ * ```
+ * @since 2.4.0
+ * @category VoiceTranslator
+ * @param payload The event detail.
+ * @event
+ */
+export declare function event_voice_translator_unsupported_language_pair(payload: {
+  /**
+   * The user ID of the active speaker.
+   */
+  userId: number;
+  /**
+   * The display name of the active speaker.
+   */
+  displayName: string;
+  /**
+   * The speaking language code (e.g., 'en', 'zh', 'ja') of the active speaker.
+   */
+  speakingLanguage: string;
+  /**
+   * The listening language code (e.g., 'en', 'zh', 'ja') that the current user has selected.
+   */
+  listeningLanguage: string;
 }): void;

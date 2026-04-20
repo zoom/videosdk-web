@@ -55,6 +55,7 @@ interface VoiceTranslatorStatus {
 
 /**
  * The client of voice translator.
+ * @ignore
  */
 export declare namespace VoiceTranslatorClient {
   /**

@@ -259,6 +259,11 @@ export interface DialOutOption {
    * The identifier of the phone welcome message
    */
   identifier?: string;
+  /**
+   * Determines whether to detect voicemail.
+   * @ignore
+   */
+  detectMachine?: number;
 }
 /**
  * Capture video option interface.

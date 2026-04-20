@@ -2232,7 +2232,7 @@ export declare function event_system_resource_usage_change(payload: {
  *
  * **Example**
  * ```javascript
- * client.on('webrtc-statistic-data-change', (statsReport) => {
+ * client.on('webrtc-stats-report-data-change', (statsReport) => {
  *   for (const [id, stats] of statsReport.entries()) {
  *     if (stats.type === 'inbound-rtp' && stats.kind === 'video') {
  *       console.log(`Video: ${stats.frameWidth}x${stats.frameHeight} @ ${stats.framesPerSecond}fps`);
@@ -2246,7 +2246,7 @@ export declare function event_system_resource_usage_change(payload: {
  * @since 2.3.0
  * @event
  */
-export declare function event_webrtc_statistic_data_change(
+export declare function event_webrtc_stats_report_data_change(
   payload: StatsReport,
 ): void;
 /**
@@ -2364,6 +2364,7 @@ export declare function event_passively_stop_whiteboard(payload: {
  * @since 2.4.0
  * @category VoiceTranslator
  * @event
+ * @ignore
  */
 export declare function event_voice_translator_started(payload: {
   /**
@@ -2388,6 +2389,7 @@ export declare function event_voice_translator_started(payload: {
  * @category VoiceTranslator
  * @param payload The event detail.
  * @event
+ * @ignore
  */
 export declare function event_voice_translator_unsupported_language_pair(payload: {
   /**

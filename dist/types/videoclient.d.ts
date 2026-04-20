@@ -95,7 +95,7 @@ import {
   event_caption_language_lock,
   event_speaking_while_muted,
   event_system_resource_usage_change,
-  event_webrtc_statistic_data_change,
+  event_webrtc_stats_report_data_change,
   event_whiteboard_status_change,
   // event_whiteboard_permission_change,
   event_peer_whiteboard_state_change,
@@ -1093,8 +1093,8 @@ export declare namespace VideoClient {
    * @param listener Details in {@link event_webrtc_statistic_data_change}
    */
   function on(
-    event: 'webrtc-statistic-data-change',
-    listener: typeof event_webrtc_statistic_data_change,
+    event: 'webrtc-stats-report-data-change',
+    listener: typeof event_webrtc_stats_report_data_change,
   ): void;
   /**
    *

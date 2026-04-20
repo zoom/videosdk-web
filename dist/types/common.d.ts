@@ -149,18 +149,22 @@ interface Participant {
   subsessionId?: string;
   /**
    * Whether the voice translator is on.
+   * @ignore
    */
   isVoiceTranslatorOn?: boolean;
   /**
    * The selected voice timbre of the user if the voice translator is on.
+   * @ignore
    */
   voiceTimbre?: number;
   /**
    * The selected listening language of the user if the voice translator is on.
+   * @ignore
    */
   voiceListeningLanguage?: string;
   /**
    * The selected speaking language of the user if the voice translator is on.
+   * @ignore
    */
   voiceSpeakingLanguage?: string;
   /**
@@ -252,6 +256,10 @@ export enum DialoutState {
    * Phone rang but no one answered, a missed call
    */
   NoAnswer = 13,
+  /**
+   * Answered by machine
+   */
+  AnsweredByMachine = 17,
 }
 
 /**

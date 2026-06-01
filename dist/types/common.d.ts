@@ -173,6 +173,10 @@ interface Participant {
    * - 'dial out': User was invited by the session user.
    */
   dialType?: string;
+  /**
+   * Whether this user is an RTMP user
+   */
+  isRtmpUser?: boolean;
 }
 /**
  * Subsession's status.

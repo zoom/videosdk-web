@@ -19,5 +19,6 @@ export * from './broadcast-streaming';
 export * from './whiteboard';
 export * from './real-time-media-streams';
 export * from './voice-translator';
+export * from './incoming-live-stream';
 // export * from './summary';
 export default ZoomVideo;

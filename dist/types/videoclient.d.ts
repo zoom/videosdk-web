@@ -102,11 +102,13 @@ import {
   // event_passively_stop_whiteboard,
   event_voice_translator_started,
   event_voice_translator_unsupported_language_pair,
+  event_incoming_live_stream_status,
 } from './event-callback';
 import { BroadcastStreamingClient } from './broadcast-streaming';
 import { RealTimeMediaStreamsClient } from './real-time-media-streams';
 import { WhiteboardClient } from './whiteboard';
 import { VoiceTranslatorClient } from './voice-translator';
+import { IncomingLiveStreamClient } from './incoming-live-stream';
 // import AIClient from '../src/summary';
 
 /**
@@ -210,8 +212,8 @@ interface InitOptions {
       };
   /**
    * Optional
-   * Enforces virtual background on browser without SharedArrayBuffer.
-   * This may result in high CPU and memory usage. Use CanvasElement to render the self video.
+   * Enforces virtual background on browser.
+   * This may result in high CPU and memory usage.
    * See [browser support](https://developers.zoom.us/docs/video-sdk/web/browser-support/) for details.
    *
    */
@@ -1115,6 +1117,16 @@ export declare namespace VideoClient {
     listener: typeof event_voice_translator_unsupported_language_pair,
   ): void;
   /**
+   *
+   * @param event
+   * @param listener Details in {@link event_incoming_live_stream_status}
+   * @category Incoming Live Stream
+   */
+  function on(
+    event: 'incoming-live-stream-status',
+    listener: typeof event_incoming_live_stream_status,
+  ): void;
+  /**
    * Removes the event handler.
    * @param event Event name.
    * @param callback The event handler.
@@ -1262,6 +1274,11 @@ export declare namespace VideoClient {
    *  Gets the voiceTranslator client.
    */
   function getVoiceTranslatorClient(): typeof VoiceTranslatorClient;
+  /**
+   * Gets the incoming live stream client.
+   * @since 2.4.5
+   */
+  function getIncomingLiveStreamClient(): typeof IncomingLiveStreamClient;
 
   /**
    * Gets the current session’s information.

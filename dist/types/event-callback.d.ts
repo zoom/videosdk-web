@@ -148,6 +148,10 @@ export interface ParticipantPropertiesPayload {
    * The selected speaking language of the user if the voice translator is on.
    */
   voiceSpeakingLanguageCode?: number;
+  /**
+   * Whether this user is an RTMP user
+   */
+  isRtmpUser?: boolean;
 }
 /**
  * The session's connection state.
@@ -780,6 +784,10 @@ export declare function event_share_content_dimension_change(payload: {
    * Height.
    */
   height: number;
+  /**
+   * User ID.
+   */
+  userId: number;
 }): void;
 /**
  * Occurs when current sharing is passively stopped.
@@ -2408,4 +2416,44 @@ export declare function event_voice_translator_unsupported_language_pair(payload
    * The listening language code (e.g., 'en', 'zh', 'ja') that the current user has selected.
    */
   listeningLanguage: string;
+}): void;
+/**
+ * Occurs when the incoming live stream status changes (RTMP connection or video push state).
+ *
+ * Monitor this event after binding a stream to track when it is ready to start, and during
+ * streaming to detect disconnections or state changes.
+ *
+ * ```javascript
+ * client.on('incoming-live-stream-status', (payload) => {
+ *   const { isRTMPConnected, isStreamPushed, streamId } = payload;
+ *   if (isRTMPConnected && !isStreamPushed) {
+ *     // Streaming software is connected but not yet pushing video into the session —
+ *     // safe to call startIncomingLiveStream to make it a virtual participant
+ *     await incomingLiveStreamClient.startIncomingLiveStream(streamId);
+ *   } else if (isRTMPConnected && isStreamPushed) {
+ *     // Stream is already active as a virtual participant
+ *   } else if (!isRTMPConnected) {
+ *     // Streaming software disconnected
+ *   }
+ * });
+ * ```
+ *
+ * @param payload The updated stream status
+ * @since 2.4.5
+ * @category Incoming Live Stream
+ * @event
+ */
+export declare function event_incoming_live_stream_status(payload: {
+  /**
+   * Whether the streaming software (OBS, vMix, etc.) has connected to the Zoom RTMP endpoint.
+   */
+  isRTMPConnected: boolean;
+  /**
+   * Whether video is actively being pushed into the session.
+   */
+  isStreamPushed: boolean;
+  /**
+   * The stream key ID (`stream_id`) of the stream whose status changed.
+   */
+  streamId: string;
 }): void;

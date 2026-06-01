@@ -33,8 +33,25 @@ interface Subsession2 {
   subsessionName: string;
   /**
    * Subsession user list.
+   *
+   * Each entry is a subset of {@link Participant} fields plus `isInSubsession`,
+   * which indicates whether the user has actually joined the subsession
+   * (`true`) or has only been assigned to it (`false`).
    */
-  userList: Array<Participant>;
+  userList: Array<
+    Pick<
+      Participant,
+      'userId' | 'displayName' | 'avatar' | 'userGuid' | 'userKey'
+    > & {
+      /**
+       * Whether the user is currently in the subsession.
+       * - `true`: the user has joined the subsession.
+       * - `false`: the user is assigned to the subsession but has not joined yet
+       *   (e.g. still in the main session).
+       */
+      isInSubsession: boolean;
+    }
+  >;
 }
 /**
  * Subsession creation options.
@@ -283,6 +300,13 @@ export declare namespace SubsessionClient {
    * Gets the list of subsessions.
    * If you are the host, will get all the subsessions.
    * If you are the participant, will get the assigned subsession.
+   *
+   * **Note:** The `userId` of each participant in `userList` is based on the **main session**.
+   * User IDs are not shared across subsessions or between a subsession and the main session —
+   * each session context assigns its own independent IDs. Because every participant has a join
+   * record in the main session, the `userId` exposed here always refers to that main-session identity.
+   * If you need to track a user across session contexts, use `userGuid` instead, as it remains
+   * constant regardless of which session the user is in.
    */
   function getSubsessionList(): Array<Subsession2>;
   /**

@@ -233,6 +233,16 @@ interface AudioOption {
    * 128 kbps bitrate
    */
   highBitrate?: boolean;
+  /**
+   * Specifies custom audio constraints for the microphone.
+   * - When set, these constraints override other options such as `microphoneId`, `backgroundNoiseSuppression`, `originalSound`, etc.
+   * - **Use this option only in specific scenarios.** Normally, the SDK automatically optimizes the constraints.
+   * - **This applies only to the current microphone.** Switching microphones using `stream.switchMicrophone` will not carry over `customAudioConstraints`, as different microphones may have different capabilities.
+   * - Enabling `backgroundNoiseSuppression` or `originalSound` after setting this option will remove the custom constraints.
+   *
+   * @since 2.4.5
+   */
+  customAudioConstraints?: MediaTrackConstraints;
 }
 
 /**
@@ -1600,6 +1610,8 @@ export declare namespace Stream {
   ): ExecutedResult;
 
   /**
+   * @deprecated
+   * > **Note** This method will be removed in the next major version. Use `stream.attachVideo` to render the video.
    * Updates the dimension of the canvas.
    *  Used to update the width or height when the styled width or height changed.
    *
@@ -1618,6 +1630,8 @@ export declare namespace Stream {
     height: number,
   ): ExecutedResult;
   /**
+   * @deprecated
+   * > **Note** This method will be removed in the next major version. Use `stream.attachVideo` to render the video.
    * Adjusts the coordinates and dimension of the rendered video.
    *
    * @param canvas Required. The canvas to render the video.
@@ -2212,6 +2226,8 @@ export declare namespace Stream {
   // -------------------------------------------------[share]-----------------------------------------------------------
 
   /**
+   *  @deprecated Use the {@link attachShareView} method instead.
+   *
    * Renders the received screen share content.
    * - It is usually called in the `active-share-change` callback.
    *
@@ -2236,7 +2252,10 @@ export declare namespace Stream {
     activeUserId: number,
   ): ExecutedResult;
   /**
+   *  @deprecated Use the {@link detachShareView} method instead.
+   *
    * Stops rendering received screen share content.
+   *
    * @returns Executed promise.
    * @category Screen Share
    */

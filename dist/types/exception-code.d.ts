@@ -1080,4 +1080,20 @@ export enum ExceptionCode {
    * Occurs in `voiceTranslatorClient.setTranslatedVoiceStyle` method because the specified voice timbre ID is invalid or not found.
    */
   VOICE_TRANSLATOR_INCORRECT_TIMBRE = 8205,
+  /**
+   * Incoming live stream exception
+   */
+  /**
+   * Occurs in incoming live stream methods when the `streamId` parameter is empty or does not match the currently bound stream.
+   */
+  INCOMING_LIVE_STREAM_INVALID_PARAMETER = 7450,
+  /**
+   * Occurs in incoming live stream methods when a state mismatch is detected.
+   * For example:
+   * - Calling `bindIncomingLiveStream` from within a breakout room
+   * - Binding a new stream while the current stream is already RTMP-connected
+   * - Calling `startIncomingLiveStream` when `isRTMPConnected` is `false`
+   * - Calling `stopIncomingLiveStream` when `isRTMPConnected` is `false`
+   */
+  INCOMING_LIVE_STREAM_MISMATCH_STATE = 7451,
 }

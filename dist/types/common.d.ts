@@ -381,6 +381,28 @@ export enum VideoQuality {
   Video_1080P = 4,
 }
 /**
+ * Enumeration of share view quality
+ * @enum
+ */
+export enum ShareViewQuality {
+  /**
+   * Original resolution
+   */
+  Original = 0,
+  /**
+   * Low resolution
+   */
+  Low = 1,
+  /**
+   * Medium resolution
+   */
+  Medium = 2,
+  /**
+   * High resolution
+   */
+  High = 3,
+}
+/**
  *  `facingMode` for mobile browser, see https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints/facingMode.
  */
 export enum MobileVideoFacingMode {

@@ -15,6 +15,12 @@ In your frontend project, install the Video SDK:
 $ npm install @zoom/videosdk --save
 ```
 
+Optionally, enable the [AI agent skill](#ai-agent-skill) so Cursor, Claude Code, or Codex can help you build with the SDK:
+
+```bash
+$ npx @zoom/videosdk install-skill
+```
+
 ## Usage
 
 ![Zoom Video SDK](https://raw.githubusercontent.com/zoom/videosdk-web-sample/master/public/images/videosdk.gif)
@@ -77,6 +83,23 @@ Now that we are in a session, we can start using core features like `stream.star
 - [Virtual Background](https://developers.zoom.us/docs/video-sdk/web/video/#use-virtual-background)
 
 For the full list of features and event listeners, as well as additional guides, see our [Video SDK docs](https://developers.zoom.us/docs/video-sdk/web/).
+
+## AI agent skill
+
+This package ships an agent skill that teaches AI coding assistants how to build with the Video SDK (API usage, framework integration, and troubleshooting). Install it into your project so Cursor, Claude Code, or Codex can use it:
+
+```bash
+npx @zoom/videosdk install-skill
+```
+
+By default this auto-detects your tool and copies the skill into the matching directory (`.cursor/skills/`, `.claude/skills/`, or `.agents/skills/`). You can also choose explicitly:
+
+```bash
+npx @zoom/videosdk install-skill --target cursor   # or claude | codex | all
+npx @zoom/videosdk install-skill --global          # install for all your projects
+```
+
+Restart your editor after installing so it picks up the new skill.
 
 ## Sample Apps
 

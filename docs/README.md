@@ -1,1 +1,1 @@
-https://marketplace.zoom.us/docs/sdk/video/web
+https://developers.zoom.us/docs/video-sdk/web/

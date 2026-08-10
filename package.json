@@ -1,6 +1,6 @@
 {
   "name": "@zoom/videosdk",
-  "version": "2.4.7",
+  "version": "2.5.0",
   "description": "Zoom Web Video SDK",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -18,9 +18,14 @@
   ],
   "author": "Zoom Communications",
   "license": "SEE LICENSE IN LICENSE.md",
+  "bin": {
+    "videosdk": "bin/videosdk-cli.cjs"
+  },
   "files": [
     "/docs",
     "/dist",
+    "/skill",
+    "/bin",
     "oss_attribution.txt",
     "README.md",
     "CHANGELOG.md",

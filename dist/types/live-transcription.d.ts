@@ -178,6 +178,30 @@ export enum LiveTranscriptionLanguageCode {
    */
   Thai = 37,
   /**
+   * Welsh
+   */
+  Welsh = 38,
+  /**
+   * Spanish (Mexico)
+   */
+  'Spanish (Mexico)' = 39,
+  /**
+   * Portuguese (Brazil)
+   */
+  'Portuguese (Brazil)' = 40,
+  /**
+   * English (New Zealand)
+   */
+  'English (New Zealand)' = 41,
+  /**
+   * English (Australia)
+   */
+  'English (Australia)' = 42,
+  /**
+   * English (United Kingdom)
+   */
+  'English (United Kingdom)' = 43,
+  /**
    * Cantonese
    */
   Cantonese = 44,
@@ -185,6 +209,14 @@ export enum LiveTranscriptionLanguageCode {
    * Somali
    */
   Somali = 45,
+  /**
+   * Urdu
+   */
+  Urdu = 46,
+  /**
+   * Portuguese (European)
+   */
+  'Portuguese (European)' = 47,
   /**
    * Catalan
    */
@@ -201,6 +233,22 @@ export enum LiveTranscriptionLanguageCode {
    * Croatian
    */
   Croatian = 51,
+  /**
+   * English (Indian)
+   */
+  'English (Indian)' = 52,
+  /**
+   * English (Ireland)
+   */
+  'English (Ireland)' = 53,
+  /**
+   * English (Scotland)
+   */
+  'English (Scotland)' = 54,
+  /**
+   * English (South Africa)
+   */
+  'English (South Africa)' = 55,
   /**
    * Galician
    */
@@ -226,11 +274,15 @@ export enum LiveTranscriptionLanguageCode {
    */
   Zulu = 61,
   /**
-   * No translation.
+   * English (Welsh)
+   */
+  'English (Welsh)' = 62,
+  /**
+   * No translation
    */
   NoTranslation = 400,
   /**
-   * Manual caption.
+   * manual caption
    */
   DefaultManualInput = 401,
 }
@@ -302,7 +354,7 @@ export enum LiveTranscriptionLanguage {
   /**
    * Chinese (Traditional)
    */
-  'Chinese (Traditional)' = 'zh-hant',
+  'Chinese (Traditional)' = 'zh-Hant',
   /**
    * Czech
    */
@@ -439,6 +491,58 @@ export enum LiveTranscriptionLanguage {
    * Zulu
    */
   Zulu = 'zu',
+  /**
+   * Welsh
+   */
+  Welsh = 'cy',
+  /**
+   * Spanish (Mexico)
+   */
+  'Spanish (Mexico)' = 'es-mx',
+  /**
+   * Portuguese (Brazil)
+   */
+  'Portuguese (Brazil)' = 'pt-br',
+  /**
+   * English (New Zealand)
+   */
+  'English (New Zealand)' = 'en-nz',
+  /**
+   * English (Australia)
+   */
+  'English (Australia)' = 'en-au',
+  /**
+   * English (United Kingdom)
+   */
+  'English (United Kingdom)' = 'en-gb',
+  /**
+   * Urdu
+   */
+  Urdu = 'ur',
+  /**
+   * Portuguese (European)
+   */
+  'Portuguese (European)' = 'pt-pt',
+  /**
+   * English (Indian)
+   */
+  'English (Indian)' = 'en-in',
+  /**
+   * English (Ireland)
+   */
+  'English (Ireland)' = 'en-ie',
+  /**
+   * English (Scotland)
+   */
+  'English (Scotland)' = 'en-scot',
+  /**
+   * English (South Africa)
+   */
+  'English (South Africa)' = 'en-za',
+  /**
+   * English (Welsh)
+   */
+  'English (Welsh)' = 'en-cy',
 }
 /**
  * Specifies the transcription mode.

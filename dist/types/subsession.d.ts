@@ -302,8 +302,8 @@ export declare namespace SubsessionClient {
    * If you are the participant, will get the assigned subsession.
    *
    * **Note:** The `userId` of each participant in `userList` is based on the **main session**.
-   * User IDs are not shared across subsessions or between a subsession and the main session —
-   * each session context assigns its own independent IDs. Because every participant has a join
+   * User IDs are not shared across subsessions or between a subsession and the main session.
+   * Each session context assigns its own independent IDs. Because every participant has a join
    * record in the main session, the `userId` exposed here always refers to that main-session identity.
    * If you need to track a user across session contexts, use `userGuid` instead, as it remains
    * constant regardless of which session the user is in.

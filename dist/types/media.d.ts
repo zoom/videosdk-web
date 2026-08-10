@@ -13,6 +13,7 @@ import {
   ProcessorParams,
   Processor,
   StatsReport,
+  ShareViewQuality,
 } from './common';
 
 /**
@@ -2512,6 +2513,24 @@ export declare namespace Stream {
    * @category Screen Share
    */
   function screenshotShareView(userId?: number): Promise<Blob | ExecutedFailure>;
+
+  /**
+   * Update the share view quality of the specified user when rendering the share view via {@link attachShareView}.
+   *
+   * When rendering multiple share views simultaneously, all at `Original` quality can cause performance issues. Use this method to lower the quality of a specific share view. The default quality is `Original`.
+   * Note: high resolution will lead to low fps.
+   * @param userId The user id of the share view to update.
+   * @param quality The share view quality.
+   * @returns
+   * - `''`: Success.
+   * - `Error`: Failure. Details in {@link ErrorTypes}.
+   * @category Screen Share
+   * @since 2.5.0
+   */
+  function updateShareViewQuality(
+    userId: number,
+    quality: ShareViewQuality,
+  ): ExecutedResult;
   /**
    * Determines whether the host locked the share.
    * @returns Whether screen share is locked.

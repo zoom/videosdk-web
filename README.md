@@ -1,7 +1,4 @@
 # Zoom Video SDK for Web
-> **⚠️ Action Required:**  
-> We recommend that you upgrade to 2.3.15 or above if you use WebRTC video to prevent issues with future Chrome versions.
----
 
 Use of this SDK is subject to our [Terms of Use](https://explore.zoom.us/en/video-sdk-terms/).
 
@@ -15,15 +12,17 @@ In your frontend project, install the Video SDK:
 $ npm install @zoom/videosdk --save
 ```
 
+Optionally, enable the [AI agent skill](#ai-agent-skill) so Cursor, Claude Code, or Codex can help you build with the SDK:
+
+```bash
+$ npx @zoom/videosdk install-skill
+```
+
 ## Usage
 
 ![Zoom Video SDK](https://raw.githubusercontent.com/zoom/videosdk-web-sample/master/public/images/videosdk.gif)
 
 > The Video SDK provides video, audio, screen sharing, chat, data streams, and more, as a service. You can build with all of these features, or pick and choose. The Video SDK also comes with a full set of server side [APIs](https://developers.zoom.us/docs/api/rest/reference/video-sdk/methods/#overview) and [Webhooks](https://developers.zoom.us/docs/api/rest/reference/video-sdk/events/#overview).
-
-> **Use UTF-8 encoding**
->
-> Add `<meta charset="UTF-8" />` to your web app's entry point (`index.html`) to ensure the browser uses UTF-8. If not set, the browser might choose a different encoding, causing text or data issues.
 
 In the component file where you want to use the Video SDK, import `ZoomVideo` and create the client.
 
@@ -77,6 +76,23 @@ Now that we are in a session, we can start using core features like `stream.star
 - [Virtual Background](https://developers.zoom.us/docs/video-sdk/web/video/#use-virtual-background)
 
 For the full list of features and event listeners, as well as additional guides, see our [Video SDK docs](https://developers.zoom.us/docs/video-sdk/web/).
+
+## AI agent skill
+
+This package ships an agent skill that teaches AI coding assistants how to build with the Video SDK (API usage, framework integration, and troubleshooting). Install it into your project so Cursor, Claude Code, or Codex can use it:
+
+```bash
+npx @zoom/videosdk install-skill
+```
+
+By default this auto-detects your tool and copies the skill into the matching directory (`.cursor/skills/`, `.claude/skills/`, or `.agents/skills/`). You can also choose explicitly:
+
+```bash
+npx @zoom/videosdk install-skill --target cursor   # or claude | codex | all
+npx @zoom/videosdk install-skill --global          # install for all your projects
+```
+
+Restart your editor after installing so it picks up the new skill.
 
 ## Sample Apps
 

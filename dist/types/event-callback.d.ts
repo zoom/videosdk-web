@@ -673,6 +673,14 @@ export declare function event_command_channel_message(payload: {
    */
   senderName: string;
   /**
+   * Sender's unified ID among the main session or subsession.
+   */
+  senderGuid: string;
+  /**
+   * Sender's `user_key` from the JWT payload.
+   */
+  senderUserKey: string;
+  /**
    * Message content.
    */
   text: string;
@@ -691,12 +699,7 @@ export declare function event_command_channel_message(payload: {
  * @event
  * @category Recording
  */
-export declare function event_recording_change(payload: {
-  /**
-   * Recording status.
-   */
-  state: RecordingStatus;
-}): void;
+export declare function event_recording_change(payload: RecordingStatus): void;
 
 /**
  * Occurs when the individual cloud recording status changes.
@@ -711,7 +714,7 @@ export declare function event_individual_recording_change(payload: {
   /**
    * state
    */
-  state: RecordingStatus;
+  status: RecordingStatus;
   /**
    * The user ID being recorded.
    */

@@ -3173,4 +3173,21 @@ export declare namespace Stream {
    * @since 2.2.10
    */
   function isSupportShareProcessor(): boolean;
+  /**
+   * Start whisper
+   * @param userId userId
+   * @returns ExecutedResult
+   * @category Audio
+   * @since 2.6.0
+   * @ignore
+   */
+  function startWhisper(userId: number): ExecutedResult;
+  /**
+   * Stop whisper
+   * @returns ExecutedResult
+   * @category Audio
+   * @since 2.6.0
+   * @ignore
+   */
+  function stopWhisper(): ExecutedResult;
 }

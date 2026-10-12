@@ -35,6 +35,7 @@ import {
   WhiteboardStatus,
 } from './whiteboard';
 import { RealTimeMediaStreamsStatus } from './real-time-media-streams';
+import { ClinicalNotesApprovedState, ClinicalNotesStatus } from './clinical-notes';
 /**
  * Interface of a ParticipantPropertiesPayload.
  */
@@ -614,12 +615,12 @@ export declare function event_chat_received_message(payload: ChatMessage): void;
  * @event
  * @category Chat
  */
-// export declare function event_chat_delete_message(payload: {
-//   /**
-//    * Message ID.
-//    */
-//   id: string;
-// }): void;
+export declare function event_chat_delete_message(payload: {
+  /**
+   * Message ID.
+   */
+  id: string;
+}): void;
 
 /**
  * Occurs when the host changes the chat privileges.
@@ -806,10 +807,14 @@ export declare function event_passively_stop_share(
  *
  * ```javascript
  * client.on('peer-share-state-change',payload=>{
- *  if(payload.action==='Start'){
- *   console.log(`user:${payload.userId} starts share`);
- *  }else if(payload.action==='Stop'){
- *  console.log(`user:${payload.userId} stops share`);
+ *  if (payload.action==='Start'){
+ *    console.log(`user:${payload.userId} starts share`);
+ *  } else if (payload.action==='Stop'){
+ *    console.log(`user:${payload.userId} stops share`);
+ *  } else if (payload.action==='Pause'){
+ *    console.log(`user:${payload.userId} pauses share`);
+ *  } else if (payload.action==='Resume'){
+ *    console.log(`user:${payload.userId} resumes share`);
  *  }
  * })
  * ```
@@ -825,7 +830,7 @@ export declare function event_peer_share_state_change(payload: {
   /**
    * Peer share action.
    */
-  action: 'Start' | 'Stop';
+  action: 'Start' | 'Stop' | 'Pause' | 'Resume';
 }): void;
 /**
  * Occurs when received shared content automatically changes.
@@ -2216,6 +2221,25 @@ export declare function event_caption_language_lock(payload: boolean): void;
  */
 export declare function event_speaking_while_muted(): void;
 /**
+ * Occurs when the current user is added to or removed from a whisper channel.
+ *
+ * @param payload - The event detail.
+ * @category Audio
+ * @since 2.6.0
+ * @event
+ * @ignore
+ */
+export declare function event_whisper_status_change(payload: {
+  /**
+   * Whether the current user is added to or removed from the whisper channel.
+   */
+  state: 'added' | 'removed';
+  /**
+   * The user ID of the operator who started or stopped the whisper.
+   */
+  operatorUserId: number;
+}): void;
+/**
  * Occurs when system resource usage changes, particularly CPU pressure levels.
  * This event can be used to monitor system performance and adjust application behavior accordingly.
  *
@@ -2459,4 +2483,103 @@ export declare function event_incoming_live_stream_status(payload: {
    * The stream key ID (`stream_id`) of the stream whose status changed.
    */
   streamId: string;
+}): void;
+/**
+ * Occurs when the Clinical Notes capture status changes.
+ *
+ * ```javascript
+ * client.on('clinical-notes-status-change', ({ status, errorCode, streamId }) => {
+ *   console.log('Clinical Notes status:', status, errorCode, streamId);
+ * });
+ * ```
+ *
+ * @param payload The event detail.
+ * @since 2.6.0
+ * @category ClinicalNotes
+ * @event
+ * @ignore
+ */
+export declare function event_clinical_notes_status_change(payload: {
+  /**
+   * Current capture status.
+   */
+  status: ClinicalNotesStatus;
+  /**
+   * Server error code. `0` when there is no error. Known values are listed in {@link ClinicalNotesErrorCode}.
+   */
+  errorCode: number;
+  /**
+   * Session stream ID. Empty string when capture is not active.
+   */
+  streamId: string;
+}): void;
+
+/**
+ * Occurs when Clinical Notes support availability changes.
+ *
+ * ```javascript
+ * client.on('clinical-notes-supported-change', ({ supported }) => {
+ *   console.log('Clinical Notes supported:', supported);
+ * });
+ * ```
+ *
+ * @param payload The event detail.
+ * @since 2.6.0
+ * @category ClinicalNotes
+ * @event
+ * @ignore
+ */
+export declare function event_clinical_notes_supported_change(payload: {
+  /**
+   * Whether Clinical Notes is supported for this session.
+   */
+  supported: boolean;
+}): void;
+
+/**
+ * Occurs when a participant asks the host to stop Clinical Notes capture.
+ *
+ * ```javascript
+ * client.on('clinical-notes-stop-request', ({ userId, displayName }) => {
+ *   console.log(`${displayName} asked to stop Clinical Notes`);
+ * });
+ * ```
+ *
+ * @param payload The event detail.
+ * @since 2.6.0
+ * @category ClinicalNotes
+ * @event
+ * @ignore
+ */
+export declare function event_clinical_notes_stop_request(payload: {
+  /**
+   * User ID of the requester.
+   */
+  userId: number;
+  /**
+   * Display name of the requester.
+   */
+  displayName?: string;
+}): void;
+
+/**
+ * Occurs when the host approves or declines a stop-capture request.
+ *
+ * ```javascript
+ * client.on('clinical-notes-stop-response', ({ state }) => {
+ *   console.log('Host decision:', state);
+ * });
+ * ```
+ *
+ * @param payload The event detail.
+ * @since 2.6.0
+ * @category ClinicalNotes
+ * @event
+ * @ignore
+ */
+export declare function event_clinical_notes_stop_response(payload: {
+  /**
+   * Host decision on the stop-capture request.
+   */
+  state: ClinicalNotesApprovedState;
 }): void;

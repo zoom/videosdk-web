@@ -1,0 +1,241 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "module": "clinical-notes",
+  "package": "@zoom/videosdk",
+  "language": "TypeScript",
+  "platform": "Web",
+  "version": "2.6.0",
+  "sourceFile": "types/clinical-notes.d.ts",
+  "declarations": [
+    {
+      "kind": "enum",
+      "type": "ClinicalNotesStatus",
+      "members": [
+        {
+          "name": "None",
+          "value": "0",
+          "description": "Clinical Notes has not started."
+        },
+        {
+          "name": "InProgress",
+          "value": "1",
+          "description": "Capture is in progress."
+        },
+        {
+          "name": "Pause",
+          "value": "2",
+          "description": "Capture is paused."
+        },
+        {
+          "name": "Stopped",
+          "value": "3",
+          "description": "Capture has stopped."
+        },
+        {
+          "name": "Init",
+          "value": "4",
+          "description": "Capture is initializing."
+        },
+        {
+          "name": "Timeout",
+          "value": "5",
+          "description": "Capture start timed out."
+        }
+      ],
+      "description": "Capture status of Clinical Notes."
+    },
+    {
+      "kind": "enum",
+      "type": "ClinicalNotesApprovedState",
+      "members": [
+        {
+          "name": "Approved",
+          "value": "Approved",
+          "description": "The host approved the request to stop capture."
+        },
+        {
+          "name": "Declined",
+          "value": "Declined",
+          "description": "The host declined the request to stop capture."
+        }
+      ],
+      "description": "Host decision on a participant's request to stop Clinical Notes capture."
+    },
+    {
+      "kind": "enum",
+      "type": "ClinicalNotesErrorCode",
+      "members": [
+        {
+          "name": "General",
+          "value": "-1",
+          "description": "Something is temporarily wrong with the connection. Try again."
+        },
+        {
+          "name": "SettingNotEnable",
+          "value": "13280",
+          "description": "Clinical Notes has been turned off in web settings."
+        },
+        {
+          "name": "CreditRunOut",
+          "value": "13284",
+          "description": "All available notes for the current subscription period have been used."
+        }
+      ],
+      "description": "Server error codes reported on Clinical Notes status changes."
+    },
+    {
+      "kind": "interface",
+      "type": "ClinicalNotesCaptureStatus",
+      "description": "Current Clinical Notes capture snapshot.",
+      "properties": [
+        {
+          "name": "status",
+          "type": "ClinicalNotesStatus",
+          "optional": false,
+          "description": "Current capture status."
+        },
+        {
+          "name": "streamId",
+          "type": "string",
+          "optional": false,
+          "description": "Session stream ID. Empty string when capture is not active."
+        }
+      ]
+    },
+    {
+      "kind": "interface",
+      "type": "StopClinicalNotesCaptureOptions",
+      "description": "Options for stopping Clinical Notes capture.",
+      "properties": [
+        {
+          "name": "cancelStream",
+          "type": "boolean",
+          "optional": true,
+          "description": "Cancel the stream instead of a normal stop. Defaults to `false`."
+        }
+      ]
+    },
+    {
+      "kind": "namespace",
+      "type": "ClinicalNotesClient",
+      "description": "The Clinical Notes client.\n\nClinical Notes capture can be started by the session host. Participants can ask\nthe host to stop capture, and the host can approve or decline that request.",
+      "examples": [
+        "const clinicalNotesClient = client.getClinicalNotesClient();\n\nclient.on('clinical-notes-supported-change', ({ supported }) => {\n  console.log('Clinical Notes supported:', supported);\n});\n\nclient.on('clinical-notes-status-change', ({ status, errorCode, streamId }) => {\n  console.log('Clinical Notes status:', status, errorCode, streamId);\n});\n\nif (clinicalNotesClient.isClinicalNotesEnabled()) {\n  await clinicalNotesClient.startCapture();\n}"
+      ],
+      "methods": [
+        {
+          "name": "startCapture",
+          "signature": "startCapture(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Start Clinical Notes capture as the host."
+        },
+        {
+          "name": "pauseCapture",
+          "signature": "pauseCapture(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Pause an in-progress Clinical Notes capture."
+        },
+        {
+          "name": "resumeCapture",
+          "signature": "resumeCapture(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Resume a paused Clinical Notes capture."
+        },
+        {
+          "name": "stopCapture",
+          "signature": "stopCapture(options?: StopClinicalNotesCaptureOptions): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "options",
+              "type": "StopClinicalNotesCaptureOptions",
+              "optional": true,
+              "description": "- Optional stop behavior."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Stop Clinical Notes capture."
+        },
+        {
+          "name": "askToStopCapture",
+          "signature": "askToStopCapture(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Ask the host to stop Clinical Notes capture.\n\nOnly a participant (non-host) can call this method.\nListen to `clinical-notes-stop-response` for the host decision."
+        },
+        {
+          "name": "approveStopCapture",
+          "signature": "approveStopCapture(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Approve a participant's request to stop Clinical Notes capture.\n\nOnly the host can call this method."
+        },
+        {
+          "name": "declineStopCapture",
+          "signature": "declineStopCapture(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "- `''`: Success.\n- `Error`: Failure. Details in {@link ErrorTypes}."
+          },
+          "description": "Decline a participant's request to stop Clinical Notes capture.\n\nOnly the host can call this method."
+        },
+        {
+          "name": "isClinicalNotesEnabled",
+          "signature": "isClinicalNotesEnabled(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean",
+            "description": "Whether Clinical Notes is enabled."
+          },
+          "description": "Get whether Clinical Notes is enabled for this session."
+        },
+        {
+          "name": "getClinicalNotesStatus",
+          "signature": "getClinicalNotesStatus(): ClinicalNotesCaptureStatus",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "ClinicalNotesCaptureStatus",
+            "description": "Current capture status and stream ID."
+          },
+          "description": "Get the current Clinical Notes capture status."
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "sourceFiles": [
+      "types/clinical-notes.d.ts"
+    ],
+    "declarationCount": 6
+  }
+}

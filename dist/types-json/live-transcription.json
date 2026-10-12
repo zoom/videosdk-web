@@ -4,7 +4,7 @@
   "package": "@zoom/videosdk",
   "language": "TypeScript",
   "platform": "Web",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "sourceFile": "types/live-transcription.d.ts",
   "declarations": [
     {

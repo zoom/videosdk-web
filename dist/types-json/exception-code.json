@@ -4,7 +4,7 @@
   "package": "@zoom/videosdk",
   "language": "TypeScript",
   "platform": "Web",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "sourceFile": "types/exception-code.d.ts",
   "declarations": [
     {
@@ -272,6 +272,16 @@
           "name": "AUDIO_PROCESSOR_LIMIT_EXCEED",
           "value": "6029",
           "description": "Error that occurs when calling `stream.addProcessor` with a processor that has already been added."
+        },
+        {
+          "name": "WHISPER_ALREADY_ACTIVE",
+          "value": "6030",
+          "description": "Occurs in `stream.startWhisper` or `stream.stopWhisper` when a whisper session is already active, being created, or being stopped."
+        },
+        {
+          "name": "WHISPER_TARGET_NOT_FOUND",
+          "value": "6031",
+          "description": "Occurs in `stream.startWhisper` method due to the target user not found or not in the session."
         },
         {
           "name": "VIDEO_CAMERA_PERMISSION_DENIED",
@@ -921,6 +931,26 @@
           "name": "INCOMING_LIVE_STREAM_MISMATCH_STATE",
           "value": "7451",
           "description": "Occurs in incoming live stream methods when a state mismatch is detected.\nFor example:\n- Calling `bindIncomingLiveStream` from within a breakout room\n- Binding a new stream while the current stream is already RTMP-connected\n- Calling `startIncomingLiveStream` when `isRTMPConnected` is `false`\n- Calling `stopIncomingLiveStream` when `isRTMPConnected` is `false`"
+        },
+        {
+          "name": "CLINICAL_NOTES_ACCOUNT_DISABLE",
+          "value": "8300",
+          "description": "Clinical notes exception\nOccurs in clinical notes methods because the clinical notes feature is not enabled in the account setting."
+        },
+        {
+          "name": "CLINICAL_NOTES_MISMATCH_STATE",
+          "value": "8301",
+          "description": "Occurs in clinical notes methods because the clinical notes state does not match the required state."
+        },
+        {
+          "name": "CLINICAL_NOTES_INSUFFICIENT_PRIVILEGE",
+          "value": "8302",
+          "description": "Occurs in clinical notes methods because the current user does not have permission to perform this action."
+        },
+        {
+          "name": "CLINICAL_NOTES_CREDIT_RUN_OUT",
+          "value": "8303",
+          "description": "Occurs in `clinicalNotesClient.startCapture` because the account has used all available clinical notes for the current subscription period."
         }
       ],
       "description": "Definition of exception code"

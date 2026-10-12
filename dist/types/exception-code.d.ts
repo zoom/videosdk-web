@@ -355,6 +355,20 @@ export enum ExceptionCode {
    */
   AUDIO_PROCESSOR_LIMIT_EXCEED = 6029,
   /**
+   * Occurs in `stream.startWhisper` or `stream.stopWhisper` when a whisper session is already active, being created, or being stopped.
+   * @category Audio
+   * @since 2.6.0
+   * @ignore
+   */
+  WHISPER_ALREADY_ACTIVE = 6030,
+  /**
+   * Occurs in `stream.startWhisper` method due to the target user not found or not in the session.
+   * @category Audio
+   * @since 2.6.0
+   * @ignore
+   */
+  WHISPER_TARGET_NOT_FOUND = 6031,
+  /**
    * Occurs in `stream.startVideo` method due to the user denied camera permission.
    * @category Video
    */
@@ -1096,4 +1110,28 @@ export enum ExceptionCode {
    * - Calling `stopIncomingLiveStream` when `isRTMPConnected` is `false`
    */
   INCOMING_LIVE_STREAM_MISMATCH_STATE = 7451,
+  /**
+   * Clinical notes exception
+   * @ignore
+   */
+  /**
+   * Occurs in clinical notes methods because the clinical notes feature is not enabled in the account setting.
+   * @ignore
+   */
+  CLINICAL_NOTES_ACCOUNT_DISABLE = 8300,
+  /**
+   * Occurs in clinical notes methods because the clinical notes state does not match the required state.
+   * @ignore
+   */
+  CLINICAL_NOTES_MISMATCH_STATE = 8301,
+  /**
+   * Occurs in clinical notes methods because the current user does not have permission to perform this action.
+   * @ignore
+   */
+  CLINICAL_NOTES_INSUFFICIENT_PRIVILEGE = 8302,
+  /**
+   * Occurs in `clinicalNotesClient.startCapture` because the account has used all available clinical notes for the current subscription period.
+   * @ignore
+   */
+  CLINICAL_NOTES_CREDIT_RUN_OUT = 8303,
 }

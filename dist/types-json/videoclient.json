@@ -4,7 +4,7 @@
   "package": "@zoom/videosdk",
   "language": "TypeScript",
   "platform": "Web",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "sourceFile": "types/videoclient.d.ts",
   "declarations": [
     {
@@ -493,6 +493,26 @@
               "type": "typeof event_chat_received_message",
               "optional": false,
               "description": "Details in {@link event_chat_received_message}."
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'chat-delete-message', listener: typeof event_chat_delete_message): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'chat-delete-message'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_chat_delete_message",
+              "optional": false
             }
           ],
           "returns": {
@@ -2055,6 +2075,27 @@
         },
         {
           "name": "on",
+          "signature": "on(event: 'whisper-status-change', listener: typeof event_whisper_status_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'whisper-status-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_whisper_status_change",
+              "optional": false,
+              "description": "Details in {@link event_whisper_status_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
           "signature": "on(event: 'system-resource-usage-change', listener: typeof event_system_resource_usage_change): void",
           "async": false,
           "parameters": [
@@ -2152,6 +2193,90 @@
               "type": "typeof event_incoming_live_stream_status",
               "optional": false,
               "description": "Details in {@link event_incoming_live_stream_status}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'clinical-notes-status-change', listener: typeof event_clinical_notes_status_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'clinical-notes-status-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_clinical_notes_status_change",
+              "optional": false,
+              "description": "Details in {@link event_clinical_notes_status_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'clinical-notes-supported-change', listener: typeof event_clinical_notes_supported_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'clinical-notes-supported-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_clinical_notes_supported_change",
+              "optional": false,
+              "description": "Details in {@link event_clinical_notes_supported_change}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'clinical-notes-stop-request', listener: typeof event_clinical_notes_stop_request): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'clinical-notes-stop-request'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_clinical_notes_stop_request",
+              "optional": false,
+              "description": "Details in {@link event_clinical_notes_stop_request}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'clinical-notes-stop-response', listener: typeof event_clinical_notes_stop_response): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'clinical-notes-stop-response'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_clinical_notes_stop_response",
+              "optional": false,
+              "description": "Details in {@link event_clinical_notes_stop_response}"
             }
           ],
           "returns": {
@@ -2499,6 +2624,16 @@
             "type": "typeof IncomingLiveStreamClient"
           },
           "description": "Gets the incoming live stream client."
+        },
+        {
+          "name": "getClinicalNotesClient",
+          "signature": "getClinicalNotesClient(): typeof ClinicalNotesClient",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "typeof ClinicalNotesClient"
+          },
+          "description": "Gets the clinical notes client."
         },
         {
           "name": "getSessionInfo",

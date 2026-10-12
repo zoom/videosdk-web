@@ -75,7 +75,6 @@ export interface IncomingLiveStreamStatus {
  * await incomingLiveStream.unbindIncomingLiveStream(streamId);
  * ```
  * @since 2.4.5
- * @category Incoming Live Stream
  */
 export declare namespace IncomingLiveStreamClient {
   /**

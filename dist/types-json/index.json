@@ -3,8 +3,8 @@
   "package": "@zoom/videosdk",
   "language": "TypeScript",
   "platform": "Web",
-  "version": "2.5.0",
-  "generatedAt": "2026-08-10T05:50:15.369Z",
+  "version": "2.6.0",
+  "generatedAt": "2026-10-08T09:32:33.989Z",
   "modules": [
     {
       "module": "broadcast-streaming",
@@ -66,12 +66,54 @@
             "sendToAll",
             "setPrivilege",
             "sendFile",
+            "deleteMessage",
             "downloadFile",
             "getPrivilege",
             "getHistory",
             "getReceivers",
             "isFileTransferEnabled",
             "getFileTransferSetting"
+          ]
+        }
+      ]
+    },
+    {
+      "module": "clinical-notes",
+      "file": "clinical-notes.json",
+      "declarations": [
+        {
+          "type": "ClinicalNotesStatus",
+          "kind": "enum"
+        },
+        {
+          "type": "ClinicalNotesApprovedState",
+          "kind": "enum"
+        },
+        {
+          "type": "ClinicalNotesErrorCode",
+          "kind": "enum"
+        },
+        {
+          "type": "ClinicalNotesCaptureStatus",
+          "kind": "interface"
+        },
+        {
+          "type": "StopClinicalNotesCaptureOptions",
+          "kind": "interface"
+        },
+        {
+          "type": "ClinicalNotesClient",
+          "kind": "namespace",
+          "methods": [
+            "startCapture",
+            "pauseCapture",
+            "resumeCapture",
+            "stopCapture",
+            "askToStopCapture",
+            "approveStopCapture",
+            "declineStopCapture",
+            "isClinicalNotesEnabled",
+            "getClinicalNotesStatus"
           ]
         }
       ]
@@ -368,6 +410,10 @@
         },
         {
           "type": "event_chat_received_message",
+          "kind": "event"
+        },
+        {
+          "type": "event_chat_delete_message",
           "kind": "event"
         },
         {
@@ -674,6 +720,10 @@
           "event": "speaking-while-muted"
         },
         {
+          "type": "event_whisper_status_change",
+          "kind": "event"
+        },
+        {
           "type": "event_system_resource_usage_change",
           "kind": "event"
         },
@@ -712,6 +762,26 @@
           "type": "event_incoming_live_stream_status",
           "kind": "event",
           "event": "incoming-live-stream-status"
+        },
+        {
+          "type": "event_clinical_notes_status_change",
+          "kind": "event",
+          "event": "clinical-notes-status-change"
+        },
+        {
+          "type": "event_clinical_notes_supported_change",
+          "kind": "event",
+          "event": "clinical-notes-supported-change"
+        },
+        {
+          "type": "event_clinical_notes_stop_request",
+          "kind": "event",
+          "event": "clinical-notes-stop-request"
+        },
+        {
+          "type": "event_clinical_notes_stop_response",
+          "kind": "event",
+          "event": "clinical-notes-stop-response"
         }
       ]
     },
@@ -1141,7 +1211,9 @@
             "removeProcessor",
             "isSupportVideoProcessor",
             "isSupportAudioProcessor",
-            "isSupportShareProcessor"
+            "isSupportShareProcessor",
+            "startWhisper",
+            "stopWhisper"
           ]
         }
       ]
@@ -1429,6 +1501,12 @@
             "on",
             "on",
             "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
+            "on",
             "off",
             "join",
             "leave",
@@ -1453,6 +1531,7 @@
             "getWhiteboardClient",
             "getVoiceTranslatorClient",
             "getIncomingLiveStreamClient",
+            "getClinicalNotesClient",
             "getSessionInfo",
             "isHost",
             "getSessionHost",

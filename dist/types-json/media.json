@@ -4,7 +4,7 @@
   "package": "@zoom/videosdk",
   "language": "TypeScript",
   "platform": "Web",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "sourceFile": "types/media.d.ts",
   "declarations": [
     {
@@ -4021,6 +4021,35 @@
             "description": "`true` if the share processor is supported on the current platform; otherwise, `false`."
           },
           "description": "Checks if the current platform supports the share processor."
+        },
+        {
+          "name": "startWhisper",
+          "signature": "startWhisper(userId: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "userId"
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "ExecutedResult"
+          },
+          "description": "Start whisper"
+        },
+        {
+          "name": "stopWhisper",
+          "signature": "stopWhisper(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "ExecutedResult"
+          },
+          "description": "Stop whisper"
         }
       ]
     }

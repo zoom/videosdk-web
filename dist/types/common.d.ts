@@ -174,6 +174,11 @@ interface Participant {
    */
   dialType?: string;
   /**
+   * The `user_property` from the JWT payload.
+   * @ignore
+   */
+  userProperty?: number;
+  /**
    * Whether this user is an RTMP user
    */
   isRtmpUser?: boolean;

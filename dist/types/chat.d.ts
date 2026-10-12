@@ -237,6 +237,12 @@ export declare namespace ChatClient {
     userId: number,
   ): Promise<FileTransferCancelFunction | Error>;
   /**
+   * Delete self-send message or host/co-host delete messages.
+   *
+   * @param id message id
+   */
+  function deleteMessage(id: string): Promise<{ id: string } | Error>;
+  /**
    * Download the file
    * The file cannot be downloaded directly from the file URL as it is encrypted. To download the file, use this method.
    * It may take some time to decrypt and download the file. However, you have the option to cancel the download process by invoking the returned method at any time.

@@ -4,7 +4,7 @@
   "package": "@zoom/videosdk",
   "language": "TypeScript",
   "platform": "Web",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "sourceFile": "types/common.d.ts",
   "declarations": [
     {
@@ -215,6 +215,12 @@
           "type": "string",
           "optional": true,
           "description": "How the phone user joined the session. Only present when the user is a phone user.\n- 'dial in': User dialed into the session.\n- 'dial out': User was invited by the session user."
+        },
+        {
+          "name": "userProperty",
+          "type": "number",
+          "optional": true,
+          "description": "The `user_property` from the JWT payload."
         },
         {
           "name": "isRtmpUser",

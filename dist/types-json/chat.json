@@ -4,7 +4,7 @@
   "package": "@zoom/videosdk",
   "language": "TypeScript",
   "platform": "Web",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "sourceFile": "types/chat.d.ts",
   "declarations": [
     {
@@ -273,6 +273,23 @@
             "type": "Promise<FileTransferCancelFunction | Error>"
           },
           "description": "Send file\nThe file will be securely encrypted and then uploaded to Zoom's file server.\nIt may take some time to encrypt and upload the file. However, you have the option to cancel the upload process by invoking the returned method at any time."
+        },
+        {
+          "name": "deleteMessage",
+          "signature": "deleteMessage(id: string): Promise<{ id: string } | Error>",
+          "async": true,
+          "parameters": [
+            {
+              "name": "id",
+              "type": "string",
+              "optional": false,
+              "description": "message id"
+            }
+          ],
+          "returns": {
+            "type": "Promise<{ id: string } | Error>"
+          },
+          "description": "Delete self-send message or host/co-host delete messages."
         },
         {
           "name": "downloadFile",

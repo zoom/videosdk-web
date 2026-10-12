@@ -20,5 +20,6 @@ export * from './whiteboard';
 export * from './real-time-media-streams';
 export * from './voice-translator';
 export * from './incoming-live-stream';
+export * from './clinical-notes';
 // export * from './summary';
 export default ZoomVideo;

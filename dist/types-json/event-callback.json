@@ -4,7 +4,7 @@
   "package": "@zoom/videosdk",
   "language": "TypeScript",
   "platform": "Web",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "sourceFile": "types/event-callback.d.ts",
   "declarations": [
     {
@@ -613,9 +613,24 @@
     },
     {
       "kind": "event",
+      "type": "event_chat_delete_message",
+      "signature": "event_chat_delete_message(payload: { id: string; }): void",
+      "description": "Occurs when a message is deleted.",
+      "payloadType": "{ id: string; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ id: string; }",
+          "optional": false,
+          "description": "Message ID.\n```javascript\nclient.on('chat-delete-message',payload=>{\nconsole.log('from %s, message:%s',payload.sender.name,payload.message);\n})\n```"
+        }
+      ]
+    },
+    {
+      "kind": "event",
       "type": "event_chat_privilege_change",
       "signature": "event_chat_privilege_change(payload: { chatPrivilege: ChatPrivilege; }): void",
-      "description": "Occurs when a message is deleted.\nOccurs when the host changes the chat privileges.",
+      "description": "Occurs when the host changes the chat privileges.",
       "payloadType": "{ chatPrivilege: ChatPrivilege; }",
       "parameters": [
         {
@@ -758,19 +773,19 @@
     {
       "kind": "event",
       "type": "event_peer_share_state_change",
-      "signature": "event_peer_share_state_change(payload: { userId: number; action: 'Start' | 'Stop'; }): void",
+      "signature": "event_peer_share_state_change(payload: { userId: number; action: 'Start' | 'Stop' | 'Pause' | 'Resume'; }): void",
       "event": "peer-share-state-change",
       "description": "Occurs when some participant starts or stops screen sharing.",
-      "payloadType": "{ userId: number; action: 'Start' | 'Stop'; }",
+      "payloadType": "{ userId: number; action: 'Start' | 'Stop' | 'Pause' | 'Resume'; }",
       "parameters": [
         {
           "name": "payload",
-          "type": "{ userId: number; action: 'Start' | 'Stop'; }",
+          "type": "{ userId: number; action: 'Start' | 'Stop' | 'Pause' | 'Resume'; }",
           "optional": false
         }
       ],
       "examples": [
-        "client.on('peer-share-state-change',payload=>{\n if(payload.action==='Start'){\n  console.log(`user:${payload.userId} starts share`);\n }else if(payload.action==='Stop'){\n console.log(`user:${payload.userId} stops share`);\n }\n})"
+        "client.on('peer-share-state-change',payload=>{\n if (payload.action==='Start'){\n   console.log(`user:${payload.userId} starts share`);\n } else if (payload.action==='Stop'){\n   console.log(`user:${payload.userId} stops share`);\n } else if (payload.action==='Pause'){\n   console.log(`user:${payload.userId} pauses share`);\n } else if (payload.action==='Resume'){\n   console.log(`user:${payload.userId} resumes share`);\n }\n})"
       ]
     },
     {
@@ -1675,6 +1690,21 @@
     },
     {
       "kind": "event",
+      "type": "event_whisper_status_change",
+      "signature": "event_whisper_status_change(payload: { state: 'added' | 'removed'; operatorUserId: number; }): void",
+      "description": "Occurs when the current user is added to or removed from a whisper channel.",
+      "payloadType": "{ state: 'added' | 'removed'; operatorUserId: number; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ state: 'added' | 'removed'; operatorUserId: number; }",
+          "optional": false,
+          "description": "- The event detail."
+        }
+      ]
+    },
+    {
+      "kind": "event",
       "type": "event_system_resource_usage_change",
       "signature": "event_system_resource_usage_change(payload: { cpu_usage: { system_cpu_pressure_level: SystemCPUPressureLevel }; }): void",
       "description": "Occurs when system resource usage changes, particularly CPU pressure levels.\nThis event can be used to monitor system performance and adjust application behavior accordingly.",
@@ -1820,12 +1850,88 @@
       "examples": [
         "client.on('incoming-live-stream-status', (payload) => {\n  const { isRTMPConnected, isStreamPushed, streamId } = payload;\n  if (isRTMPConnected && !isStreamPushed) {\n    // Streaming software is connected but not yet pushing video into the session —\n    // safe to call startIncomingLiveStream to make it a virtual participant\n    await incomingLiveStreamClient.startIncomingLiveStream(streamId);\n  } else if (isRTMPConnected && isStreamPushed) {\n    // Stream is already active as a virtual participant\n  } else if (!isRTMPConnected) {\n    // Streaming software disconnected\n  }\n});"
       ]
+    },
+    {
+      "kind": "event",
+      "type": "event_clinical_notes_status_change",
+      "signature": "event_clinical_notes_status_change(payload: { status: ClinicalNotesStatus; errorCode: number; streamId: string; }): void",
+      "event": "clinical-notes-status-change",
+      "description": "Occurs when the Clinical Notes capture status changes.",
+      "payloadType": "{ status: ClinicalNotesStatus; errorCode: number; streamId: string; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ status: ClinicalNotesStatus; errorCode: number; streamId: string; }",
+          "optional": false,
+          "description": "The event detail."
+        }
+      ],
+      "examples": [
+        "client.on('clinical-notes-status-change', ({ status, errorCode, streamId }) => {\n  console.log('Clinical Notes status:', status, errorCode, streamId);\n});"
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_clinical_notes_supported_change",
+      "signature": "event_clinical_notes_supported_change(payload: { supported: boolean; }): void",
+      "event": "clinical-notes-supported-change",
+      "description": "Occurs when Clinical Notes support availability changes.",
+      "payloadType": "{ supported: boolean; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ supported: boolean; }",
+          "optional": false,
+          "description": "The event detail."
+        }
+      ],
+      "examples": [
+        "client.on('clinical-notes-supported-change', ({ supported }) => {\n  console.log('Clinical Notes supported:', supported);\n});"
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_clinical_notes_stop_request",
+      "signature": "event_clinical_notes_stop_request(payload: { userId: number; displayName?: string; }): void",
+      "event": "clinical-notes-stop-request",
+      "description": "Occurs when a participant asks the host to stop Clinical Notes capture.",
+      "payloadType": "{ userId: number; displayName?: string; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ userId: number; displayName?: string; }",
+          "optional": false,
+          "description": "The event detail."
+        }
+      ],
+      "examples": [
+        "client.on('clinical-notes-stop-request', ({ userId, displayName }) => {\n  console.log(`${displayName} asked to stop Clinical Notes`);\n});"
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_clinical_notes_stop_response",
+      "signature": "event_clinical_notes_stop_response(payload: { state: ClinicalNotesApprovedState; }): void",
+      "event": "clinical-notes-stop-response",
+      "description": "Occurs when the host approves or declines a stop-capture request.",
+      "payloadType": "{ state: ClinicalNotesApprovedState; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ state: ClinicalNotesApprovedState; }",
+          "optional": false,
+          "description": "The event detail."
+        }
+      ],
+      "examples": [
+        "client.on('clinical-notes-stop-response', ({ state }) => {\n  console.log('Host decision:', state);\n});"
+      ]
     }
   ],
   "metadata": {
     "sourceFiles": [
       "types/event-callback.d.ts"
     ],
-    "declarationCount": 107
+    "declarationCount": 113
   }
 }

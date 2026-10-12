@@ -30,7 +30,7 @@ import {
   event_video_dimension_change,
   event_share_privilege_change,
   event_peer_video_state_change,
-  // event_chat_delete_message,
+  event_chat_delete_message,
   event_command_channel_status,
   event_command_channel_message,
   event_recording_change,
@@ -94,6 +94,7 @@ import {
   event_share_camera_status,
   event_caption_language_lock,
   event_speaking_while_muted,
+  event_whisper_status_change,
   event_system_resource_usage_change,
   event_webrtc_stats_report_data_change,
   event_whiteboard_status_change,
@@ -103,12 +104,17 @@ import {
   event_voice_translator_started,
   event_voice_translator_unsupported_language_pair,
   event_incoming_live_stream_status,
+  event_clinical_notes_status_change,
+  event_clinical_notes_supported_change,
+  event_clinical_notes_stop_request,
+  event_clinical_notes_stop_response,
 } from './event-callback';
 import { BroadcastStreamingClient } from './broadcast-streaming';
 import { RealTimeMediaStreamsClient } from './real-time-media-streams';
 import { WhiteboardClient } from './whiteboard';
 import { VoiceTranslatorClient } from './voice-translator';
 import { IncomingLiveStreamClient } from './incoming-live-stream';
+import { ClinicalNotesClient } from './clinical-notes';
 // import AIClient from '../src/summary';
 
 /**
@@ -397,15 +403,15 @@ export declare namespace VideoClient {
     event: 'chat-on-message',
     listener: typeof event_chat_received_message,
   ): void;
-  // /**
-  //  *
-  //  * @param event
-  //  * @param listener
-  //  */
-  // function on(
-  //   event: 'chat-delete-message',
-  //   listener: typeof event_chat_delete_message,
-  // ): void;
+  /**
+   *
+   * @param event
+   * @param listener
+   */
+  function on(
+    event: 'chat-delete-message',
+    listener: typeof event_chat_delete_message,
+  ): void;
   /**
    * @param event
    * @param listener Details in {@link event_chat_privilege_change}.
@@ -1083,6 +1089,17 @@ export declare namespace VideoClient {
   /**
    *
    * @param event
+   * @param listener Details in {@link event_whisper_status_change}
+   * @since 2.6.0
+   * @ignore
+   */
+  function on(
+    event: 'whisper-status-change',
+    listener: typeof event_whisper_status_change,
+  ): void;
+  /**
+   *
+   * @param event
    * @param listener Details in {@link event_system_resource_usage_change}
    */
   function on(
@@ -1125,6 +1142,54 @@ export declare namespace VideoClient {
   function on(
     event: 'incoming-live-stream-status',
     listener: typeof event_incoming_live_stream_status,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_clinical_notes_status_change}
+   * @since 2.6.0
+   * @category ClinicalNotes
+   * @ignore
+   */
+  function on(
+    event: 'clinical-notes-status-change',
+    listener: typeof event_clinical_notes_status_change,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_clinical_notes_supported_change}
+   * @since 2.6.0
+   * @category ClinicalNotes
+   * @ignore
+   */
+  function on(
+    event: 'clinical-notes-supported-change',
+    listener: typeof event_clinical_notes_supported_change,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_clinical_notes_stop_request}
+   * @since 2.6.0
+   * @category ClinicalNotes
+   * @ignore
+   */
+  function on(
+    event: 'clinical-notes-stop-request',
+    listener: typeof event_clinical_notes_stop_request,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener Details in {@link event_clinical_notes_stop_response}
+   * @since 2.6.0
+   * @category ClinicalNotes
+   * @ignore
+   */
+  function on(
+    event: 'clinical-notes-stop-response',
+    listener: typeof event_clinical_notes_stop_response,
   ): void;
   /**
    * Removes the event handler.
@@ -1279,6 +1344,12 @@ export declare namespace VideoClient {
    * @since 2.4.5
    */
   function getIncomingLiveStreamClient(): typeof IncomingLiveStreamClient;
+  /**
+   * Gets the clinical notes client.
+   * @since 2.6.0
+   * @ignore
+   */
+  function getClinicalNotesClient(): typeof ClinicalNotesClient;
 
   /**
    * Gets the current session’s information.

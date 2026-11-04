@@ -4,7 +4,7 @@
   "package": "@zoom/videosdk",
   "language": "TypeScript",
   "platform": "Web",
-  "version": "2.6.0",
+  "version": "2.6.10",
   "sourceFile": "types/zoomstreaming.d.ts",
   "declarations": [
     {
@@ -66,6 +66,12 @@
           "type": "StreamingWatermark",
           "optional": true,
           "description": "Optional. Specifies the watermark."
+        },
+        {
+          "name": "userName",
+          "type": "string",
+          "optional": true,
+          "description": "Optional. Specifies the display name of the viewer in chat. If not specified, a random name is generated."
         }
       ]
     },
@@ -120,6 +126,440 @@
       "description": "Occurs when the SDK tried and failed to auto play audio.\nThis is usually because the streaming was played without any prior user interaction with the page.\nIn this callback, you need to manually set the `muted` attribute of the live-video element to 'false'."
     },
     {
+      "kind": "event",
+      "type": "event_chat_on_message",
+      "signature": "event_chat_on_message(payload: { id: string; message: string; sender: string; isSelf: boolean; }): void",
+      "description": "Occurs when a chat message is received.",
+      "payloadType": "{ id: string; message: string; sender: string; isSelf: boolean; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ id: string; message: string; sender: string; isSelf: boolean; }",
+          "optional": false,
+          "description": "The event detail."
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_chat_privilege_change",
+      "signature": "event_chat_privilege_change(payload: { chatPrivilege: ChatPrivilege; }): void",
+      "description": "Occurs when the chat privilege is changed.",
+      "payloadType": "{ chatPrivilege: ChatPrivilege; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ chatPrivilege: ChatPrivilege; }",
+          "optional": false,
+          "description": "The event detail."
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_caption_message",
+      "signature": "event_caption_message(payload: { message?: string; }): void",
+      "description": "Occurs when a live translation caption is received.",
+      "payloadType": "{ message?: string; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ message?: string; }",
+          "optional": false,
+          "description": "The event detail."
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_emoji_reaction",
+      "signature": "event_emoji_reaction(payload: { reactions: Array<string | number>; }): void",
+      "description": "Occurs when emoji reactions are received.",
+      "payloadType": "{ reactions: Array<string | number>; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ reactions: Array<string | number>; }",
+          "optional": false,
+          "description": "The event detail."
+        }
+      ]
+    },
+    {
+      "kind": "event",
+      "type": "event_caption_enable",
+      "signature": "event_caption_enable(payload: boolean): void",
+      "description": "Occurs when live translation is enabled or disabled for the current streaming.",
+      "payloadType": "boolean",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "boolean",
+          "optional": false,
+          "description": "Whether live translation is enabled."
+        }
+      ]
+    },
+    {
+      "kind": "enum",
+      "type": "ReactionType",
+      "members": [
+        {
+          "name": "Clap",
+          "value": "1",
+          "description": "Clap"
+        },
+        {
+          "name": "ThumbsUp",
+          "value": "2",
+          "description": "Thumbs up"
+        },
+        {
+          "name": "Heart",
+          "value": "3",
+          "description": "Heart"
+        },
+        {
+          "name": "Joy",
+          "value": "4",
+          "description": "Joy"
+        },
+        {
+          "name": "OpenMouth",
+          "value": "5",
+          "description": "Open mouth"
+        },
+        {
+          "name": "Tada",
+          "value": "6",
+          "description": "Tada"
+        }
+      ],
+      "description": "Emoji reaction type for broadcast streaming."
+    },
+    {
+      "kind": "enum",
+      "type": "TranslationLanguage",
+      "members": [
+        {
+          "name": "English",
+          "value": "en",
+          "description": "English"
+        },
+        {
+          "name": "'Chinese (Simplified)'",
+          "value": "zh",
+          "description": "Chinese (Simplified)"
+        },
+        {
+          "name": "Japanese",
+          "value": "ja",
+          "description": "Japanese"
+        },
+        {
+          "name": "German",
+          "value": "de",
+          "description": "German"
+        },
+        {
+          "name": "'French (France)'",
+          "value": "fr",
+          "description": "French (France)"
+        },
+        {
+          "name": "Russian",
+          "value": "ru",
+          "description": "Russian"
+        },
+        {
+          "name": "Portuguese",
+          "value": "pt",
+          "description": "Portuguese"
+        },
+        {
+          "name": "Spanish",
+          "value": "es",
+          "description": "Spanish"
+        },
+        {
+          "name": "Korean",
+          "value": "ko",
+          "description": "Korean"
+        },
+        {
+          "name": "Italian",
+          "value": "it",
+          "description": "Italian"
+        },
+        {
+          "name": "Vietnamese",
+          "value": "vi",
+          "description": "Vietnamese"
+        },
+        {
+          "name": "Dutch",
+          "value": "nl",
+          "description": "Dutch"
+        },
+        {
+          "name": "Ukrainian",
+          "value": "uk",
+          "description": "Ukrainian"
+        },
+        {
+          "name": "Arabic",
+          "value": "ar",
+          "description": "Arabic"
+        },
+        {
+          "name": "Bengali",
+          "value": "bn",
+          "description": "Bengali"
+        },
+        {
+          "name": "'Chinese (Traditional)'",
+          "value": "zh-hant",
+          "description": "Chinese (Traditional)"
+        },
+        {
+          "name": "Czech",
+          "value": "cs",
+          "description": "Czech"
+        },
+        {
+          "name": "Estonian",
+          "value": "et",
+          "description": "Estonian"
+        },
+        {
+          "name": "Finnish",
+          "value": "fi",
+          "description": "Finnish"
+        },
+        {
+          "name": "Greek",
+          "value": "el",
+          "description": "Greek"
+        },
+        {
+          "name": "Hebrew",
+          "value": "he",
+          "description": "Hebrew"
+        },
+        {
+          "name": "Hindi",
+          "value": "hi",
+          "description": "Hindi"
+        },
+        {
+          "name": "Hungarian",
+          "value": "hu",
+          "description": "Hungarian"
+        },
+        {
+          "name": "Indonesian",
+          "value": "id",
+          "description": "Indonesian"
+        },
+        {
+          "name": "Malay",
+          "value": "ms",
+          "description": "Malay"
+        },
+        {
+          "name": "Persian",
+          "value": "fa",
+          "description": "Persian"
+        },
+        {
+          "name": "Polish",
+          "value": "pl",
+          "description": "Polish"
+        },
+        {
+          "name": "Romanian",
+          "value": "ro",
+          "description": "Romanian"
+        },
+        {
+          "name": "Swedish",
+          "value": "sv",
+          "description": "Swedish"
+        },
+        {
+          "name": "Tamil",
+          "value": "ta",
+          "description": "Tamil"
+        },
+        {
+          "name": "Telugu",
+          "value": "te",
+          "description": "Telugu"
+        },
+        {
+          "name": "Tagalog",
+          "value": "tl",
+          "description": "Tagalog"
+        },
+        {
+          "name": "Turkish",
+          "value": "tr",
+          "description": "Turkish"
+        },
+        {
+          "name": "'French (Canada)'",
+          "value": "fr-ca",
+          "description": "French (Canada)"
+        },
+        {
+          "name": "Danish",
+          "value": "da",
+          "description": "Danish"
+        },
+        {
+          "name": "Norwegian",
+          "value": "no",
+          "description": "Norwegian"
+        },
+        {
+          "name": "Thai",
+          "value": "th",
+          "description": "Thai"
+        },
+        {
+          "name": "Welsh",
+          "value": "cy",
+          "description": "Welsh"
+        },
+        {
+          "name": "'Spanish (Mexico)'",
+          "value": "es-mx",
+          "description": "Spanish (Mexico)"
+        },
+        {
+          "name": "'Portuguese (Brazil)'",
+          "value": "pt-br",
+          "description": "Portuguese (Brazil)"
+        },
+        {
+          "name": "'English (New Zealand)'",
+          "value": "en-nz",
+          "description": "English (New Zealand)"
+        },
+        {
+          "name": "'English (Australia)'",
+          "value": "en-au",
+          "description": "English (Australia)"
+        },
+        {
+          "name": "'English (United Kingdom)'",
+          "value": "en-gb",
+          "description": "English (United Kingdom)"
+        },
+        {
+          "name": "Cantonese",
+          "value": "zh-yue",
+          "description": "Cantonese"
+        },
+        {
+          "name": "Somali",
+          "value": "so",
+          "description": "Somali"
+        },
+        {
+          "name": "Urdu",
+          "value": "ur",
+          "description": "Urdu"
+        },
+        {
+          "name": "'Portuguese (Portugal)'",
+          "value": "pt-pt",
+          "description": "Portuguese (Portugal)"
+        },
+        {
+          "name": "Catalan",
+          "value": "ca",
+          "description": "Catalan"
+        },
+        {
+          "name": "Afrikaans",
+          "value": "af",
+          "description": "Afrikaans"
+        },
+        {
+          "name": "'Arabic (Gulf)'",
+          "value": "ar-gulf",
+          "description": "Arabic (Gulf)"
+        },
+        {
+          "name": "Croatian",
+          "value": "hr",
+          "description": "Croatian"
+        },
+        {
+          "name": "'English (India)'",
+          "value": "en-in",
+          "description": "English (India)"
+        },
+        {
+          "name": "'English (Ireland)'",
+          "value": "en-ie",
+          "description": "English (Ireland)"
+        },
+        {
+          "name": "'English (Scot)'",
+          "value": "en-scot",
+          "description": "English (Scot)"
+        },
+        {
+          "name": "'English (South Africa)'",
+          "value": "en-za",
+          "description": "English (South Africa)"
+        },
+        {
+          "name": "Galician",
+          "value": "gl",
+          "description": "Galician"
+        },
+        {
+          "name": "'German (Switzerland)'",
+          "value": "de-ch",
+          "description": "German (Switzerland)"
+        },
+        {
+          "name": "Latvian",
+          "value": "lv",
+          "description": "Latvian"
+        },
+        {
+          "name": "Serbian",
+          "value": "sr",
+          "description": "Serbian"
+        },
+        {
+          "name": "Slovak",
+          "value": "sk",
+          "description": "Slovak"
+        },
+        {
+          "name": "Zulu",
+          "value": "zu",
+          "description": "Zulu"
+        },
+        {
+          "name": "'English (Welsh)'",
+          "value": "en-cy",
+          "description": "English (Welsh)"
+        },
+        {
+          "name": "NoTranslation",
+          "value": "notranslation",
+          "description": "No translation"
+        }
+      ],
+      "description": "Translation language for broadcast streaming."
+    },
+    {
       "kind": "enum",
       "type": "VideoQuality",
       "members": [
@@ -156,6 +596,6 @@
     "sourceFiles": [
       "types/zoomstreaming.d.ts"
     ],
-    "declarationCount": 7
+    "declarationCount": 14
   }
 }

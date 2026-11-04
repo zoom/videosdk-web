@@ -153,6 +153,10 @@ export interface ParticipantPropertiesPayload {
    * Whether this user is an RTMP user
    */
   isRtmpUser?: boolean;
+  /**
+   *  Whether the user is on hold
+   */
+  isOnHold?: boolean;
 }
 /**
  * The session's connection state.
@@ -1415,7 +1419,6 @@ export declare function event_far_end_camera_capability_change(payload: {
 }): void;
 /**
  * Occurs when network quality changes.
- * The network quality reflects the video quality, so only when the user starts video, the data will broadcast to all users.
  * @param payload the network quality
  *
  * @event
@@ -2484,6 +2487,29 @@ export declare function event_incoming_live_stream_status(payload: {
    */
   streamId: string;
 }): void;
+
+/**
+ * Occurs when the on hold state changes.
+ *
+ * ```javascript
+ * client.on('on-hold-change', (payload) => {
+ *   if (payload.isOnHold) {
+ *     console.log('User is on hold');
+ *   } else {
+ *     console.log('User is admitted to meeting');
+ *   }
+ * });
+ * ```
+ * @param payload The event detail.
+ * @since 2.6.10
+ * @event
+ */
+export declare function event_on_hold_change(payload: {
+  /**
+   * Whether the current user is on hold.
+   */
+  isOnHold: boolean;
+}): void;
 /**
  * Occurs when the Clinical Notes capture status changes.
  *
@@ -2583,3 +2609,35 @@ export declare function event_clinical_notes_stop_response(payload: {
    */
   state: ClinicalNotesApprovedState;
 }): void;
+
+/**
+ * Occurs when any user sends an emoji reaction.
+ *
+ * ```javascript
+ * client.on('emoji-reaction', (payload) => {
+ *   payload.forEach(({ userId, emojiUnicode }) => {
+ *     console.log(userId, emojiUnicode);
+ *   });
+ * });
+ * ```
+ *
+ * @param payload An array detailing which user/s sent which reaction/s. If `userId` is absent, the reaction was sent by streaming viewers and is aggregated by emoji with `count`.
+ * @category Reactions
+ * @event
+ */
+export declare function event_emoji_reaction(
+  payload: Array<{
+    /**
+     * ID of the user who sent the reaction. Not provided when the reaction is sent by a streaming viewer.
+     */
+    userId?: number;
+    /**
+     * Unicode of the emoji.
+     */
+    emojiUnicode: string;
+    /**
+     * Number of times the emoji is sent. Only provided when the reaction is sent by streaming viewers.
+     */
+    count?: number;
+  }>,
+): void;

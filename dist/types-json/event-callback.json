@@ -4,7 +4,7 @@
   "package": "@zoom/videosdk",
   "language": "TypeScript",
   "platform": "Web",
-  "version": "2.6.0",
+  "version": "2.6.10",
   "sourceFile": "types/event-callback.d.ts",
   "declarations": [
     {
@@ -172,6 +172,12 @@
           "type": "boolean",
           "optional": true,
           "description": "Whether this user is an RTMP user"
+        },
+        {
+          "name": "isOnHold",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether the user is on hold"
         }
       ]
     },
@@ -1166,7 +1172,7 @@
       "kind": "event",
       "type": "event_network_quality_change",
       "signature": "event_network_quality_change(payload: { userId: number; type: 'uplink' | 'downlink'; level: number; }): void",
-      "description": "Occurs when network quality changes.\nThe network quality reflects the video quality, so only when the user starts video, the data will broadcast to all users.",
+      "description": "Occurs when network quality changes.",
       "payloadType": "{ userId: number; type: 'uplink' | 'downlink'; level: number; }",
       "parameters": [
         {
@@ -1853,6 +1859,25 @@
     },
     {
       "kind": "event",
+      "type": "event_on_hold_change",
+      "signature": "event_on_hold_change(payload: { isOnHold: boolean; }): void",
+      "event": "on-hold-change",
+      "description": "Occurs when the on hold state changes.",
+      "payloadType": "{ isOnHold: boolean; }",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "{ isOnHold: boolean; }",
+          "optional": false,
+          "description": "The event detail."
+        }
+      ],
+      "examples": [
+        "client.on('on-hold-change', (payload) => {\n  if (payload.isOnHold) {\n    console.log('User is on hold');\n  } else {\n    console.log('User is admitted to meeting');\n  }\n});"
+      ]
+    },
+    {
+      "kind": "event",
       "type": "event_clinical_notes_status_change",
       "signature": "event_clinical_notes_status_change(payload: { status: ClinicalNotesStatus; errorCode: number; streamId: string; }): void",
       "event": "clinical-notes-status-change",
@@ -1926,12 +1951,31 @@
       "examples": [
         "client.on('clinical-notes-stop-response', ({ state }) => {\n  console.log('Host decision:', state);\n});"
       ]
+    },
+    {
+      "kind": "event",
+      "type": "event_emoji_reaction",
+      "signature": "event_emoji_reaction(payload: Array<{ userId?: number; emojiUnicode: string; count?: number; }>): void",
+      "event": "emoji-reaction",
+      "description": "Occurs when any user sends an emoji reaction.",
+      "payloadType": "Array<{ userId?: number; emojiUnicode: string; count?: number; }>",
+      "parameters": [
+        {
+          "name": "payload",
+          "type": "Array<{ userId?: number; emojiUnicode: string; count?: number; }>",
+          "optional": false,
+          "description": "An array detailing which user/s sent which reaction/s. If `userId` is absent, the reaction was sent by streaming viewers and is aggregated by emoji with `count`."
+        }
+      ],
+      "examples": [
+        "client.on('emoji-reaction', (payload) => {\n  payload.forEach(({ userId, emojiUnicode }) => {\n    console.log(userId, emojiUnicode);\n  });\n});"
+      ]
     }
   ],
   "metadata": {
     "sourceFiles": [
       "types/event-callback.d.ts"
     ],
-    "declarationCount": 113
+    "declarationCount": 115
   }
 }

@@ -4,7 +4,7 @@
   "package": "@zoom/videosdk",
   "language": "TypeScript",
   "platform": "Web",
-  "version": "2.6.0",
+  "version": "2.6.10",
   "sourceFile": "types/exception-code.d.ts",
   "declarations": [
     {
@@ -155,6 +155,11 @@
           "name": "CLIENT_HOST_DISALLOW_RENAME",
           "value": "5014",
           "description": "Occurs in `client.changeName` method due to the host disallowing users from changing their names themselves."
+        },
+        {
+          "name": "CLIENT_FEATURE_UNSUPPORTED",
+          "value": "5015",
+          "description": "The feature is not supported in the current context or configuration"
         },
         {
           "name": "STREAM_MISMATCH_DEVICE",

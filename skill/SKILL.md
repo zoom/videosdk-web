@@ -158,6 +158,7 @@ Use rejected Promise `error.errorCode` first, then match known common issues.
 | Command channel or custom in-session control messages | `references/features/command-channel.md` |
 | Chat | `references/chat/chat.md`, `references/chat/chat-send-files.md` |
 | Recording | `references/features/recording.md` |
+| OnHold / waiting room, admit participants, `hold` JWT field | `references/sessions.md` (Hold participants until admitted), `references/auth.md` |
 | Subsessions, breakout rooms, waiting-room-like flows | `references/features/subsessions.md`, `troubleshooting/common-issues.md` |
 | Live transcription, translation, captions | `references/features/transcription-translation.md` |
 | PSTN/SIP phone call | `references/features/pstn.md`, `references/features/sip.md` |

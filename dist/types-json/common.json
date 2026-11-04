@@ -4,7 +4,7 @@
   "package": "@zoom/videosdk",
   "language": "TypeScript",
   "platform": "Web",
-  "version": "2.6.0",
+  "version": "2.6.10",
   "sourceFile": "types/common.d.ts",
   "declarations": [
     {
@@ -227,6 +227,12 @@
           "type": "boolean",
           "optional": true,
           "description": "Whether this user is an RTMP user"
+        },
+        {
+          "name": "isOnHold",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether the user is on hold"
         }
       ]
     },
@@ -916,6 +922,16 @@
           "description": "Remote audio playback was interrupted."
         },
         {
+          "name": "AudioPeerConnectionReconnect",
+          "value": "108",
+          "description": "Audio peer connection was interrupted and is reconnecting automatically."
+        },
+        {
+          "name": "AudioTagError",
+          "value": "109",
+          "description": "Audio playback failed. Refresh the browser to try again."
+        },
+        {
           "name": "VideoConnectionFailed",
           "value": "201",
           "description": "Failed to establish the video data channel."
@@ -949,6 +965,11 @@
           "name": "VideoStreamMuted",
           "value": "207",
           "description": "Video stream was interrupted."
+        },
+        {
+          "name": "VideoPeerConnectionReconnect",
+          "value": "208",
+          "description": "Video peer connection was interrupted and is reconnecting automatically."
         },
         {
           "name": "SharingStreamFailed",

@@ -1,6 +1,7 @@
 /**
  * @module ZoomBroadcastStreaming
  */
+import { ChatPrivilege } from './chat';
 /**
  * Streaming watermark
  */
@@ -46,6 +47,10 @@ export interface ZoomBroadcastStreamingOptions {
    * Optional. Specifies the watermark.
    */
   watermark?: StreamingWatermark;
+  /**
+   * Optional. Specifies the display name of the viewer in chat. If not specified, a random name is generated.
+   */
+  userName?: string;
 }
 export declare class LiveVideoContainer extends HTMLElement {}
 export declare class LiveVideo extends HTMLElement {
@@ -148,14 +153,12 @@ export declare const onResulutionChange:
  * ```
  */
 export declare const onRewindTotalTime:
-  | ((this: LiveVideo, ev: CustomEvent<number>) => any)
-  | null;
+  ((this: LiveVideo, ev: CustomEvent<number>) => any) | null;
 /**
  * Occurs in rewind mode, when the time indicated by the currentTime attribute has been updated.
  */
 export declare const onTimeupdate:
-  | ((this: LiveVideo, ev: CustomEvent) => any)
-  | null;
+  ((this: LiveVideo, ev: CustomEvent) => any) | null;
 /**
  * Occurs when the rewind capability of the stream changes.
  * ```javascript
@@ -168,8 +171,7 @@ export declare const onTimeupdate:
  * ```
  */
 export declare const onRewindConfig:
-  | ((this: LiveVideo, ev: CustomEvent<boolean>) => any)
-  | null;
+  ((this: LiveVideo, ev: CustomEvent<boolean>) => any) | null;
 /**
  * Occurs when the connection is changed.
  * @param payload
@@ -275,6 +277,68 @@ export declare function event_audio_statistic_data_change(payload: {
  */
 export declare function event_auto_play_audio_failed(): void;
 /**
+ * Occurs when a chat message is received.
+ * @param payload The event detail.
+ * @event
+ */
+export declare function event_chat_on_message(payload: {
+  /**
+   * Message ID.
+   */
+  id: string;
+  /**
+   * Message content.
+   */
+  message: string;
+  /**
+   * Sender name.
+   */
+  sender: string;
+  /**
+   * Whether the message is sent by the current user.
+   */
+  isSelf: boolean;
+}): void;
+/**
+ * Occurs when the chat privilege is changed.
+ * @param payload The event detail.
+ * @event
+ */
+export declare function event_chat_privilege_change(payload: {
+  /**
+   * Current chat privilege.
+   */
+  chatPrivilege: ChatPrivilege;
+}): void;
+/**
+ * Occurs when a live translation caption is received.
+ * @param payload The event detail.
+ * @event
+ */
+export declare function event_caption_message(payload: {
+  /**
+   * Caption text.
+   */
+  message?: string;
+}): void;
+/**
+ * Occurs when emoji reactions are received.
+ * @param payload The event detail.
+ * @event
+ */
+export declare function event_emoji_reaction(payload: {
+  /**
+   * Reaction values from the current streaming.
+   */
+  reactions: Array<string | number>;
+}): void;
+/**
+ * Occurs when live translation is enabled or disabled for the current streaming.
+ * @param payload Whether live translation is enabled.
+ * @event
+ */
+export declare function event_caption_enable(payload: boolean): void;
+/**
  * Zoom Broadcast streaming for web platform.
  */
 declare class ZoomBroadcastStreaming {
@@ -351,6 +415,35 @@ declare class ZoomBroadcastStreaming {
     element?: string | LiveVideo,
   ): Promise<LiveVideo | { type: string; reason: string }>;
   /**
+   * Check whether the current user can send a chat message.
+   * @returns `true` when the chat privilege allows everyone to send.
+   */
+  canSendChat(): boolean;
+  /**
+   * Send a chat message to the current streaming.
+   * @param text Required. The chat message.
+   */
+  sendChat(text: string): Promise<string | { type: string; reason: string }>;
+  /**
+   * Check whether live translation is enabled for the current streaming.
+   * @returns `true` when closed caption is enabled.
+   */
+  isLiveTranslationEnabled(): boolean;
+  /**
+   * Set the translation language of the current streaming. Omit `language` to turn off translation.
+   * @param language Optional. Language code, such as a {@link TranslationLanguage} value.
+   */
+  setTranslationLanguage(
+    language?: string,
+  ): Promise<void | { type: string; reason: string }>;
+  /**
+   * Send an emoji reaction to the current streaming.
+   * @param type Required. The reaction type.
+   */
+  sendEmojiReaction(
+    type: ReactionType,
+  ): Promise<void | { type: string; reason: string }>;
+  /**
    * Listens for events and handles them.
    *
    * @since 2.2.5
@@ -392,6 +485,39 @@ declare class ZoomBroadcastStreaming {
     listener: typeof event_auto_play_audio_failed,
   ): void;
   /**
+   *
+   * @param event
+   * @param listener listener Details in {@link event_chat_on_message}
+   */
+  on(event: 'chat-on-message', listener: typeof event_chat_on_message): void;
+  /**
+   *
+   * @param event
+   * @param listener listener Details in {@link event_chat_privilege_change}
+   */
+  on(
+    event: 'chat-privilege-change',
+    listener: typeof event_chat_privilege_change,
+  ): void;
+  /**
+   *
+   * @param event
+   * @param listener listener Details in {@link event_caption_message}
+   */
+  on(event: 'caption-message', listener: typeof event_caption_message): void;
+  /**
+   *
+   * @param event
+   * @param listener listener Details in {@link event_emoji_reaction}
+   */
+  on(event: 'emoji-reaction', listener: typeof event_emoji_reaction): void;
+  /**
+   *
+   * @param event
+   * @param listener listener Details in {@link event_caption_enable}
+   */
+  on(event: 'caption-enable', listener: typeof event_caption_enable): void;
+  /**
    *  Removes the event handler.
    *
    * @since 2.2.5
@@ -399,6 +525,292 @@ declare class ZoomBroadcastStreaming {
    * @param callback The event handler.
    */
   off(event: string, callback: (payload: any) => void): void;
+}
+/**
+ * Emoji reaction type for broadcast streaming.
+ */
+export enum ReactionType {
+  /**
+   * Clap
+   */
+  Clap = 1,
+  /**
+   * Thumbs up
+   */
+  ThumbsUp = 2,
+  /**
+   * Heart
+   */
+  Heart = 3,
+  /**
+   * Joy
+   */
+  Joy = 4,
+  /**
+   * Open mouth
+   */
+  OpenMouth = 5,
+  /**
+   * Tada
+   */
+  Tada = 6,
+}
+/**
+ * Translation language for broadcast streaming.
+ */
+export enum TranslationLanguage {
+  /**
+   * English
+   */
+  English = 'en',
+  /**
+   * Chinese (Simplified)
+   */
+  'Chinese (Simplified)' = 'zh',
+  /**
+   * Japanese
+   */
+  Japanese = 'ja',
+  /**
+   * German
+   */
+  German = 'de',
+  /**
+   * French (France)
+   */
+  'French (France)' = 'fr',
+  /**
+   * Russian
+   */
+  Russian = 'ru',
+  /**
+   * Portuguese
+   */
+  Portuguese = 'pt',
+  /**
+   * Spanish
+   */
+  Spanish = 'es',
+  /**
+   * Korean
+   */
+  Korean = 'ko',
+  /**
+   * Italian
+   */
+  Italian = 'it',
+  /**
+   * Vietnamese
+   */
+  Vietnamese = 'vi',
+  /**
+   * Dutch
+   */
+  Dutch = 'nl',
+  /**
+   * Ukrainian
+   */
+  Ukrainian = 'uk',
+  /**
+   * Arabic
+   */
+  Arabic = 'ar',
+  /**
+   * Bengali
+   */
+  Bengali = 'bn',
+  /**
+   * Chinese (Traditional)
+   */
+  'Chinese (Traditional)' = 'zh-hant',
+  /**
+   * Czech
+   */
+  Czech = 'cs',
+  /**
+   * Estonian
+   */
+  Estonian = 'et',
+  /**
+   * Finnish
+   */
+  Finnish = 'fi',
+  /**
+   * Greek
+   */
+  Greek = 'el',
+  /**
+   * Hebrew
+   */
+  Hebrew = 'he',
+  /**
+   * Hindi
+   */
+  Hindi = 'hi',
+  /**
+   * Hungarian
+   */
+  Hungarian = 'hu',
+  /**
+   * Indonesian
+   */
+  Indonesian = 'id',
+  /**
+   * Malay
+   */
+  Malay = 'ms',
+  /**
+   * Persian
+   */
+  Persian = 'fa',
+  /**
+   * Polish
+   */
+  Polish = 'pl',
+  /**
+   * Romanian
+   */
+  Romanian = 'ro',
+  /**
+   * Swedish
+   */
+  Swedish = 'sv',
+  /**
+   * Tamil
+   */
+  Tamil = 'ta',
+  /**
+   * Telugu
+   */
+  Telugu = 'te',
+  /**
+   * Tagalog
+   */
+  Tagalog = 'tl',
+  /**
+   * Turkish
+   */
+  Turkish = 'tr',
+  /**
+   * French (Canada)
+   */
+  'French (Canada)' = 'fr-ca',
+  /**
+   * Danish
+   */
+  Danish = 'da',
+  /**
+   * Norwegian
+   */
+  Norwegian = 'no',
+  /**
+   * Thai
+   */
+  Thai = 'th',
+  /**
+   * Welsh
+   */
+  Welsh = 'cy',
+  /**
+   * Spanish (Mexico)
+   */
+  'Spanish (Mexico)' = 'es-mx',
+  /**
+   * Portuguese (Brazil)
+   */
+  'Portuguese (Brazil)' = 'pt-br',
+  /**
+   * English (New Zealand)
+   */
+  'English (New Zealand)' = 'en-nz',
+  /**
+   * English (Australia)
+   */
+  'English (Australia)' = 'en-au',
+  /**
+   * English (United Kingdom)
+   */
+  'English (United Kingdom)' = 'en-gb',
+  /**
+   * Cantonese
+   */
+  Cantonese = 'zh-yue',
+  /**
+   * Somali
+   */
+  Somali = 'so',
+  /**
+   * Urdu
+   */
+  Urdu = 'ur',
+  /**
+   * Portuguese (Portugal)
+   */
+  'Portuguese (Portugal)' = 'pt-pt',
+  /**
+   * Catalan
+   */
+  Catalan = 'ca',
+  /**
+   * Afrikaans
+   */
+  Afrikaans = 'af',
+  /**
+   * Arabic (Gulf)
+   */
+  'Arabic (Gulf)' = 'ar-gulf',
+  /**
+   * Croatian
+   */
+  Croatian = 'hr',
+  /**
+   * English (India)
+   */
+  'English (India)' = 'en-in',
+  /**
+   * English (Ireland)
+   */
+  'English (Ireland)' = 'en-ie',
+  /**
+   * English (Scot)
+   */
+  'English (Scot)' = 'en-scot',
+  /**
+   * English (South Africa)
+   */
+  'English (South Africa)' = 'en-za',
+  /**
+   * Galician
+   */
+  Galician = 'gl',
+  /**
+   * German (Switzerland)
+   */
+  'German (Switzerland)' = 'de-ch',
+  /**
+   * Latvian
+   */
+  Latvian = 'lv',
+  /**
+   * Serbian
+   */
+  Serbian = 'sr',
+  /**
+   * Slovak
+   */
+  Slovak = 'sk',
+  /**
+   * Zulu
+   */
+  Zulu = 'zu',
+  /**
+   * English (Welsh)
+   */
+  'English (Welsh)' = 'en-cy',
+  /**
+   * No translation
+   */
+  NoTranslation = 'notranslation',
 }
 /**
  * Video Quality

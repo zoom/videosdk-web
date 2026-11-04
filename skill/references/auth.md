@@ -1,10 +1,10 @@
 <!-- Source: https://developers.zoom.us/docs/video-sdk/auth.md -->
-<!-- Fetched: 2026-07-17 -->
+<!-- Fetched: 2026-10-15 -->
 
 # Authorize
 
 
-Zoom Video SDKs use [JSON Web Tokens (JWT)](https://datatracker.ietf.org/doc/html/rfc7519) for authorization to start and join sessions. Generate a Video SDK JWT using your [Video SDK app credentials](/docs/video-sdk/get-credentials/#get-video-sdk-credentials).
+Zoom Video SDKs use [JSON Web Tokens (JWT)](https://datatracker.ietf.org/doc/html/rfc7519) for authorization to start and join sessions. Generate a Video SDK JWT using your Video SDK credentials.
 
 Only your Video SDK account can start and join your sessions. Other Video SDK accounts cannot join your sessions, and the Video SDK cannot join Zoom Meetings or Webinars.
 
@@ -13,9 +13,9 @@ Only your Video SDK account can start and join your sessions. Other Video SDK ac
 
     Use the [Video SDK auth endpoint sample](https://github.com/zoom/videosdk-auth-endpoint-sample) to generate a Video SDK JWT securely, then start or join sessions for [your chosen platform](#pick-a-platform-and-get-started).
 
-## How to generate a Video SDK JWT
+## Generate a Video SDK JWT
 
-First, [get your Video SDK key and secret](/docs/video-sdk/get-credentials/#get-video-sdk-credentials). Use these credentials to generate your Video SDK JWT on a secure server-side environment.
+In [Platform Studio](https://platform.zoom.us), under **SDK credentials**, get your **SDK Key** and **SDK Secret**. Use these credentials to generate your Video SDK JWT on a secure server-side environment.
 
 A JWT consists of three parts: **Header**, **Payload**, and **Signature**.
 
@@ -41,23 +41,24 @@ The header specifies the signing algorithm and the token type.
 
 The payload contains the token claims, user information, and required metadata.
 
-| Key                                 | Required                     | Description                                                                                                                                                                                                                                                                                                                                                                                              |
-| ----------------------------------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `app_key`                           | Yes                          | Your Video SDK key.                                                                                                                                                                                                                                                                                                                                                                                      |
-| `role_type`                         | Yes                          | The user role. `1` = host or co-host. `0` = participant. Participants can join before the host. Must be a number.                                                                                                                                                                                                                                                                                        |
-| `tpc`                               | Yes                          | The Video SDK session name (max 200 characters). Supports alphanumeric characters, spaces, and standard visible symbols (`!`, `#`, `$`, `%`, `&`, `(`, `)`, `+`, `-`, `:`, `;`, `<`, `=`, `.`, `>`, `?`, `@`, `[`, `]`, `^`, `_`, `{`, `}`, &#124;, `~`, `,`, `\`). Must match the session `join` context value. Case-insensitive (converted to lowercase).                                              |
-| `version`                           | Yes                          | Set to `1`.                                                                                                                                                                                                                                                                                                                                                                                              |
-| `iat`                               | Yes                          | Token issuance timestamp.                                                                                                                                                                                                                                                                                                                                                                                |
-| `exp`                               | Yes                          | Token expiration timestamp (epoch). Must be ≥ 1800 seconds after `iat` and ≤ 48 hours after `iat`.                                                                                                                                                                                                                                                                                                       |
-| `user_key`                          | Optional                     | A unique identifier you assign to the user (max 36 characters). Also used in [Video SDK APIs](/docs/api/video-sdk/#tag/sessions/GET/videosdk/sessions), [Dashboard](/docs/build/dashboard/), and SDK interfaces. Set a unique value per customer or user segment to [audit usage](#audit-usage-with-user_key). [Previously named `user_identity`](/changelog/video-sdk/android/2.4.12#added) in the SDK. |
-| `session_key`                       | Optional/<br></br>Required\* | \*If set by the host. Identifies the session (max 36 characters) in the [Video SDK APIs](/docs/api/video-sdk/#tag/sessions/GET/videosdk/sessions) and [Dashboard](/docs/build/dashboard/). All attendees must supply the same value if the host sets it.                                                                                                                                                 |
-| `geo_regions`                       | Optional                     | Comma-separated data center connection [region](/docs/api/references/abbreviations/#countries) preferences for the user joining the session. Must also be enabled in your [account](/docs/build/account/#data-configuration-customize-data-center-regions). Supported values: `AU`, `BR`, `CA`, `DE`, `HK`, `IN`, `JP`, `CN`, `MX`, `NL`, `SG`, `US`.                                                    |
-| `cloud_recording_option`            | Optional                     | `0` (default) one combined video. `1` separate video files per user. Requires host (`role_type = 1`). Requires a Zoom Build Platform universal credit account.                                                                                                                                                                                                                                           |
-| `cloud_recording_election`          | Optional                     | `1` to record the user's self-view, otherwise `0` (default).                                                                                                                                                                                                                                                                                                                                             |
-| `telemetry_tracking_id`             | Optional                     | For [sending basic client telemetry (Web SDK only)](/docs/video-sdk/web/quality/#set-a-tracking-id).                                                                                                                                                                                                                                                                                                     |
-| `video_webrtc_mode`                 | Optional\*                   | Web 2.x+. `0` = disable WebRTC video, `1` = enable. Zoom may choose automatically if omitted. \*On browsers that do not support WebRTC video, Zoom will use WebAssembly video.                                                                                                                                                                                                                           |
-| `audio_webrtc_mode`                 | Optional\*                   | Web only. `1` to enable WebRTC audio. Replaces `audio_compatible_mode`. If you do not define this value in the JWT, Zoom determines whether to enable WebRTC audio based on various factors determined by Zoom at the time. \*On mobile browsers Zoom always uses WebRTC audio.                                                                                                                          |
-| `cloud_recording_transcript_option` | Optional                     | `0` = (default) none, `1` = transcript only, `2` = transcript + summary. Requires a Zoom Build Platform universal credit account.                                                                                                                                                                                                                                                                        |
+| Key                                 | Required                     | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| ----------------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `app_key`                           | Yes                          | Your Video SDK key.                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `role_type`                         | Yes                          | The user role. `1` = host or co-host. `0` = participant. Participants can join before the host. Must be a number.                                                                                                                                                                                                                                                                                                                                                                        |
+| `tpc`                               | Yes                          | The Video SDK session name (max 200 characters). Supports alphanumeric characters, spaces, and standard visible symbols (`!`, `#`, `$`, `%`, `&`, `(`, `)`, `+`, `-`, `:`, `;`, `<`, `=`, `.`, `>`, `?`, `@`, `[`, `]`, `^`, `_`, `{`, `}`, &#124;, `~`, `,`, `\`). Must match the session `join` context value. Case-insensitive (converted to lowercase).                                                                                                                              |
+| `version`                           | Yes                          | Set to `1`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| `iat`                               | Yes                          | Token issuance timestamp.                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| `exp`                               | Yes                          | Token expiration timestamp (epoch). Must be ≥ 1800 seconds after `iat` and ≤ 48 hours after `iat`.                                                                                                                                                                                                                                                                                                                                                                                       |
+| `user_key`                          | Optional                     | A unique identifier you assign to the user (max 36 characters). Also used in [Video SDK APIs](/docs/api/video-sdk/#tag/sessions/GET/videosdk/sessions), [Dashboard](/docs/build/dashboard/), and SDK interfaces. Set a unique value per customer or user segment to [audit usage](#audit-usage-with-user_key). [Previously named `user_identity`](/changelog/video-sdk/android/2.4.12#added) in the SDK.                                                                                 |
+| `session_key`                       | Optional/<br></br>Required\* | \*If set by the host. Identifies the session (max 36 characters) in the [Video SDK APIs](/docs/api/video-sdk/#tag/sessions/GET/videosdk/sessions) and [Dashboard](/docs/build/dashboard/). All attendees must supply the same value if the host sets it.                                                                                                                                                                                                                                 |
+| `geo_regions`                       | Optional                     | Comma-separated data center connection [region](/docs/api/references/abbreviations/#countries) preferences for the user joining the session. Must also be enabled in your [account](/docs/build/account/#data-configuration-customize-data-center-regions). Supported values: `AU`, `BR`, `CA`, `DE`, `HK`, `IN`, `JP`, `CN`, `MX`, `NL`, `SG`, `US`.                                                                                                                                    |
+| `cloud_recording_option`            | Optional                     | `0` (default) one combined video. `1` separate video file per user. `2` individual source tracks (ISO) and regular (active/gallery) cloud recordings simultaneously. Requires host privileges (`role_type = 1`) and a Zoom Build Platform universal credit account.                                                                                                                                                                                                                      |
+| `cloud_recording_election`          | Optional                     | `1` to record the user's self-view, otherwise `0` (default).                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `telemetry_tracking_id`             | Optional                     | For [sending basic client telemetry (Web SDK only)](/docs/video-sdk/web/quality/#set-a-tracking-id).                                                                                                                                                                                                                                                                                                                                                                                     |
+| `video_webrtc_mode`                 | Optional\*                   | Web 2.x+. `0` = disable WebRTC video, `1` = enable. Zoom may choose automatically if omitted. \*On browsers that do not support WebRTC video, Zoom will use WebAssembly video.                                                                                                                                                                                                                                                                                                           |
+| `audio_webrtc_mode`                 | Optional\*                   | Web only. `1` to enable WebRTC audio. Replaces `audio_compatible_mode`. If you do not define this value in the JWT, Zoom determines whether to enable WebRTC audio based on various factors determined by Zoom at the time. \*On mobile browsers Zoom always uses WebRTC audio.                                                                                                                                                                                                          |
+| `cloud_recording_transcript_option` | Optional                     | `0` = (default) none, `1` = transcript only, `2` = transcript + summary. Requires a Zoom Build Platform universal credit account.                                                                                                                                                                                                                                                                                                                                                        |
+| `hold`                              | Optional                     | OnHold support for the session. `0` = (default) the session does not support OnHold. `1` = OnHold is on, and participants wait on hold until a host or manager admits them. `2` = OnHold is supported but off, and a host or manager can turn it on during the session. Set this value in the JWT of the first user to join. `1` and `2` require Video SDK 2.6.11 or later on every client. Must be a number. See [Hold participants until admitted](#hold-participants-until-admitted). |
 
 **Sample payload**
 
@@ -69,7 +70,7 @@ The payload contains the token claims, user information, and required metadata.
   "version": 1,
   "iat": 1646937553,
   "exp": 1646944753,
-  "user_key": USER_KEY
+  "user_key": USER_KEY,
   "session_key": SESSION_KEY,
   "geo_regions": "US,AU,CA,IN,CN,BR,MX,HK,SG,JP,DE,NL",
   "cloud_recording_option": 0,
@@ -77,7 +78,8 @@ The payload contains the token claims, user information, and required metadata.
   "telemetry_tracking_id": "",
   "video_webrtc_mode": 0,
   "audio_webrtc_mode": 1,
-  "cloud_recording_transcript_option": 0
+  "cloud_recording_transcript_option": 0,
+  "hold": 0
 }
 ```
 
@@ -127,7 +129,8 @@ const payload = {
     // cloud_recording_election: 0,
     // telemetry_tracking_id: "",
     // video_webrtc_mode: 0,
-    // audio_webrtc_mode: 1
+    // audio_webrtc_mode: 1,
+    // hold: 0
 };
 
 const token = KJUR.jws.JWS.sign(
@@ -140,35 +143,7 @@ const token = KJUR.jws.JWS.sign(
 console.log(token);
 ```
 
-### Audit usage with user_key
-
-The `user_key` payload field assigns a unique identifier that you define to each of your end users. It differs from the other identifiers in the payload: `tpc` is the session name and `session_key` identifies a session, while `user_key` identifies an individual user. You control the value, so you can map it to your own customer or user segment.
-
-Set a stable, unique `user_key` per customer or user segment when you generate the JWT. Each distinct `user_key` is then individually identifiable in Zoom usage reporting, which lets you track and audit Video SDK usage by your own customers.
-
-`user_key` values are queryable in [Build Platform reports](/docs/build/reports/), the [Build Platform dashboard](/docs/build/dashboard/), and the [Video SDK sessions API](/docs/api/video-sdk/#tag/sessions/GET/videosdk/sessions).
-
-> **Tip**
->
-> Use `user_key` to audit Video SDK usage by customer or user segment. Assign each of your customers a unique `user_key` so you can track their activity separately in usage reports.
-
-The following snippet sets `user_key` to a stable identifier you define when generating the JWT payload.
-
-```javascript
-const payload = {
-    app_key: process.env.ZOOM_SDK_KEY,
-    tpc: "My Session",
-    role_type: 0,
-    version: 1,
-    iat: iat,
-    exp: exp,
-
-    // A stable identifier you assign per customer or user segment.
-    user_key: "customer-acme-001",
-};
-```
-
-## Start and join sessions with the Video SDK JWT
+## Start and join sessions
 
 Use the generated JWT to start or join a Video SDK session.
 
@@ -232,7 +207,73 @@ IZoomVideoSDKSession* pSession = m_pVideoSDK->joinSession(sessionContext);
 
 See the [platform-specific Video SDK documentation](/docs/video-sdk/#platforms) for more details.
 
-## Troubleshooting
+## Audit usage with user_key
+
+The `user_key` payload field assigns a unique identifier that you define to each of your end users. It differs from the other identifiers in the payload: `tpc` is the session name and `session_key` identifies a session, while `user_key` identifies an individual user. You control the value, so you can map it to your own customer or user segment.
+
+Set a stable, unique `user_key` per customer or user segment when you generate the JWT. Each distinct `user_key` is then individually identifiable in Zoom usage reporting, which lets you track and audit Video SDK usage by your own customers.
+
+`user_key` values are queryable in [Build Platform reports](/docs/build/reports/), the [Build Platform dashboard](/docs/build/dashboard/), and the [Video SDK sessions API](/docs/api/video-sdk/#tag/sessions/GET/videosdk/sessions).
+
+> **Tip**
+>
+> Use `user_key` to audit Video SDK usage by customer or user segment. Assign each of your customers a unique `user_key` so you can track their activity separately in usage reports.
+
+The following snippet sets `user_key` to a stable identifier you define when generating the JWT payload.
+
+```javascript
+const payload = {
+    app_key: process.env.ZOOM_SDK_KEY,
+    tpc: "My Session",
+    role_type: 0,
+    version: 1,
+    iat: iat,
+    exp: exp,
+
+    // A stable identifier you assign per customer or user segment.
+    user_key: "customer-acme-001",
+};
+```
+
+## Hold participants until admitted
+
+Use the `hold` payload field to place participants on hold when they join a session. Participants on hold stay outside the session until a host or manager admits them. The `hold` value in the JWT of the first user to join, which starts the session, determines whether the session supports OnHold.
+
+-   `0` - (default) The session does not support OnHold. Clients that do not support OnHold can join.
+-   `1` - The session supports OnHold, and OnHold is on when the session starts.
+-   `2` - The session supports OnHold, but OnHold is off when the session starts. A host or manager can turn it on during the session.
+
+When OnHold is on, participants who join receive `onHoldJoined()` instead of `onSessionJoin()` until a host or manager admits them. Hosts and managers receive a callback when users are placed on hold, and can admit users one at a time or all at once.
+
+After the session starts, a host or manager can call `enableHold(true)` or `enableHold(false)` to turn OnHold on or off. This change only affects future join attempts. It does not admit users who are already on hold. To check whether the current session supports OnHold, call `isSupportHold()`.
+
+The following snippet starts a session with OnHold on.
+
+```javascript
+const payload = {
+    app_key: process.env.ZOOM_SDK_KEY,
+    tpc: "My Session",
+    role_type: 1,
+    version: 1,
+    iat: iat,
+    exp: exp,
+
+    // Place participants on hold until a host or manager admits them.
+    hold: 1,
+};
+```
+
+If you create sessions with the [Create a session API](/docs/api/video-sdk/#tag/sessions/POST/videosdk/sessions), set `settings.hold` in the request body. It accepts the same values as the `hold` payload field.
+
+> **Note**
+>
+> OnHold requires Video SDK 2.6.11 or later on Android, iOS, macOS, Windows, and Linux. The Video SDK for React Native, Flutter, Unity, and Electron supports OnHold in versions built on Video SDK 2.6.11 or later. The Video SDK for Web does not support OnHold yet.
+>
+> When `hold` is `1` or `2`, the session rejects join attempts from clients that do not support OnHold, including Web clients. Update every client that joins the session before you turn on OnHold.
+
+For platform-specific instructions, see the sessions page for [Android](/docs/video-sdk/android/sessions/#hold-participants-until-admitted), [iOS](/docs/video-sdk/ios/sessions/#hold-participants-until-admitted), [macOS](/docs/video-sdk/macos/sessions/#hold-participants-until-admitted), [Windows](/docs/video-sdk/windows/sessions/#hold-participants-until-admitted), or [Linux](/docs/video-sdk/linux/sessions/#hold-participants-until-admitted).
+
+## Troubleshoot SDK JWT issues
 
 If you have issues generating or using your SDK JWT, ensure that:
 

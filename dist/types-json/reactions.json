@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "module": "reactions",
+  "package": "@zoom/videosdk",
+  "language": "TypeScript",
+  "platform": "Web",
+  "version": "2.6.10",
+  "sourceFile": "types/reactions.d.ts",
+  "declarations": [
+    {
+      "kind": "namespace",
+      "type": "ReactionsClient",
+      "description": "The reactions client.",
+      "methods": [
+        {
+          "name": "sendEmojiReaction",
+          "signature": "sendEmojiReaction(emojiCode: string): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "emojiCode",
+              "type": "string",
+              "optional": false,
+              "description": "The emoji unicode code point(s), such as `1f44f`. Use `-` to join multiple code points, such as `2764-fe0f`."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult"
+          },
+          "description": "Sends an emoji reaction in the session.",
+          "examples": [
+            "const reactions = client.getReactionsClient();\nawait reactions.sendEmojiReaction('1f44f');"
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "sourceFiles": [
+      "types/reactions.d.ts"
+    ],
+    "declarationCount": 1
+  }
+}

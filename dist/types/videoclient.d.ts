@@ -104,10 +104,12 @@ import {
   event_voice_translator_started,
   event_voice_translator_unsupported_language_pair,
   event_incoming_live_stream_status,
+  event_on_hold_change,
   event_clinical_notes_status_change,
   event_clinical_notes_supported_change,
   event_clinical_notes_stop_request,
   event_clinical_notes_stop_response,
+  event_emoji_reaction,
 } from './event-callback';
 import { BroadcastStreamingClient } from './broadcast-streaming';
 import { RealTimeMediaStreamsClient } from './real-time-media-streams';
@@ -115,6 +117,7 @@ import { WhiteboardClient } from './whiteboard';
 import { VoiceTranslatorClient } from './voice-translator';
 import { IncomingLiveStreamClient } from './incoming-live-stream';
 import { ClinicalNotesClient } from './clinical-notes';
+import { ReactionsClient } from './reactions';
 // import AIClient from '../src/summary';
 
 /**
@@ -236,7 +239,7 @@ interface InitOptions {
   /**
    * Quickly leave the session when refreshing or closing the page, instead of experiencing session failover.
    *
-   * > ***Note**: Due to limitations in Firefox support, this feature is not available on the Firefox browser.
+   * > ***Note**: This feature relies on the browser's `beforeunload` event, which may not fire reliably on some browsers (especially Firefox) and platforms (especially mobile). See [MDN: Window beforeunload event](https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeunload_event) for browser compatibility details.
    *
    * Caveat for two scenarios:
    * - PSTN: Phone user who is bound to the current user. The phone will hang up instead of staying connected.
@@ -1118,6 +1121,13 @@ export declare namespace VideoClient {
   /**
    *
    * @param event
+   * @param listener Details in {@link event_emoji_reaction}
+   * @category Reactions
+   */
+  function on(event: 'emoji-reaction', listener: typeof event_emoji_reaction): void;
+  /**
+   *
+   * @param event
    * @param listener Details in {@link event_voice_translator_started}
    */
   function on(
@@ -1143,6 +1153,12 @@ export declare namespace VideoClient {
     event: 'incoming-live-stream-status',
     listener: typeof event_incoming_live_stream_status,
   ): void;
+  /**
+   * @param event
+   * @param listener Details in {@link event_on_hold_change}.
+   * @since 2.6.10
+   */
+  function on(event: 'on-hold-change', listener: typeof event_on_hold_change): void;
   /**
    *
    * @param event
@@ -1271,6 +1287,55 @@ export declare namespace VideoClient {
    * - Only the **original host** can do this.
    */
   function reclaimHost(): ExecutedResult;
+  /**
+   * Admit the participant who is on hold into the meeting.
+   * - Only the **host** or **co-host** can admit others.
+   * - Once a participant is allowed into the meeting, the SDK will reconnect the meeting. Listen to the `connection-change` event to get the detail.
+   *
+   * ```javascript
+   * // Host side
+   * await client.admit(userId);
+   *
+   * // Participant side
+   * client.on('connection-change', (payload) => {
+   *   if (payload.state === 'Reconnecting' && payload.reason === 'on hold') {
+   *     console.log('Waiting to rejoin the meeting');
+   *   }
+   * });
+   * ```
+   *
+   * @param userId User ID of the participant to admit.
+   *
+   * @returns Executed promise.
+   * @since 2.6.10
+   */
+  function admit(userId: number): ExecutedResult;
+  /**
+   * Admit all the participants who are on hold into the meeting.
+   * - Only the **host** or **co-host** can admit others.
+   * - When the number of on hold participants is large, it will take a long time to complete the operation.
+   * - When the operation is not complete, but you are not the host or co-host, the executed promise will resolve immediately.
+   *
+   * @returns Executed promise.
+   *  - `''`: Success.
+   *  - `'host changed'`: Resolved because you are not the host.
+   *  - `'co-host changed'`: Resolved because you are not the co-host.
+   * @since 2.6.10
+   */
+  function admitAll(): ExecutedResult;
+  /**
+   * Enable or disable the waiting room (on hold) feature for the session.
+   * - Only the **host** or **co-host** can enable or disable the waiting room.
+   * - When enabled, participants can be placed on hold before joining the meeting.
+   * - **Important**: This method can only be used when the `hold` field in the JWT payload is set to `2`.
+   *   If the `hold` field is not `2`, this method will fail with an error.
+   *
+   * @param enabled `true` to enable the waiting room, `false` to disable it.
+   *
+   * @returns Executed promise.
+   * @since 2.6.10
+   */
+  function enableHold(enabled: boolean): ExecutedResult;
 
   /**
    * Gets the current user info.
@@ -1350,6 +1415,10 @@ export declare namespace VideoClient {
    * @ignore
    */
   function getClinicalNotesClient(): typeof ClinicalNotesClient;
+  /**
+   * Gets the reactions client.
+   */
+  function getReactionsClient(): typeof ReactionsClient;
 
   /**
    * Gets the current session’s information.
@@ -1372,4 +1441,26 @@ export declare namespace VideoClient {
    * `role_type` in JWT payload =1 is the original host.
    */
   function isOriginalHost(): boolean;
+  /**
+   * Check whether the current user is on hold (in the waiting room).
+   *
+   * @returns `true` if the current user is on hold, `false` otherwise.
+   * @since 2.6.10
+   */
+  function isUserOnHold(): boolean;
+  /**
+   * Check whether the waiting room (on hold) feature is enabled for the session.
+   *
+   * @returns `true` if the waiting room is enabled, `false` otherwise.
+   * @since 2.6.10
+   */
+  function isHoldEnabled(): boolean;
+  /**
+   * Get the on hold participants of the meeting.
+   * - Only the **host** or **co-host** has this permission.
+   *
+   * @returns Array of [[Participant]] objects who are on hold.
+   * @since 2.6.10
+   */
+  function getOnHoldUsers(): Array<Participant>;
 }

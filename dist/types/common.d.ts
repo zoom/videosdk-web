@@ -175,13 +175,16 @@ interface Participant {
   dialType?: string;
   /**
    * The `user_property` from the JWT payload.
-   * @ignore
    */
   userProperty?: number;
   /**
    * Whether this user is an RTMP user
    */
   isRtmpUser?: boolean;
+  /**
+   *  Whether the user is on hold
+   */
+  isOnHold?: boolean;
 }
 /**
  * Subsession's status.
@@ -895,6 +898,14 @@ export enum ActiveMediaFailedCode {
    */
   AudioPlaybackInterrupted = 107,
   /**
+   * Audio peer connection was interrupted and is reconnecting automatically.
+   */
+  AudioPeerConnectionReconnect = 108,
+  /**
+   * Audio playback failed. Refresh the browser to try again.
+   */
+  AudioTagError = 109,
+  /**
    * Failed to establish the video data channel.
    */
   VideoConnectionFailed = 201,
@@ -922,6 +933,10 @@ export enum ActiveMediaFailedCode {
    * Video stream was interrupted.
    */
   VideoStreamMuted = 207,
+  /**
+   * Video peer connection was interrupted and is reconnecting automatically.
+   */
+  VideoPeerConnectionReconnect = 208,
   /**
    * Failed to get sharing data from the stream.
    */

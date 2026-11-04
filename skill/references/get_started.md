@@ -1,5 +1,5 @@
 <!-- Source: https://developers.zoom.us/docs/video-sdk/web/get-started.md -->
-<!-- Fetched: 2026-06-15 -->
+<!-- Fetched: 2026-10-15 -->
 
 # Get started
 
@@ -10,15 +10,15 @@
 
 Use the [Zoom Video SDK UI Toolkit](/docs/video-sdk/web/ui-toolkit/), a prebuilt user interface, to include the Video SDK in your application or integrate Video SDK directly to customize the experience yourself.
 
-> ## Quickstart
->
-> If you're building with React, use our [React Library for Zoom Video SDK](https://github.com/zoom/videosdk-react/) to get started faster with ready-to-use hooks and components.
+## React quickstart
+
+If you're building with React, use our [React Library for Zoom Video SDK](https://github.com/zoom/videosdk-react/) to quickly get started with ready-to-use hooks and components.
 
 ## Prebuilt user interface
 
 The [Zoom Video SDK UI Toolkit](/docs/video-sdk/web/ui-toolkit/) is a prebuilt user interface that you can use to quickly add Video SDK to your app.
 
-1. [Get your credentials](/docs/video-sdk/get-credentials/#get-video-sdk-credentials).
+1. [Get your credentials](/docs/video-sdk/get-credentials/).
 2. [Install the UI Toolkit in your app](/docs/video-sdk/web/ui-toolkit/#install).
 
 See the documentation for details on how to start and join sessions and use the prebuilt Video SDK features. The UI Toolkit is all you need to run the Video SDK in your app.
@@ -102,7 +102,7 @@ stream = client.getMediaStream();
 -   The host of the session is the user with a `role` set to `1` in the [Video SDK JWT](/docs/video-sdk/auth/).
 -   The `sessionPasscode` is optional, but if set for a session, it's required for other users joining that session.
 
-See [Sessions](/docs/video-sdk/web/sessions/) for details about the session lifecycle, including best practices for pre-session, in-session, and post-session, how to leave and end sessions, and managing user roles and actions. See [Handle events](/docs/video-sdk/web/events) for how to best use event listeners.
+See [Sessions](/docs/video-sdk/web/sessions/) for details about the session lifecycle, including best practices for pre-session, in-session, and post-session, how to leave and end sessions, and managing user roles and actions. See [Handle events](/docs/video-sdk/web/handle-events/) for how to best use event listeners.
 
 See the sample for an example of a simple implementation.
 

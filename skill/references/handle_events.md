@@ -1,5 +1,5 @@
 <!-- Source: https://developers.zoom.us/docs/video-sdk/web/handle-events.md -->
-<!-- Fetched: 2026-06-15 -->
+<!-- Fetched: 2026-10-15 -->
 
 # Event handling
 
@@ -70,7 +70,18 @@ enum ConnectionState {
 }
 ```
 
-We recommend listening for the `connection-change` event and handling each connection state as follows:
+### Manage the in-meeting UI during failover
+
+During failover, the connection state changes to `Reconnecting` and audio, video, and screen share stop until the session recovers. Follow these guidelines to keep the in-meeting UI in sync with the connection state so users can tell what is happening.
+
+-   Show the in-meeting UI, including the `video-player-container` used for video and screen share, only when the connection state is `Connected`.
+-   Mount the `video-player-container` once the state is `Connected` and keep it mounted. Do not conditionally render it while connected, for example, based on whether a user turned on video or started sharing. Unmount it only when the state changes to `Reconnecting` or when the session ends.
+-   While the state is `Reconnecting`, show a reconnection status indicator, such as a loading bar or a spinner icon, in place of the in-meeting UI.
+-   When the connection state returns to `Connected` after a failover, the SDK re-emits session state events, including `user-added` and `peer-video-state-change`. Rebuild the in-meeting UI from those events rather than from state you cached before the failover, and keep your handlers idempotent so the repeated events do not duplicate users or `video-player` elements.
+
+### Handle each connection state
+
+We recommend listening for the `connection-change` event and handling each connection state as follows.
 
 ```javascript
 client.on("connection-change", (payload) => {
@@ -78,20 +89,29 @@ client.on("connection-change", (payload) => {
         /**
          * Session ended by the host or the SDK kicked the user from the session
          * (use `payload.reason` to see why the SDK kicked the user).
+         * Unmount the in-meeting UI, including the `video-player-container`.
          **/
+        hideInMeetingUI();
     } else if (payload.state === ConnectionState.Reconnecting) {
         /**
          * The client-side connection to the server was lost (e.g., when driving through a tunnel) and will attempt to reconnect for a few minutes.
          * Alternatively, if the user joins or leaves a subsession, use `payload.subsessionName` to retrieve the subsession name.
+         * Unmount the in-meeting UI and show a reconnection indicator instead.
          */
+        showReconnectingIndicator();
     } else if (payload.state === ConnectionState.Connected) {
         /**
          * SDK connected the session successfully.
+         * Mount the in-meeting UI, including the `video-player-container`,
+         * and leave it mounted for as long as the state is `Connected`.
          */
+        showInMeetingUI();
     } else if (payload.state === ConnectionState.Fail) {
         /**
          * SDK join session failed, use `payload.errorCode` and `payload.reason` to find out why.
+         * Unmount the in-meeting UI.
          */
+        hideInMeetingUI();
     }
 });
 ```
@@ -196,6 +216,8 @@ See the following error codes and suggested actions.
 | `ActiveMediaFailedCode.MicrophoneMuted`           | 105        | Unmute the mic via system or browser settings.                                                                                                                                                                                         |
 | `ActiveMediaFailedCode.AudioStreamMuted`          | 106        | The microphone was temporarily occupied and then released, typically due to scenarios like answering a phone call or another application using the microphone. Prompt the user to click on the page so that the SDK can restore audio. |
 | `ActiveMediaFailedCode.AudioPlaybackInterrupted`  | 107        | The audio playback of other users in the session was interrupted by the system. Prompt the user to click on the page to resume audio playback.                                                                                         |
+| `ActiveMediaFailedCode.AudioPeerConnectionReconnect` | 108     | The audio connection was interrupted and the SDK is reconnecting automatically. No user action is required; you can optionally notify the user.                                                                                        |
+| `ActiveMediaFailedCode.AudioTagError`             | 109        | Audio playback failed. Refresh the browser to try again.                                                                                                                                                                               |
 
 ### Video exceptions
 
@@ -208,6 +230,7 @@ See the following error codes and suggested actions.
 | `ActiveMediaFailedCode.WasmOutOfMemory`       | 205        | Close all browsers and rejoin the session.                                                                                                                                                                                                |
 | `ActiveMediaFailedCode.VideoStreamFailed`     | 206        | Close all browsers and rejoin the session.                                                                                                                                                                                                |
 | `ActiveMediaFailedCode.VideoStreamMuted`      | 207        | The camera was temporarily occupied and then released. Prompt the user to click on the page so that the SDK can restore video.                                                                                                            |
+| `ActiveMediaFailedCode.VideoPeerConnectionReconnect` | 208     | The video connection was interrupted and the SDK is reconnecting automatically. No user action is required; you can optionally notify the user.                                                                                           |
 
 ### Screen share exception
 

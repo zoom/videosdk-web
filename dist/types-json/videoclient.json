@@ -4,7 +4,7 @@
   "package": "@zoom/videosdk",
   "language": "TypeScript",
   "platform": "Web",
-  "version": "2.6.0",
+  "version": "2.6.10",
   "sourceFile": "types/videoclient.d.ts",
   "declarations": [
     {
@@ -136,7 +136,7 @@
           "name": "leaveOnPageUnload",
           "type": "boolean",
           "optional": true,
-          "description": "Quickly leave the session when refreshing or closing the page, instead of experiencing session failover.\n\n> ***Note**: Due to limitations in Firefox support, this feature is not available on the Firefox browser.\n\nCaveat for two scenarios:\n- PSTN: Phone user who is bound to the current user. The phone will hang up instead of staying connected.\n- Subsession: Users in a subsession need to be assigned again instead of having been assigned and auto-joining the subsession."
+          "description": "Quickly leave the session when refreshing or closing the page, instead of experiencing session failover.\n\n> ***Note**: This feature relies on the browser's `beforeunload` event, which may not fire reliably on some browsers (especially Firefox) and platforms (especially mobile). See [MDN: Window beforeunload event](https://developer.mozilla.org/en-US/docs/Web/API/Window/beforeunload_event) for browser compatibility details.\n\nCaveat for two scenarios:\n- PSTN: Phone user who is bound to the current user. The phone will hang up instead of staying connected.\n- Subsession: Users in a subsession need to be assigned again instead of having been assigned and auto-joining the subsession."
         },
         {
           "name": "patchJsMedia",
@@ -2138,6 +2138,27 @@
         },
         {
           "name": "on",
+          "signature": "on(event: 'emoji-reaction', listener: typeof event_emoji_reaction): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'emoji-reaction'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_emoji_reaction",
+              "optional": false,
+              "description": "Details in {@link event_emoji_reaction}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
           "signature": "on(event: 'voice-translator-started', listener: typeof event_voice_translator_started): void",
           "async": false,
           "parameters": [
@@ -2193,6 +2214,27 @@
               "type": "typeof event_incoming_live_stream_status",
               "optional": false,
               "description": "Details in {@link event_incoming_live_stream_status}"
+            }
+          ],
+          "returns": {
+            "type": "void"
+          }
+        },
+        {
+          "name": "on",
+          "signature": "on(event: 'on-hold-change', listener: typeof event_on_hold_change): void",
+          "async": false,
+          "parameters": [
+            {
+              "name": "event",
+              "type": "'on-hold-change'",
+              "optional": false
+            },
+            {
+              "name": "listener",
+              "type": "typeof event_on_hold_change",
+              "optional": false,
+              "description": "Details in {@link event_on_hold_change}."
             }
           ],
           "returns": {
@@ -2463,6 +2505,56 @@
           "description": "Reclaims the host privilege if the user is now the host.\n- Only the **original host** can do this."
         },
         {
+          "name": "admit",
+          "signature": "admit(userId: number): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "userId",
+              "type": "number",
+              "optional": false,
+              "description": "User ID of the participant to admit."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Admit the participant who is on hold into the meeting.\n- Only the **host** or **co-host** can admit others.\n- Once a participant is allowed into the meeting, the SDK will reconnect the meeting. Listen to the `connection-change` event to get the detail.",
+          "examples": [
+            "// Host side\nawait client.admit(userId);\n\n// Participant side\nclient.on('connection-change', (payload) => {\n  if (payload.state === 'Reconnecting' && payload.reason === 'on hold') {\n    console.log('Waiting to rejoin the meeting');\n  }\n});"
+          ]
+        },
+        {
+          "name": "admitAll",
+          "signature": "admitAll(): ExecutedResult",
+          "async": true,
+          "parameters": [],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise.\n- `''`: Success.\n- `'host changed'`: Resolved because you are not the host.\n- `'co-host changed'`: Resolved because you are not the co-host."
+          },
+          "description": "Admit all the participants who are on hold into the meeting.\n- Only the **host** or **co-host** can admit others.\n- When the number of on hold participants is large, it will take a long time to complete the operation.\n- When the operation is not complete, but you are not the host or co-host, the executed promise will resolve immediately."
+        },
+        {
+          "name": "enableHold",
+          "signature": "enableHold(enabled: boolean): ExecutedResult",
+          "async": true,
+          "parameters": [
+            {
+              "name": "enabled",
+              "type": "boolean",
+              "optional": false,
+              "description": "`true` to enable the waiting room, `false` to disable it."
+            }
+          ],
+          "returns": {
+            "type": "ExecutedResult",
+            "description": "Executed promise."
+          },
+          "description": "Enable or disable the waiting room (on hold) feature for the session.\n- Only the **host** or **co-host** can enable or disable the waiting room.\n- When enabled, participants can be placed on hold before joining the meeting.\n- **Important**: This method can only be used when the `hold` field in the JWT payload is set to `2`.\n  If the `hold` field is not `2`, this method will fail with an error."
+        },
+        {
           "name": "getCurrentUserInfo",
           "signature": "getCurrentUserInfo(): Participant",
           "async": false,
@@ -2636,6 +2728,16 @@
           "description": "Gets the clinical notes client."
         },
         {
+          "name": "getReactionsClient",
+          "signature": "getReactionsClient(): typeof ReactionsClient",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "typeof ReactionsClient"
+          },
+          "description": "Gets the reactions client."
+        },
+        {
           "name": "getSessionInfo",
           "signature": "getSessionInfo(): SessionInfo",
           "async": false,
@@ -2684,6 +2786,39 @@
             "type": "boolean"
           },
           "description": "Determines whether the current user is the original host.\n`role_type` in JWT payload =1 is the original host."
+        },
+        {
+          "name": "isUserOnHold",
+          "signature": "isUserOnHold(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean",
+            "description": "`true` if the current user is on hold, `false` otherwise."
+          },
+          "description": "Check whether the current user is on hold (in the waiting room)."
+        },
+        {
+          "name": "isHoldEnabled",
+          "signature": "isHoldEnabled(): boolean",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "boolean",
+            "description": "`true` if the waiting room is enabled, `false` otherwise."
+          },
+          "description": "Check whether the waiting room (on hold) feature is enabled for the session."
+        },
+        {
+          "name": "getOnHoldUsers",
+          "signature": "getOnHoldUsers(): Array<Participant>",
+          "async": false,
+          "parameters": [],
+          "returns": {
+            "type": "Array<Participant>",
+            "description": "Array of [[Participant]] objects who are on hold."
+          },
+          "description": "Get the on hold participants of the meeting.\n- Only the **host** or **co-host** has this permission."
         }
       ]
     }

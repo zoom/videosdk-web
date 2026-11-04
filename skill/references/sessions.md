@@ -1,5 +1,5 @@
 <!-- Source: https://developers.zoom.us/docs/video-sdk/web/sessions.md -->
-<!-- Fetched: 2026-06-15 -->
+<!-- Fetched: 2026-10-15 -->
 
 # Sessions
 
@@ -103,7 +103,7 @@ Start a session with the `join` function. Pass in a session name, [Video SDK JWT
 | Parameter                | Required                    | Parameter Description                                                                                                                                                                                                                                                                                                                                |
 | ------------------------ | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `topic`                  | Yes                         | The name of the session you are creating or joining. Should be alphanumeric with a max-length of 150 characters. It can include symbols and the space character. Session names are case insensitive (they are all converted to lowercase). This must match the `tpc` value in the [SDK JWT payload](/docs/video-sdk/auth/#payload).                  |
-| `token`                  | Yes                         | JWT token generated from your SDK credentials. See [Authorize](/docs/sdk/video/auth/) for details.                                                                                                                                                                                                                                                   |
+| `token`                  | Yes                         | JWT token generated from your SDK credentials. See [Authorize](/docs/video-sdk/auth/) for details.                                                                                                                                                                                                                                                   |
 | `userName`               | Yes                         | Display name of the user shown in the session. If empty, the name is displayed as the string "null". Max 200 characters. Values longer than 200 characters are truncated without error.                                                                                                                                                              |
 | `sessionPassword`        | No, unless set by the host. | Password for session. If set, the session will be private and can only be joined if the user provides a valid password. If not set, the session will be public for anyone in your account and users only need to use the `topic` to join. The field has a max-length limit of 10 characters, printable ASCII characters only (ch >= 32 && ch < 127). |
 | `sessionIdleTimeoutMins` | No                          | The number of minutes a session can remain idle (with only one user present and no cloud recording) before it automatically ends. The default is 40 minutes. This setting applies only when the host is the sole user; otherwise, the default timeout applies.                                                                                       |
@@ -157,6 +157,7 @@ A **host** of the session has the following **privileges**.
 -   Revoke manager privilege from a user.
 -   Start a live stream.
 -   Prevent other users from sharing their screen (lock screen).
+-   Admit users on hold, and turn OnHold on or off. See [Hold participants until admitted](#hold-participants-until-admitted).
 -   End the session.
 
 ### Manager
@@ -169,6 +170,7 @@ A **manager** of the session is assigned the following subset of the **host priv
 -   Change the display name of a user in the session.
 -   Mute or unmute a user's audio.
 -   Prevent other users from sharing their screen (lock screen).
+-   Admit users on hold, and turn OnHold on or off.
 
 ### Participant
 
@@ -183,6 +185,121 @@ We also recommend adding their video, audio, and screen share state next to thei
 ![Show user list and audio video statuses](/img/uitk-web-UsersComponent2.png)
 
 See the [VideoClient namespace reference documentation](https://marketplacefront.zoom.us/sdk/custom/web/modules/ZoomVideo.VideoClient.html) to learn more about managing host, manager, and user roles.
+
+---
+
+## Hold participants until admitted
+
+OnHold places participants in a holding state (a waiting room) when they join a session. They stay on hold, outside the session, until a host or manager admits them. OnHold requires Video SDK for Web 2.6.10 or later.
+
+The [`hold` JWT payload field](auth.md#hold-participants-until-admitted) controls whether a session supports OnHold. Set it in the JWT of the first user to join, which starts the session.
+
+-   `0` - (default) The session does not support OnHold.
+-   `1` - The session supports OnHold, and OnHold is on when the session starts.
+-   `2` - The session supports OnHold, but OnHold is off when the session starts. A host or manager can turn it on during the session.
+
+> **Note**
+>
+> When `hold` is `1` or `2`, the session rejects join attempts from clients that do not support OnHold, including Web clients earlier than 2.6.10 and native clients earlier than 2.6.11. Update every client that joins the session before you turn on OnHold.
+
+### Check OnHold status
+
+Call `isHoldEnabled()` to check whether OnHold is on for the session, and `isUserOnHold()` to check whether the current user is on hold.
+
+```javascript
+const isHoldEnabled = client.isHoldEnabled();
+const isOnHold = client.isUserOnHold();
+```
+
+The Web SDK has no equivalent of the native `isSupportHold()`. `isHoldEnabled()` only tells you whether OnHold is currently on.
+
+### Wait on hold (participant side)
+
+When OnHold is on, `client.join()` still resolves, but the user is placed on hold instead of entering the session. Check `client.isUserOnHold()` after `join` resolves, and listen for `on-hold-change` to show or hide a holding screen.
+
+While the user is on hold, don't start audio, video, or screen share. Methods that require being in the session reject with error type `IMPROPER_MEETING_STATE` and reason `on hold`.
+
+When a host or manager admits the user, the SDK emits `on-hold-change` with `isOnHold: false`, then reconnects the user into the session: `connection-change` fires with `state: "Reconnecting"` and `reason: "on hold"`, followed by `state: "Connected"`. Start audio and video after `Connected`. The `"on hold"` reason is a plain string; it is not a member of the `ReconnectReason` enum.
+
+```javascript
+client.on("on-hold-change", (payload) => {
+    if (payload.isOnHold) {
+        showHoldingScreen();
+    } else {
+        // Admitted. The SDK now reconnects the user into the session.
+        showLoading("Joining the session...");
+    }
+});
+
+client.on("connection-change", (payload) => {
+    if (payload.state === "Reconnecting" && payload.reason === "on hold") {
+        showLoading("Joining the session...");
+    } else if (payload.state === "Connected" && !client.isUserOnHold()) {
+        showSessionScreen();
+        // The user is in the session. Start audio, video, and other features here.
+    }
+});
+
+await client.join("sessionName", "VIDEO_SDK_JWT", "userName", "sessionPasscode");
+
+if (client.isUserOnHold()) {
+    showHoldingScreen();
+}
+```
+
+To leave while on hold, call `client.leave()`.
+
+### Get notified when other users are on hold (host and manager side)
+
+The Web SDK has no dedicated event for users entering or leaving the on-hold list (the native `onHoldUserJoin()` and `onHoldUserLeave()` callbacks). Instead, hosts and managers call `client.getOnHoldUsers()` to get the users currently on hold as an array of `Participant` objects, and refresh that list on `user-added`, `user-updated`, and `user-removed`. `user-updated` also covers the current user gaining or losing the host or manager role.
+
+Only hosts and managers can call `getOnHoldUsers()`. Don't gate the list on `isHoldEnabled()`: turning OnHold off doesn't admit users who are already on hold, so they still need to be shown and admitted.
+
+```javascript
+function refreshOnHoldUsers() {
+    const canAdmit = client.isHost() || client.isManager();
+    const onHoldUsers = canAdmit ? client.getOnHoldUsers() : [];
+    // Render onHoldUsers, for example user.userId and user.displayName.
+    renderWaitingRoom(onHoldUsers);
+}
+
+client.on("user-added", refreshOnHoldUsers);
+client.on("user-updated", refreshOnHoldUsers);
+client.on("user-removed", refreshOnHoldUsers);
+```
+
+The `Participant` interface also has an `isOnHold` property. If you build your participant list from `user-added` payloads, skip entries where `isOnHold` is `true`.
+
+### Admit users on hold
+
+A host or manager can call `admit(userId)` to admit one user, or `admitAll()` to admit every user on hold.
+
+```javascript
+try {
+    // Admit one user.
+    await client.admit(userId);
+
+    // Admit every user on hold.
+    await client.admitAll();
+} catch (error) {
+    console.error(error.type, error.reason);
+}
+```
+
+-   With many users on hold, `admitAll()` can take a long time to complete.
+-   If the current user stops being the host or manager before `admitAll()` completes, the promise resolves early with `"host changed"` or `"co-host changed"`.
+
+### Turn OnHold on or off during a session
+
+A host or manager can call `enableHold()` to turn OnHold on or off. This only works when the `hold` field in the session's JWT is `2`; otherwise the call rejects. The change only affects future join attempts. It doesn't admit users who are already on hold, so call `admit()` or `admitAll()` for them.
+
+```javascript
+// Pass true to turn OnHold on, or false to turn it off.
+await client.enableHold(true);
+```
+
+
+---
 
 ## Add features
 

@@ -214,6 +214,10 @@ export enum ExceptionCode {
    */
   CLIENT_HOST_DISALLOW_RENAME = 5014,
   /**
+   * The feature is not supported in the current context or configuration
+   */
+  CLIENT_FEATURE_UNSUPPORTED = 5015,
+  /**
    * The device ID (microphone, audio speaker, camera) does not match any device in the list.
    * @category Common stream
    */

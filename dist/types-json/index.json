@@ -3,8 +3,8 @@
   "package": "@zoom/videosdk",
   "language": "TypeScript",
   "platform": "Web",
-  "version": "2.6.0",
-  "generatedAt": "2026-10-08T09:32:33.989Z",
+  "version": "2.6.10",
+  "generatedAt": "2026-11-03T07:24:34.583Z",
   "modules": [
     {
       "module": "broadcast-streaming",
@@ -764,6 +764,11 @@
           "event": "incoming-live-stream-status"
         },
         {
+          "type": "event_on_hold_change",
+          "kind": "event",
+          "event": "on-hold-change"
+        },
+        {
           "type": "event_clinical_notes_status_change",
           "kind": "event",
           "event": "clinical-notes-status-change"
@@ -782,6 +787,11 @@
           "type": "event_clinical_notes_stop_response",
           "kind": "event",
           "event": "clinical-notes-stop-response"
+        },
+        {
+          "type": "event_emoji_reaction",
+          "kind": "event",
+          "event": "emoji-reaction"
         }
       ]
     },
@@ -1264,6 +1274,19 @@
       ]
     },
     {
+      "module": "reactions",
+      "file": "reactions.json",
+      "declarations": [
+        {
+          "type": "ReactionsClient",
+          "kind": "namespace",
+          "methods": [
+            "sendEmojiReaction"
+          ]
+        }
+      ]
+    },
+    {
       "module": "real-time-media-streams",
       "file": "real-time-media-streams.json",
       "declarations": [
@@ -1507,6 +1530,8 @@
             "on",
             "on",
             "on",
+            "on",
+            "on",
             "off",
             "join",
             "leave",
@@ -1516,6 +1541,9 @@
             "makeManager",
             "revokeManager",
             "reclaimHost",
+            "admit",
+            "admitAll",
+            "enableHold",
             "getCurrentUserInfo",
             "getAllUser",
             "getUser",
@@ -1532,11 +1560,15 @@
             "getVoiceTranslatorClient",
             "getIncomingLiveStreamClient",
             "getClinicalNotesClient",
+            "getReactionsClient",
             "getSessionInfo",
             "isHost",
             "getSessionHost",
             "isManager",
-            "isOriginalHost"
+            "isOriginalHost",
+            "isUserOnHold",
+            "isHoldEnabled",
+            "getOnHoldUsers"
           ]
         }
       ]
@@ -1636,6 +1668,34 @@
         {
           "type": "event_auto_play_audio_failed",
           "kind": "event"
+        },
+        {
+          "type": "event_chat_on_message",
+          "kind": "event"
+        },
+        {
+          "type": "event_chat_privilege_change",
+          "kind": "event"
+        },
+        {
+          "type": "event_caption_message",
+          "kind": "event"
+        },
+        {
+          "type": "event_emoji_reaction",
+          "kind": "event"
+        },
+        {
+          "type": "event_caption_enable",
+          "kind": "event"
+        },
+        {
+          "type": "ReactionType",
+          "kind": "enum"
+        },
+        {
+          "type": "TranslationLanguage",
+          "kind": "enum"
         },
         {
           "type": "VideoQuality",

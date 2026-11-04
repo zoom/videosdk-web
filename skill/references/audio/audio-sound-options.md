@@ -1,5 +1,5 @@
 <!-- Source: https://developers.zoom.us/docs/video-sdk/web/audio-sound-options.md -->
-<!-- Fetched: 2026-06-15 -->
+<!-- Fetched: 2026-10-15 -->
 
 # Sound options
 
@@ -72,7 +72,7 @@ stream.enableOriginalSound({
 
 ## Background noise suppression
 
-Enable advanced AI background noise suppression for all desktop browsers, which suppresses background noise in your environment like dogs barking, lawn mowers, clapping, fans, pen tapping, and other unwelcome distractions. For WebAssembly audio, this feature requires [`SharedArrayBuffer`](/docs/video-sdk/web/sharedarraybuffer/). It is not required for WebRTC audio.
+Enable advanced AI background noise suppression for all desktop browsers, which suppresses background noise in your environment like dogs barking, lawn mowers, clapping, fans, pen tapping, and other unwelcome distractions.
 
 You can enable it when connecting to session audio using [`backgroundNoiseSuppression`](https://marketplacefront.zoom.us/sdk/custom/web/interfaces/ZoomVideo.AudioOption.html#backgroundNoiseSuppression).
 

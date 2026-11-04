@@ -1,5 +1,5 @@
 <!-- Source: https://developers.zoom.us/docs/video-sdk/web/recording.md -->
-<!-- Fetched: 2026-06-15 -->
+<!-- Fetched: 2026-10-15 -->
 
 # Cloud recording
 
@@ -172,17 +172,17 @@ Recordings are also available to view and download from your [Video SDK Account 
 
 ## Get transcript and summary
 
-To add a transcript or AI summary to the cloud recording, set the `cloud_recording_transcript_option` field in the JWT used to start the session.
+To add a transcript or AI summary to the cloud recording, set the `cloud_recording_transcript_option` field in the JWT used to start the session. See the final setting in the [JWT payload table](/docs/video-sdk/auth/#payload) for details.
 
 -   `0` (default) - Neither transcript nor summary
 -   `1` - Transcript only
 -   `2` - Transcript and summary
 
-See the final setting in the [JWT payload table](/docs/video-sdk/auth/#payload) for details.
+Subscribe to the Zoom Build Platform credit plan for access. See the [Zoom Developer pricing page](https://zoom.us/pricing/developer) for details.
 
 > **Get AI summary**
 >
-> To receive the AI summary, enable both cloud recording (in the SDK) and session transcript (`cloud_recording_transcript_option` JWT field set to `2`). Each feature incurs a separate charge. See the [Zoom Developer pricing page](https://zoom.us/pricing/developer) for details.
+> To receive the AI summary, enable both cloud recording (in the SDK) and session transcript (`cloud_recording_transcript_option` JWT field set to `2`). Each feature incurs a separate charge.
 
 ### Start cloud recording
 

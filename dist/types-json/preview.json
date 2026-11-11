@@ -4,7 +4,7 @@
   "package": "@zoom/videosdk",
   "language": "TypeScript",
   "platform": "Web",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "sourceFile": "types/preview.d.ts",
   "declarations": [
     {
